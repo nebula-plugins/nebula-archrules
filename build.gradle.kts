@@ -3,8 +3,8 @@ plugins {
 }
 tasks.wrapper {
     distributionType = Wrapper.DistributionType.BIN
-    gradleVersion = "9.1.0"
-    distributionSha256Sum = "b84e04fa845fecba48551f425957641074fcc00a88a84d2aae5808743b35fc85"
+    gradleVersion = "9.2.0"
+    distributionSha256Sum = "df67a32e86e3276d011735facb1535f64d0d88df84fa87521e90becc2d735444"
 }
 dependencyLocking {
     lockAllConfigurations()
