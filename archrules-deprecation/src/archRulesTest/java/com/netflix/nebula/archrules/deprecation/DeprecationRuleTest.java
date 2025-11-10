@@ -90,7 +90,7 @@ public class DeprecationRuleTest {
     }
 
     static class CodeThatUsesClassThatExtendsDeprecatedInterface {
-        static void usage(DeprecatedInterface impl) {
+        static void usage(Impl impl) {
             impl.notDeprecated();
         }
     }
