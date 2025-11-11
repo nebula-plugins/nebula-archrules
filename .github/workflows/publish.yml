@@ -42,4 +42,4 @@ jobs:
         run: ./gradlew --info --stacktrace -Prelease.useLastTag=true candidate
       - name: Publish release
         if: (!contains(github.ref, '-rc.'))
-        run: ./gradlew --info --stacktrace -Dgradle.publish.key=${{ secrets.gradlePublishKey }} -Dgradle.publish.secret=${{ secrets.gradlePublishSecret }} -Prelease.useLastTag=true final
+        run: ./gradlew --info --stacktrace -Prelease.useLastTag=true final
