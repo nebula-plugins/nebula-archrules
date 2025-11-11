@@ -5,6 +5,10 @@ plugins {
 repositories {
     mavenCentral()
 }
+dependencies {
+    archRulesTestImplementation(libs.assertj)
+    archRulesTestImplementation(libs.logback)
+}
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(11)
