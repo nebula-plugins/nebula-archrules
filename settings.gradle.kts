@@ -21,3 +21,4 @@ develocity {
 rootProject.name = "nebula-archrules"
 
 include(":archrules-deprecation")
+include(":archrules-junit4")
