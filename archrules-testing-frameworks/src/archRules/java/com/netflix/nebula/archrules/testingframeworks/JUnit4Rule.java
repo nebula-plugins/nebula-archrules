@@ -1,4 +1,4 @@
-package com.netflix.nebula.archrules.junit4;
+package com.netflix.nebula.archrules.testingframeworks;
 
 import com.netflix.nebula.archrules.core.ArchRulesService;
 import com.tngtech.archunit.lang.ArchRule;
