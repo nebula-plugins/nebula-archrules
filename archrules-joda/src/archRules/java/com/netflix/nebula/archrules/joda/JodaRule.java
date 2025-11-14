@@ -5,8 +5,8 @@ import com.tngtech.archunit.lang.ArchRule;
 import com.tngtech.archunit.lang.Priority;
 import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPackage;
-import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideOutsideOfPackage;
 
+import java.util.Collections;
 import java.util.Map;
 
 public class JodaRule implements ArchRulesService {
@@ -22,6 +22,6 @@ public class JodaRule implements ArchRulesService {
 
     @Override
     public Map<String, ArchRule> getRules() {
-        return Map.of("jodaRule", jodaRule);
+        return Collections.singletonMap("jodaRule", jodaRule);
     }
 }
