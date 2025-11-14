@@ -5,6 +5,7 @@ ch.qos.logback:logback-classic:1.5.20=archRulesTestCompileClasspath,archRulesTes
 ch.qos.logback:logback-core:1.5.20=archRulesTestCompileClasspath,archRulesTestRuntimeClasspath
 com.netflix.nebula:nebula-archrules-core:0.1.1=archRulesCompileClasspath,archRulesRuntimeClasspath,archRulesTestCompileClasspath,archRulesTestRuntimeClasspath
 com.tngtech.archunit:archunit:1.4.1=archRulesCompileClasspath,archRulesRuntimeClasspath,archRulesTestCompileClasspath,archRulesTestRuntimeClasspath
+joda-time:joda-time:2.14.0=archRulesTestCompileClasspath,archRulesTestRuntimeClasspath
 net.bytebuddy:byte-buddy:1.17.7=archRulesTestCompileClasspath,archRulesTestRuntimeClasspath
 org.apiguardian:apiguardian-api:1.1.2=archRulesTestCompileClasspath
 org.assertj:assertj-core:3.27.6=archRulesTestCompileClasspath,archRulesTestRuntimeClasspath

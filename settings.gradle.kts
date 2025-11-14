@@ -22,3 +22,4 @@ rootProject.name = "nebula-archrules"
 
 include(":archrules-deprecation")
 include(":archrules-testing-frameworks")
+include(":archrules-joda")
