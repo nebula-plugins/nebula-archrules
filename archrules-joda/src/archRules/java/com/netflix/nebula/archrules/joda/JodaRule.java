@@ -4,7 +4,7 @@ import com.netflix.nebula.archrules.core.ArchRulesService;
 import com.tngtech.archunit.lang.ArchRule;
 import com.tngtech.archunit.lang.Priority;
 import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
-import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPackage;
+import com.tngtech.archunit.library.GeneralCodingRules;
 
 import java.util.Collections;
 import java.util.Map;
@@ -15,7 +15,7 @@ public class JodaRule implements ArchRulesService {
      */
     public static ArchRule jodaRule = ArchRuleDefinition.priority(Priority.MEDIUM)
             .noClasses()
-            .should().dependOnClassesThat(resideInAPackage("org.joda.time.."))
+            .should(GeneralCodingRules.USE_JODATIME)
             .allowEmptyShould(true)
             .as("No code should use Joda time library")
             .because("usage of Joda is deprecated. Please migrate to java.time.");
