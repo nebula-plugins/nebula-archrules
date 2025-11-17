@@ -9,6 +9,7 @@ repositories {
 dependencies {
     archRulesTestImplementation(libs.assertj)
     archRulesTestImplementation(libs.logback)
+    archRulesTestImplementation("org.jetbrains.kotlin:kotlin-stdlib:2.2.0")
 }
 java {
     toolchain {
