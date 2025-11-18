@@ -3,8 +3,8 @@
 # This file is expected to be part of source control.
 ch.qos.logback:logback-classic:1.5.20=archRulesTestCompileClasspath,archRulesTestRuntimeClasspath
 ch.qos.logback:logback-core:1.5.20=archRulesTestCompileClasspath,archRulesTestRuntimeClasspath
-com.netflix.nebula:nebula-archrules-core:0.1.2=archRulesCompileClasspath,archRulesRuntimeClasspath,archRulesTestCompileClasspath,archRulesTestRuntimeClasspath
-com.tngtech.archunit:archunit:1.4.1=archRulesCompileClasspath,archRulesRuntimeClasspath,archRulesTestCompileClasspath,archRulesTestRuntimeClasspath
+com.netflix.nebula:nebula-archrules-core:0.1.5=archRules,archRulesCompileClasspath,archRulesRuntimeClasspath,archRulesTestCompileClasspath,archRulesTestRuntimeClasspath
+com.tngtech.archunit:archunit:1.4.1=archRules,archRulesCompileClasspath,archRulesRuntimeClasspath,archRulesTestCompileClasspath,archRulesTestRuntimeClasspath
 net.bytebuddy:byte-buddy:1.17.7=archRulesTestCompileClasspath,archRulesTestRuntimeClasspath
 org.apiguardian:apiguardian-api:1.1.2=archRulesTestCompileClasspath
 org.assertj:assertj-core:3.27.6=archRulesTestCompileClasspath,archRulesTestRuntimeClasspath
@@ -19,5 +19,5 @@ org.junit.platform:junit-platform-engine:1.12.2=archRulesTestRuntimeClasspath
 org.junit.platform:junit-platform-launcher:1.12.2=archRulesTestRuntimeClasspath
 org.junit:junit-bom:5.12.2=archRulesTestCompileClasspath,archRulesTestRuntimeClasspath
 org.opentest4j:opentest4j:1.3.0=archRulesTestCompileClasspath,archRulesTestRuntimeClasspath
-org.slf4j:slf4j-api:2.0.17=archRulesCompileClasspath,archRulesRuntimeClasspath,archRulesTestCompileClasspath,archRulesTestRuntimeClasspath
+org.slf4j:slf4j-api:2.0.17=archRules,archRulesCompileClasspath,archRulesRuntimeClasspath,archRulesTestCompileClasspath,archRulesTestRuntimeClasspath
 empty=annotationProcessor,archRulesAnnotationProcessor,archRulesTestAnnotationProcessor,compileClasspath,runtimeClasspath,testAnnotationProcessor,testCompileClasspath,testRuntimeClasspath
