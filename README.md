@@ -6,7 +6,11 @@ This repository contains several libraries of ArchRules which can be used in pro
 ## Deprecation Rules
 [![Maven Central](https://img.shields.io/maven-central/v/com.netflix.nebula/archrules-deprecation?style=for-the-badge&color=01AF01)](https://repo1.maven.org/maven2/com/netflix/nebula/archrules-deprecation/)
 
+## Joda Rules
+[![Maven Central](https://img.shields.io/maven-central/v/com.netflix.nebula/archrules-joda?style=for-the-badge&color=01AF01)](https://repo1.maven.org/maven2/com/netflix/nebula/archrules-joda/)
 
+## Testing Frameworks Rules
+[![Maven Central](https://img.shields.io/maven-central/v/com.netflix.nebula/archrules-testing-frameworks?style=for-the-badge&color=01AF01)](https://repo1.maven.org/maven2/com/netflix/nebula/archrules-testing-frameworks/)
 
 ## LICENSE
 
