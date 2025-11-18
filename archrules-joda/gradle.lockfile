@@ -3,9 +3,9 @@
 # This file is expected to be part of source control.
 ch.qos.logback:logback-classic:1.5.20=archRulesTestCompileClasspath,archRulesTestRuntimeClasspath
 ch.qos.logback:logback-core:1.5.20=archRulesTestCompileClasspath,archRulesTestRuntimeClasspath
-com.netflix.nebula:archrules-deprecation:0.1.1=archRules
-com.netflix.nebula:nebula-archrules-core:0.1.2=archRules
-com.netflix.nebula:nebula-archrules-core:0.1.5=archRulesCompileClasspath,archRulesRuntimeClasspath,archRulesTestCompileClasspath,archRulesTestRuntimeClasspath
+com.netflix.nebula:archrules-deprecation:0.1.2=archRules
+com.netflix.nebula:archrules-testing-frameworks:0.1.2=archRules
+com.netflix.nebula:nebula-archrules-core:0.1.5=archRules,archRulesCompileClasspath,archRulesRuntimeClasspath,archRulesTestCompileClasspath,archRulesTestRuntimeClasspath
 com.tngtech.archunit:archunit:1.4.1=archRules,archRulesCompileClasspath,archRulesRuntimeClasspath,archRulesTestCompileClasspath,archRulesTestRuntimeClasspath
 joda-time:joda-time:2.14.0=archRulesTestCompileClasspath,archRulesTestRuntimeClasspath
 net.bytebuddy:byte-buddy:1.17.7=archRulesTestCompileClasspath,archRulesTestRuntimeClasspath
