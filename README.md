@@ -8,9 +8,15 @@ This repository contains several libraries of ArchRules which can be used in pro
 
 ## Joda Rules
 [![Maven Central](https://img.shields.io/maven-central/v/com.netflix.nebula/archrules-joda?style=for-the-badge&color=01AF01)](https://repo1.maven.org/maven2/com/netflix/nebula/archrules-joda/)
+These rules enforce the usage of `java.time` over Joda Time
 
 ## Testing Frameworks Rules
 [![Maven Central](https://img.shields.io/maven-central/v/com.netflix.nebula/archrules-testing-frameworks?style=for-the-badge&color=01AF01)](https://repo1.maven.org/maven2/com/netflix/nebula/archrules-testing-frameworks/)
+These rules enforce upgrading to JUnit Jupiter
+
+## Nullability Rules
+[![Maven Central](https://img.shields.io/maven-central/v/com.netflix.nebula/archrules-nullability?style=for-the-badge&color=01AF01)](https://repo1.maven.org/maven2/com/netflix/nebula/archrules-nullability/)
+These rules enforce JSpecify nullability annotations on public code. Kotlin classes are exempt from the rule, as Kotlin has nullability built into its type system, which is compatible with JSpecify.
 
 ## LICENSE
 
