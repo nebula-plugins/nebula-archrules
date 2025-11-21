@@ -7,9 +7,10 @@ repositories {
     mavenCentral()
 }
 dependencies {
+    archRulesImplementation(libs.jspecify)
+
     archRulesTestImplementation(libs.assertj)
     archRulesTestImplementation(libs.logback)
-
     archRulesTestImplementation("joda-time:joda-time:2.14.0")
 }
 java {

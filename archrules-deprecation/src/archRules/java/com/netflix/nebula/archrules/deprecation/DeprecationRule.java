@@ -4,6 +4,7 @@ import com.netflix.nebula.archrules.core.ArchRulesService;
 import com.tngtech.archunit.lang.ArchRule;
 import com.tngtech.archunit.lang.Priority;
 import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Collections;
 import java.util.Map;
@@ -12,6 +13,7 @@ import static com.tngtech.archunit.core.domain.JavaAccess.Predicates.target;
 import static com.tngtech.archunit.core.domain.JavaAccess.Predicates.targetOwner;
 import static com.tngtech.archunit.core.domain.properties.CanBeAnnotated.Predicates.annotatedWith;
 
+@NullMarked
 public class DeprecationRule implements ArchRulesService {
 
     /**

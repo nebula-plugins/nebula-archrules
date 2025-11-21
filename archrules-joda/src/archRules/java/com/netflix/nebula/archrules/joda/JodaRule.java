@@ -5,10 +5,12 @@ import com.tngtech.archunit.lang.ArchRule;
 import com.tngtech.archunit.lang.Priority;
 import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
 import com.tngtech.archunit.library.GeneralCodingRules;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Collections;
 import java.util.Map;
 
+@NullMarked
 public class JodaRule implements ArchRulesService {
     /**
      * This rule is a stop-gap to find all usages of Joda.

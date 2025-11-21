@@ -4,12 +4,15 @@ import com.netflix.nebula.archrules.core.ArchRulesService;
 import com.tngtech.archunit.lang.ArchRule;
 import com.tngtech.archunit.lang.Priority;
 import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
+import org.jspecify.annotations.NullMarked;
+
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPackage;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideOutsideOfPackage;
 
 import java.util.Collections;
 import java.util.Map;
 
+@NullMarked
 public class JUnit4Rule implements ArchRulesService {
     /**
      * This rule is a stop-gap to find all usages of JUnit4.

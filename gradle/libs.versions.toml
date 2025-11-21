@@ -1,3 +1,4 @@
 [libraries]
 assertj = { module = "org.assertj:assertj-core", version = "3.27.6" }
+jspecify = { module = "org.jspecify:jspecify", version = "1.0.0" }
 logback = { module = "ch.qos.logback:logback-classic", version = "1.5.20" }

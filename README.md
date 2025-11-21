@@ -1,6 +1,6 @@
 # Nebula ArchRules
 
-This repository contains several libraries of ArchRules which can be used in projects by using the ArchRules Runner plugin.
+This repository contains several libraries of ArchRules which can be used in projects by using the [ArchRules Runner](https://github.com/nebula-plugins/nebula-archrules-plugin?tab=readme-ov-file#running-rules) plugin.
 
 
 ## Deprecation Rules

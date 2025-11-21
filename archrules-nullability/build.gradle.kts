@@ -7,6 +7,8 @@ repositories {
     mavenCentral()
 }
 dependencies {
+    archRulesImplementation(libs.jspecify)
+
     archRulesTestImplementation(libs.assertj)
     archRulesTestImplementation(libs.logback)
     archRulesTestImplementation("org.jspecify:jspecify:1.0.0")

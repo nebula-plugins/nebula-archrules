@@ -22,7 +22,7 @@ public class NebulaNullabilityArchRules implements ArchRulesService {
             .and().areNotAnnotatedWith("kotlin.Metadata")
             .should().beAnnotatedWith("org.jspecify.annotations.NullMarked")
             .allowEmptyShould(true)
-            .because("public classes should be null marked (if marked @Public)");
+            .because("public classes should be null marked");
     static final ArchRule UPGRADE_LEGACY_JETBRAINS = ArchRuleDefinition.priority(Priority.MEDIUM)
             .noClasses()
             .that().areAnnotatedWith("org.jspecify.annotations.NullMarked")

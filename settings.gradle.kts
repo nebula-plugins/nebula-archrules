@@ -1,7 +1,7 @@
 pluginManagement {
     plugins {
-        id("com.netflix.nebula.root") version ("25.0.1")
-        id("com.netflix.nebula.library") version ("25.0.1")
+        id("com.netflix.nebula.root") version ("25.1.2")
+        id("com.netflix.nebula.library") version ("25.1.2")
     }
 }
 plugins {
