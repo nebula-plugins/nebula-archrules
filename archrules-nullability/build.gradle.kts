@@ -15,6 +15,7 @@ dependencies {
     archRulesTestImplementation("com.google.code.findbugs:jsr305:3.0.2")
     archRulesTestImplementation("jakarta.annotation:jakarta.annotation-api:3.0.0")
     archRulesTestImplementation("org.jetbrains:annotations:26.0.2-1")
+    archRulesTestImplementation("org.springframework:spring-core:5.3.39")
 }
 java {
     toolchain {

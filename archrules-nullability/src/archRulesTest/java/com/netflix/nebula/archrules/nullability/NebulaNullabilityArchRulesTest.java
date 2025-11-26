@@ -78,6 +78,17 @@ public class NebulaNullabilityArchRulesTest {
                 .hasSize(2);
     }
 
+    @Test
+    public void test_spring_framework() {
+      EvaluationResult result = Runner.check(
+          NebulaNullabilityArchRules.UPGRADE_LEGACY_SPRING_FRAMEWORK,
+          SpringFrameworkFailingClass.class);
+      assertThat(result.hasViolation())
+          .isTrue();
+      assertThat(result.getFailureReport().getDetails())
+          .hasSize(2);
+  }
+
     static class InnerClass {
     }
 }
