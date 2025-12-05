@@ -18,6 +18,11 @@ java {
         languageVersion = JavaLanguageVersion.of(8)
     }
 }
+tasks.named<JavaCompile>("compileArchRulesTestJava") {
+    javaCompiler.set(javaToolchains.compilerFor {
+        languageVersion.set(JavaLanguageVersion.of(11))
+    })
+}
 dependencyLocking {
     lockAllConfigurations()
 }

@@ -2,6 +2,7 @@ package com.netflix.nebula.archrules.deprecation;
 
 import com.netflix.nebula.archrules.core.Runner;
 import com.tngtech.archunit.lang.EvaluationResult;
+import com.tngtech.archunit.lang.Priority;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,7 @@ public class DeprecationRuleTest {
         final EvaluationResult result = Runner.check(DeprecationRule.deprecationRule, CodeThatUsesDeprecatedClass.class);
         LOG.info(result.getFailureReport().toString());
         assertThat(result.hasViolation()).isTrue();
+        assertThat(result.getPriority() == Priority.LOW);
     }
 
     @Test
@@ -23,6 +25,7 @@ public class DeprecationRuleTest {
         final EvaluationResult result = Runner.check(DeprecationRule.deprecationRule, CodeThatUsesDeprecatedMethod.class);
         LOG.info(result.getFailureReport().toString());
         assertThat(result.hasViolation()).isTrue();
+        assertThat(result.getPriority() == Priority.LOW);
     }
 
     @Test
@@ -30,6 +33,7 @@ public class DeprecationRuleTest {
         final EvaluationResult result = Runner.check(DeprecationRule.deprecationRule, CodeThatUsesDeprecatedInterface.class);
         LOG.info(result.getFailureReport().toString());
         assertThat(result.hasViolation()).isTrue();
+        assertThat(result.getPriority() == Priority.LOW);
     }
 
     @Test
@@ -37,6 +41,7 @@ public class DeprecationRuleTest {
         final EvaluationResult result = Runner.check(DeprecationRule.deprecationRule, Impl.class);
         LOG.info(result.getFailureReport().toString());
         assertThat(result.hasViolation()).isTrue();
+        assertThat(result.getPriority() == Priority.LOW);
     }
 
     @Test
@@ -46,6 +51,7 @@ public class DeprecationRuleTest {
         assertThat(result.hasViolation())
                 .as("Don't flag usage of a non-deprecated class that extends a deprecated class")
                 .isFalse();
+        assertThat(result.getPriority() == Priority.LOW);
     }
 
     @Deprecated
