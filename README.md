@@ -6,17 +6,30 @@ This repository contains several libraries of ArchRules which can be used in pro
 ## Deprecation Rules
 [![Maven Central](https://img.shields.io/maven-central/v/com.netflix.nebula/archrules-deprecation?style=for-the-badge&color=01AF01)](https://repo1.maven.org/maven2/com/netflix/nebula/archrules-deprecation/)
 
+## Gradle Plugin Development
+[![Maven Central](https://img.shields.io/maven-central/v/com.netflix.nebula/archrules-gradle-plugin-development?style=for-the-badge&color=01AF01)](https://repo1.maven.org/maven2/com/netflix/nebula/gradle-plugin-development/)
+
+These rules enforce best practices when developing Gradle plugins.
+
 ## Joda Rules
 [![Maven Central](https://img.shields.io/maven-central/v/com.netflix.nebula/archrules-joda?style=for-the-badge&color=01AF01)](https://repo1.maven.org/maven2/com/netflix/nebula/archrules-joda/)
-These rules enforce the usage of `java.time` over Joda Time
 
-## Testing Frameworks Rules
-[![Maven Central](https://img.shields.io/maven-central/v/com.netflix.nebula/archrules-testing-frameworks?style=for-the-badge&color=01AF01)](https://repo1.maven.org/maven2/com/netflix/nebula/archrules-testing-frameworks/)
-These rules enforce upgrading to JUnit Jupiter
+These rules enforce the usage of `java.time` over Joda Time
 
 ## Nullability Rules
 [![Maven Central](https://img.shields.io/maven-central/v/com.netflix.nebula/archrules-nullability?style=for-the-badge&color=01AF01)](https://repo1.maven.org/maven2/com/netflix/nebula/archrules-nullability/)
+
 These rules enforce JSpecify nullability annotations on public code. Kotlin classes are exempt from the rule, as Kotlin has nullability built into its type system, which is compatible with JSpecify.
+
+## Security Rules
+[![Maven Central](https://img.shields.io/maven-central/v/com.netflix.nebula/archrules-security?style=for-the-badge&color=01AF01)](https://repo1.maven.org/maven2/com/netflix/nebula/archrules-archrules-security/)
+
+These rules ensure calls are not made to known insecure OSS Java APIs.
+
+## Testing Frameworks Rules
+[![Maven Central](https://img.shields.io/maven-central/v/com.netflix.nebula/archrules-testing-frameworks?style=for-the-badge&color=01AF01)](https://repo1.maven.org/maven2/com/netflix/nebula/archrules-testing-frameworks/)
+
+These rules enforce upgrading to JUnit Jupiter
 
 ## LICENSE
 
