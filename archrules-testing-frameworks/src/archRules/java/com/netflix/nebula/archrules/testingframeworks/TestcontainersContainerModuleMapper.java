@@ -24,8 +24,9 @@ import java.util.Map;
 public class TestcontainersContainerModuleMapper {
 
     /**
-     * Map of container class names to their module names for cases that don't follow the standard naming pattern.
+     * Lazy-initialized holder for the overrides map.
      * <p>
+     * Map of container class names to their module names for cases that don't follow the standard naming pattern.
      * Standard pattern: Remove "Container" suffix and convert to lowercase.
      * <br>Example: CassandraContainer → cassandra, KafkaContainer → kafka
      * <p>
@@ -37,32 +38,35 @@ public class TestcontainersContainerModuleMapper {
      *   <li>Numeric suffixes (K3s, K6)</li>
      * </ul>
      */
-    private static final Map<String, String> OVERRIDES = new HashMap<>();
+    private static class OverridesHolder {
+        private static final Map<String, String> INSTANCE;
 
-    static {
-        OVERRIDES.put("PostgreSQLContainer", "postgresql");  // PostgreSQL → postgresql
-        OVERRIDES.put("MySQLContainer", "mysql");            // MySQL → mysql
-        OVERRIDES.put("MariaDBContainer", "mariadb");        // MariaDB → mariadb
-        OVERRIDES.put("MSSQLServerContainer", "mssqlserver"); // MS SQL Server → mssqlserver
+        static {
+            Map<String, String> map = new HashMap<>();
+            map.put("PostgreSQLContainer", "postgresql");
+            map.put("MySQLContainer", "mysql");
+            map.put("MariaDBContainer", "mariadb");
+            map.put("MSSQLServerContainer", "mssqlserver");
+            map.put("MongoDBContainer", "mongodb");
+            map.put("ScyllaDBContainer", "scylladb");
+            map.put("OracleContainer", "oracle-xe");
+            map.put("LocalStackContainer", "localstack");
+            map.put("MockServerContainer", "mockserver");
+            map.put("OpenFGAContainer", "openfga");
+            map.put("HiveMQContainer", "hivemq");
+            map.put("K3sContainer", "k3s");
+            map.put("K6Container", "k6");
+            map.put("TiDBContainer", "tidb");
+            map.put("OceanBaseContainer", "oceanbase");
+            map.put("QdrantContainer", "qdrant");
+            map.put("QuestDBContainer", "questdb");
+            map.put("R2DBCDatabaseContainer", "r2dbc");
+            INSTANCE = map;
+        }
+    }
 
-        OVERRIDES.put("MongoDBContainer", "mongodb");        // MongoDB → mongodb
-        OVERRIDES.put("ScyllaDBContainer", "scylladb");      // ScyllaDB → scylladb
-
-        OVERRIDES.put("OracleContainer", "oracle-xe");       // Could also be oracle-free
-
-        OVERRIDES.put("LocalStackContainer", "localstack");  // LocalStack → localstack
-        OVERRIDES.put("MockServerContainer", "mockserver");  // MockServer → mockserver
-        OVERRIDES.put("OpenFGAContainer", "openfga");        // OpenFGA → openfga
-        OVERRIDES.put("HiveMQContainer", "hivemq");          // HiveMQ → hivemq
-
-        OVERRIDES.put("K3sContainer", "k3s");                // K3s → k3s
-        OVERRIDES.put("K6Container", "k6");                  // K6 → k6
-        OVERRIDES.put("TiDBContainer", "tidb");              // TiDB → tidb
-        OVERRIDES.put("OceanBaseContainer", "oceanbase");    // OceanBase → oceanbase
-        OVERRIDES.put("QdrantContainer", "qdrant");          // Qdrant → qdrant
-        OVERRIDES.put("QuestDBContainer", "questdb");        // QuestDB → questdb
-
-        OVERRIDES.put("R2DBCDatabaseContainer", "r2dbc");    // R2DBC → r2dbc
+    private static Map<String, String> getOverrides() {
+        return OverridesHolder.INSTANCE;
     }
 
     /**
@@ -87,8 +91,9 @@ public class TestcontainersContainerModuleMapper {
     @Nullable
     public static String deriveModuleName(String containerClassName) {
         // Check explicit overrides for special cases
-        if (OVERRIDES.containsKey(containerClassName)) {
-            return OVERRIDES.get(containerClassName);
+        Map<String, String> overrides = getOverrides();
+        if (overrides.containsKey(containerClassName)) {
+            return overrides.get(containerClassName);
         }
 
         // Apply standard heuristic: remove "Container" suffix and lowercase
