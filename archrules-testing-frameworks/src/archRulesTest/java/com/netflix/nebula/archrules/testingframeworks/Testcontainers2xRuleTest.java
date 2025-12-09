@@ -14,16 +14,16 @@ public class Testcontainers2xRuleTest {
     private static final Logger LOG = LoggerFactory.getLogger(Testcontainers2xRuleTest.class);
 
     @Test
-    public void legacyContainerPackage_on_1x_should_pass() {
+    public void legacyContainerPackage_on_1x_does_not_flag_violations() {
         // On Testcontainers 1.x, only org.testcontainers.containers exists
-        // This rule should stay silent since new packages don't exist yet
+        // The rule should stay silent since new module-specific packages don't exist yet
         final EvaluationResult result = Runner.check(
                 Testcontainers2xRule.legacyContainerPackageRule,
                 UsesOldPackageLocation.class
         );
         LOG.info(result.getFailureReport().toString());
-        // On 1.x this should pass (no violation) because new packages don't exist
-        // On 2.x this would fail (has violation) because new packages are available
+        // On 1.x: should pass (no violation) because new packages don't exist
+        // On 2.x: would fail (has violation) because new packages are available
         assertThat(result.hasViolation()).isFalse();
     }
 
