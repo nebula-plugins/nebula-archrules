@@ -4,7 +4,9 @@
       "WebFetch(domain:docs.openrewrite.org)",
       "WebFetch(domain:github.com)",
       "Bash(./gradlew :archrules-testing-frameworks:test:*)",
-      "Bash(./gradlew:*)"
+      "Bash(./gradlew:*)",
+      "Bash(cat:*)",
+      "WebFetch(domain:testcontainers.com)"
     ],
     "deny": [],
     "ask": []

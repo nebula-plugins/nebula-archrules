@@ -16,6 +16,7 @@ dependencies {
     archRulesTestImplementation(libs.logback)
     archRulesTestImplementation("junit:junit:4.12")
     archRulesTestImplementation("org.testcontainers:testcontainers:1.21.3")
+    archRulesTestImplementation("org.testcontainers:postgresql:1.21.3")
 }
 java {
     toolchain {

@@ -51,6 +51,26 @@ public class Testcontainers1xRuleTest {
         assertThat(result.hasViolation()).isFalse();
     }
 
+    @Test
+    public void noArgConstructor_should_fail() {
+        final EvaluationResult result = Runner.check(
+                Testcontainers1xRule.noArgConstructorRule,
+                UsesNoArgConstructor.class
+        );
+        LOG.info(result.getFailureReport().toString());
+        assertThat(result.hasViolation()).isTrue();
+    }
+
+    @Test
+    public void explicitImageConstructor_should_pass() {
+        final EvaluationResult result = Runner.check(
+                Testcontainers1xRule.noArgConstructorRule,
+                UsesExplicitImageConstructor.class
+        );
+        LOG.info(result.getFailureReport().toString());
+        assertThat(result.hasViolation()).isFalse();
+    }
+
     // Test classes using 1.x patterns
     @SuppressWarnings("unused")
     public static class UsesDockerComposeContainer {
@@ -73,6 +93,28 @@ public class Testcontainers1xRuleTest {
     public static class UsesGetHost {
         public void getIp(org.testcontainers.containers.ContainerState container) {
             String host = container.getHost();
+        }
+    }
+
+    @SuppressWarnings({"unused", "rawtypes"})
+    public static class UsesNoArgConstructor {
+        private org.testcontainers.containers.PostgreSQLContainer container;
+
+        public UsesNoArgConstructor() {
+            // Using no-arg constructor (relies on default image) - will break in 2.x
+            this.container = new org.testcontainers.containers.PostgreSQLContainer();
+        }
+    }
+
+    @SuppressWarnings("unused")
+    public static class UsesExplicitImageConstructor {
+        private org.testcontainers.containers.PostgreSQLContainer<?> container;
+
+        public UsesExplicitImageConstructor() {
+            // Using explicit DockerImageName - proper 2.x pattern
+            this.container = new org.testcontainers.containers.PostgreSQLContainer<>(
+                    org.testcontainers.utility.DockerImageName.parse("postgres:16-alpine")
+            );
         }
     }
 }
