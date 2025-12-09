@@ -5,6 +5,8 @@ import com.tngtech.archunit.lang.EvaluationResult;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.utility.DockerImageName;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -98,22 +100,22 @@ public class Testcontainers1xRuleTest {
 
     @SuppressWarnings({"unused", "rawtypes"})
     public static class UsesNoArgConstructor {
-        private org.testcontainers.containers.PostgreSQLContainer container;
+        private PostgreSQLContainer container;
 
         public UsesNoArgConstructor() {
             // Using no-arg constructor (relies on default image) - will break in 2.x
-            this.container = new org.testcontainers.containers.PostgreSQLContainer();
+            this.container = new PostgreSQLContainer();
         }
     }
 
     @SuppressWarnings("unused")
     public static class UsesExplicitImageConstructor {
-        private org.testcontainers.containers.PostgreSQLContainer<?> container;
+        private PostgreSQLContainer<?> container;
 
         public UsesExplicitImageConstructor() {
             // Using explicit DockerImageName - proper 2.x pattern
             this.container = new org.testcontainers.containers.PostgreSQLContainer<>(
-                    org.testcontainers.utility.DockerImageName.parse("postgres:16-alpine")
+                    DockerImageName.parse("postgres:16-alpine")
             );
         }
     }
