@@ -10,6 +10,9 @@ jobs:
     if: github.event.base_ref == 'refs/heads/main' # tags must be pushed to main
     runs-on: ubuntu-latest
     name: Gradle Build and Publish
+    environment:
+      name: Publish
+      url: "https://repo1.maven.org/maven2/com/netflix/nebula"
     env:
       NETFLIX_OSS_SONATYPE_USERNAME: ${{ secrets.ORG_SONATYPE_USERNAME }}
       NETFLIX_OSS_SONATYPE_PASSWORD: ${{ secrets.ORG_SONATYPE_PASSWORD }}
