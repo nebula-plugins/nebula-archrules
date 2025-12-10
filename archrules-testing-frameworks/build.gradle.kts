@@ -5,7 +5,7 @@ plugins {
     id("com.netflix.nebula.library")
     id("com.netflix.nebula.archrules.library")
 }
-description = "Arch Rules for detecting usage of Junit4"
+description = "Arch Rules for detecting usage of Junit4 and Testcontainers 1.x"
 repositories {
     mavenCentral()
 }
@@ -14,7 +14,9 @@ dependencies {
 
     archRulesTestImplementation(libs.assertj)
     archRulesTestImplementation(libs.logback)
-    archRulesTestImplementation("junit:junit:4.12")
+    archRulesTestImplementation(libs.junit4)
+    archRulesTestImplementation(libs.testcontainers)
+    archRulesTestImplementation(libs.testcontainers.postgresql)
 }
 java {
     toolchain {

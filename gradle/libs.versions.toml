@@ -1,4 +1,7 @@
 [libraries]
 assertj = { module = "org.assertj:assertj-core", version = "3.27.6" }
 jspecify = { module = "org.jspecify:jspecify", version = "1.0.0" }
+junit4 = { module = "junit:junit", version = "4.12" }
 logback = { module = "ch.qos.logback:logback-classic", version = "1.5.20" }
+testcontainers = { module = "org.testcontainers:testcontainers", version = "1.21.3" }
+testcontainers-postgresql = { module = "org.testcontainers:postgresql", version = "1.21.3" }
