@@ -2,10 +2,9 @@ plugins {
     id("com.netflix.nebula.library")
     id("com.netflix.nebula.archrules.library")
 }
+
 description = "Arch Rules for detecting usage of Joda"
-repositories {
-    mavenCentral()
-}
+
 dependencies {
     archRulesImplementation(libs.jspecify)
 

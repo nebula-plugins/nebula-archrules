@@ -6,9 +6,7 @@ plugins {
     id("com.netflix.nebula.archrules.library")
 }
 description = "Arch Rules for detecting usage of Junit4 and Testcontainers 1.x"
-repositories {
-    mavenCentral()
-}
+
 dependencies {
     archRulesImplementation(libs.jspecify)
 

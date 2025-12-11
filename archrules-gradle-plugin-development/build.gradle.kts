@@ -2,10 +2,9 @@ plugins {
     id("com.netflix.nebula.library")
     id("com.netflix.nebula.archrules.library")
 }
+
 description = "Arch Rules for detecting bad practices when developing Gradle plugins"
-repositories {
-    mavenCentral()
-}
+
 dependencies {
     archRulesImplementation(libs.jspecify)
 
