@@ -29,13 +29,16 @@ public class GradleTaskActionRule implements ArchRulesService {
      * cause runtime errors in Gradle 10+. Move Project access to configuration time
      * (constructor/initializer) and use task properties instead.
      */
-    public static final ArchRule taskActionShouldNotAccessProject = createTaskActionRule(
-            notAccessProject(),
-            "access the Project object",
-            "Accessing Project in @TaskAction methods breaks configuration cache and will be removed in Gradle 10. " +
-            "Move Project access to task configuration time and use task inputs/properties instead.",
-            "task_project"
-    );
+    public static final ArchRule taskActionShouldNotAccessProject = ArchRuleDefinition.priority(Priority.MEDIUM)
+            .methods()
+            .that(areAnnotatedWithTaskAction())
+            .should(notAccessProject())
+            .allowEmptyShould(true)
+            .because(
+                    "Accessing Project in @TaskAction methods breaks configuration cache and will be removed in Gradle 10. " +
+                    "Move Project access to task configuration time and use task inputs/properties instead. " +
+                    "See https://docs.gradle.org/9.2.0/userguide/upgrading_version_7.html#task_project"
+            );
 
     /**
      * Prevents {@code @TaskAction} methods from calling {@code getTaskDependencies()}.
@@ -43,23 +46,16 @@ public class GradleTaskActionRule implements ArchRulesService {
      * Calling {@code getTaskDependencies()} in task actions breaks configuration cache and will
      * cause runtime errors in Gradle 10+. Task dependencies should be declared at configuration time.
      */
-    public static final ArchRule taskActionShouldNotCallGetTaskDependencies = createTaskActionRule(
-            notCallGetTaskDependencies(),
-            "call getTaskDependencies()",
-            "Calling getTaskDependencies() in @TaskAction methods breaks configuration cache and will be removed in Gradle 10. " +
-            "Declare task dependencies at configuration time instead.",
-            "task_dependencies"
-    );
-
-    private static ArchRule createTaskActionRule(ArchCondition<JavaMethod> condition, String actionDescription, String reason, String docAnchor) {
-        return ArchRuleDefinition.priority(Priority.MEDIUM)
-                .methods()
-                .that(areAnnotatedWithTaskAction())
-                .should(condition)
-                .allowEmptyShould(true)
-                .as("Methods annotated with @TaskAction should not " + actionDescription)
-                .because(reason + " See https://docs.gradle.org/9.2.0/userguide/upgrading_version_7.html#" + docAnchor);
-    }
+    public static final ArchRule taskActionShouldNotCallGetTaskDependencies = ArchRuleDefinition.priority(Priority.MEDIUM)
+            .methods()
+            .that(areAnnotatedWithTaskAction())
+            .should(notCallGetTaskDependencies())
+            .allowEmptyShould(true)
+            .because(
+                    "Calling getTaskDependencies() in @TaskAction methods breaks configuration cache and will be removed in Gradle 10. " +
+                    "Declare task dependencies at configuration time instead. " +
+                    "See https://docs.gradle.org/9.2.0/userguide/upgrading_version_7.html#task_dependencies"
+            );
 
     private static DescribedPredicate<JavaMethod> areAnnotatedWithTaskAction() {
         return new DescribedPredicate<JavaMethod>("are annotated with @TaskAction") {
