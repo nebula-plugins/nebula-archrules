@@ -45,7 +45,7 @@ public class Testcontainers2xRule implements ArchRulesService {
      *
      * @see TestcontainersContainerModuleMapper for the full container-to-module mapping
      */
-    public static ArchRule legacyContainerPackageRule = ArchRuleDefinition.priority(Priority.LOW)
+    public static final ArchRule legacyContainerPackageRule = ArchRuleDefinition.priority(Priority.LOW)
             .classes()
             .should(notDependOnDeprecatedContainerPackages())
             .allowEmptyShould(true)

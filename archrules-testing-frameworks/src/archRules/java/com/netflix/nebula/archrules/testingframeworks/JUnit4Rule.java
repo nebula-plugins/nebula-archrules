@@ -17,7 +17,7 @@ public class JUnit4Rule implements ArchRulesService {
     /**
      * This rule is a stop-gap to find all usages of JUnit4.
      */
-    public static ArchRule junit4Rule = ArchRuleDefinition.priority(Priority.MEDIUM)
+    public static final ArchRule junit4Rule = ArchRuleDefinition.priority(Priority.MEDIUM)
             .noClasses()
             .should().dependOnClassesThat(resideInAPackage("org.junit..")
                     .and(resideOutsideOfPackage("org.junit.jupiter..")))

@@ -29,7 +29,7 @@ public class GradleTaskActionRule implements ArchRulesService {
      * cause runtime errors in Gradle 10+. Move Project access to configuration time
      * (constructor/initializer) and use task properties instead.
      */
-    public static ArchRule taskActionShouldNotAccessProject = createTaskActionRule(
+    public static final ArchRule taskActionShouldNotAccessProject = createTaskActionRule(
             notAccessProject(),
             "access the Project object",
             "Accessing Project in @TaskAction methods breaks configuration cache and will be removed in Gradle 10. " +
@@ -43,7 +43,7 @@ public class GradleTaskActionRule implements ArchRulesService {
      * Calling {@code getTaskDependencies()} in task actions breaks configuration cache and will
      * cause runtime errors in Gradle 10+. Task dependencies should be declared at configuration time.
      */
-    public static ArchRule taskActionShouldNotCallGetTaskDependencies = createTaskActionRule(
+    public static final ArchRule taskActionShouldNotCallGetTaskDependencies = createTaskActionRule(
             notCallGetTaskDependencies(),
             "call getTaskDependencies()",
             "Calling getTaskDependencies() in @TaskAction methods breaks configuration cache and will be removed in Gradle 10. " +
