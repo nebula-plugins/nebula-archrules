@@ -44,7 +44,7 @@ public class Testcontainers1xRule implements ArchRulesService {
      * <p>
      * <b>The fix:</b> Replace {@code DockerComposeContainer} with {@code ComposeContainer} everywhere.
      */
-    public static ArchRule dockerComposeContainerRule = ArchRuleDefinition.priority(Priority.MEDIUM)
+    public static final ArchRule dockerComposeContainerRule = ArchRuleDefinition.priority(Priority.MEDIUM)
             .noClasses()
             .should().dependOnClassesThat().haveSimpleName("DockerComposeContainer")
             .allowEmptyShould(true)
@@ -60,7 +60,7 @@ public class Testcontainers1xRule implements ArchRulesService {
      * <p>
      * <b>The fix:</b> Change {@code container.getContainerIpAddress()} to {@code container.getHost()}.
      */
-    public static ArchRule containerIpAddressMethodRule = ArchRuleDefinition.priority(Priority.MEDIUM)
+    public static final ArchRule containerIpAddressMethodRule = ArchRuleDefinition.priority(Priority.MEDIUM)
             .noClasses()
             .should().callMethod("org.testcontainers.containers.ContainerState", "getContainerIpAddress")
             .allowEmptyShould(true)
@@ -85,7 +85,7 @@ public class Testcontainers1xRule implements ArchRulesService {
      * </pre>
      * <p>
      */
-    public static ArchRule noArgConstructorRule = ArchRuleDefinition.priority(Priority.MEDIUM)
+    public static final ArchRule noArgConstructorRule = ArchRuleDefinition.priority(Priority.MEDIUM)
             .noClasses()
             .should().callConstructorWhere(target(new DescribedPredicate<AccessTarget>("no-arg Testcontainers container constructor") {
                 @Override

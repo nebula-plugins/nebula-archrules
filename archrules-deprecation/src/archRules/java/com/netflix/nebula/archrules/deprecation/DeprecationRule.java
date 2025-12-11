@@ -26,7 +26,7 @@ public class DeprecationRule implements ArchRulesService {
      * - Kotlin @Deprecated annotations
      * - Kotlin @DeprecatedSinceKotlin annotations
      */
-    public static ArchRule deprecationRule = ArchRuleDefinition.priority(Priority.LOW)
+    public static final ArchRule deprecationRule = ArchRuleDefinition.priority(Priority.LOW)
             .noClasses()
             // Java deprecated
             .should().dependOnClassesThat().areAnnotatedWith(Deprecated.class)
@@ -58,7 +58,7 @@ public class DeprecationRule implements ArchRulesService {
                 }
             };
 
-    public static ArchRule deprecationForRemovalRule = ArchRuleDefinition.priority(Priority.MEDIUM)
+    public static final ArchRule deprecationForRemovalRule = ArchRuleDefinition.priority(Priority.MEDIUM)
             .noClasses()
             .should().dependOnClassesThat().areAnnotatedWith(deprecatedForRemoval)
             .orShould().accessTargetWhere(targetOwner(annotatedWith(deprecatedForRemoval)))

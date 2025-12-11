@@ -15,7 +15,7 @@ public class JodaRule implements ArchRulesService {
     /**
      * This rule is a stop-gap to find all usages of Joda.
      */
-    public static ArchRule jodaRule = ArchRuleDefinition.priority(Priority.MEDIUM)
+    public static final ArchRule jodaRule = ArchRuleDefinition.priority(Priority.MEDIUM)
             .noClasses()
             .should(GeneralCodingRules.USE_JODATIME)
             .allowEmptyShould(true)
