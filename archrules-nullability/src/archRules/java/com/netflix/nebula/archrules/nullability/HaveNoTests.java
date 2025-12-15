@@ -11,6 +11,10 @@ public class HaveNoTests extends DescribedPredicate<JavaClass> {
     @Override
     public boolean test(JavaClass javaClass) {
         return javaClass.getMembers().stream()
-                .noneMatch(it -> it.isAnnotatedWith("org.junit.jupiter.api.Test"));
+                .noneMatch(it -> it.isMetaAnnotatedWith("org.junit.platform.commons.annotation.Testable"));
+    }
+
+    public static HaveNoTests haveNoTests() {
+        return new HaveNoTests();
     }
 }
