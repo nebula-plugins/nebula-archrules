@@ -10,6 +10,7 @@ import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.netflix.nebula.archrules.nullability.HaveNoTests.haveNoTests;
 import static com.tngtech.archunit.lang.conditions.ArchConditions.fullyQualifiedName;
 
 public class NebulaNullabilityArchRules implements ArchRulesService {
@@ -18,7 +19,7 @@ public class NebulaNullabilityArchRules implements ArchRulesService {
             .areTopLevelClasses()
             .and().arePublic()
             .and().containAnyMembersThat(HasModifiers.Predicates.modifier(JavaModifier.PUBLIC))
-            .and(new HaveNoTests())
+            .and(haveNoTests())
             .and().areNotAnnotatedWith("kotlin.Metadata")
             .should().beAnnotatedWith("org.jspecify.annotations.NullMarked")
             .allowEmptyShould(true)
