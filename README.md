@@ -11,10 +11,15 @@ This repository contains several libraries of ArchRules which can be used in pro
 
 These rules enforce best practices when developing Gradle plugins.
 
+## Javax Rules
+[![Maven Central](https://img.shields.io/maven-central/v/com.netflix.nebula/archrules-joda?style=for-the-badge&color=01AF01)](https://repo1.maven.org/maven2/com/netflix/nebula/archrules-javax/)
+
+These rules enforce the usage of `jakarta` over `javax`.
+
 ## Joda Rules
 [![Maven Central](https://img.shields.io/maven-central/v/com.netflix.nebula/archrules-joda?style=for-the-badge&color=01AF01)](https://repo1.maven.org/maven2/com/netflix/nebula/archrules-joda/)
 
-These rules enforce the usage of `java.time` over Joda Time
+These rules enforce the usage of `java.time` over Joda Time.
 
 ## Nullability Rules
 [![Maven Central](https://img.shields.io/maven-central/v/com.netflix.nebula/archrules-nullability?style=for-the-badge&color=01AF01)](https://repo1.maven.org/maven2/com/netflix/nebula/archrules-nullability/)
@@ -29,7 +34,7 @@ These rules ensure calls are not made to known insecure OSS Java APIs.
 ## Testing Frameworks Rules
 [![Maven Central](https://img.shields.io/maven-central/v/com.netflix.nebula/archrules-testing-frameworks?style=for-the-badge&color=01AF01)](https://repo1.maven.org/maven2/com/netflix/nebula/archrules-testing-frameworks/)
 
-These rules enforce upgrading to JUnit Jupiter
+These rules enforce upgrading to JUnit Jupiter.
 
 ## LICENSE
 
