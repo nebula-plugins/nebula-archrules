@@ -1,21 +1,11 @@
 package com.netflix.nebula.archrules.gradleplugins;
 
-import com.netflix.nebula.archrules.core.ArchRulesService;
-import com.tngtech.archunit.core.domain.JavaMethodCall;
-import com.tngtech.archunit.core.domain.JavaClass;
-import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ArchRule;
-import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.Priority;
-import com.tngtech.archunit.lang.SimpleConditionEvent;
 import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
 import org.jspecify.annotations.NullMarked;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import static com.netflix.nebula.archrules.gradleplugins.Predicates.taskIsCreatedEagerly;
 
 /**
  * Rules for Gradle plugin classes to ensure they use lazy task registration.
@@ -25,12 +15,8 @@ import java.util.Set;
  * in large multi-module projects.
  */
 @NullMarked
-public class GradlePluginLazyTaskRegistrationRule implements ArchRulesService {
+class GradlePluginLazyTaskRegistrationRule {
 
-    private static final Set<String> EAGER_TASK_CREATION_METHODS = new HashSet<>(Arrays.asList(
-            "task",
-            "create"
-    ));
 
     /**
      * Prevents Plugin classes from using eager task creation methods.
@@ -39,10 +25,10 @@ public class GradlePluginLazyTaskRegistrationRule implements ArchRulesService {
      * all tasks during configuration phase, even if they won't be executed.
      * Use {@code tasks.register()} instead for lazy task creation.
      */
-    public static final ArchRule pluginsShouldUseLazyTaskRegistration = ArchRuleDefinition.priority(Priority.MEDIUM)
-            .classes()
+    static final ArchRule LAZY_TASK_CREATION = ArchRuleDefinition.priority(Priority.MEDIUM)
+            .noClasses()
             .that().implement("org.gradle.api.Plugin")
-            .should(useLazyTaskRegistration())
+            .should().callMethodWhere(taskIsCreatedEagerly)
             .allowEmptyShould(true)
             .because(
                     "Plugins should use tasks.register() instead of task() or tasks.create() for lazy task registration. " +
@@ -50,44 +36,4 @@ public class GradlePluginLazyTaskRegistrationRule implements ArchRulesService {
                     "Lazy registration with tasks.register() only creates tasks when needed. " +
                     "See https://docs.gradle.org/current/userguide/task_configuration_avoidance.html"
             );
-
-    private static ArchCondition<JavaClass> useLazyTaskRegistration() {
-        return new ArchCondition<JavaClass>("use lazy task registration (tasks.register())") {
-            @Override
-            public void check(JavaClass pluginClass, ConditionEvents events) {
-                pluginClass.getMethodCallsFromSelf().forEach(call -> {
-                    if (isEagerTaskCreation(call)) {
-                        String message = String.format(
-                                "Plugin %s uses eager task creation with %s.%s() at %s. " +
-                                "Use tasks.register() instead for lazy task registration.",
-                                pluginClass.getSimpleName(),
-                                call.getTargetOwner().getSimpleName(),
-                                call.getName(),
-                                call.getDescription()
-                        );
-                        events.add(SimpleConditionEvent.violated(call, message));
-                    }
-                });
-            }
-
-            private boolean isEagerTaskCreation(JavaMethodCall call) {
-                String methodName = call.getName();
-
-                if (!EAGER_TASK_CREATION_METHODS.contains(methodName)) {
-                    return false;
-                }
-
-                JavaClass targetOwner = call.getTargetOwner();
-                return targetOwner.isAssignableTo("org.gradle.api.Project") ||
-                       targetOwner.isAssignableTo("org.gradle.api.tasks.TaskContainer");
-            }
-        };
-    }
-
-    @Override
-    public Map<String, ArchRule> getRules() {
-        Map<String, ArchRule> rules = new HashMap<>();
-        rules.put("gradle-plugin-lazy-task-registration", pluginsShouldUseLazyTaskRegistration);
-        return rules;
-    }
 }

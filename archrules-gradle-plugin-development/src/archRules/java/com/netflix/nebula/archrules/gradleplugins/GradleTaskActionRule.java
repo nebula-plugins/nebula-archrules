@@ -1,6 +1,5 @@
 package com.netflix.nebula.archrules.gradleplugins;
 
-import com.netflix.nebula.archrules.core.ArchRulesService;
 import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.domain.JavaAccess;
 import com.tngtech.archunit.core.domain.JavaFieldAccess;
@@ -13,14 +12,11 @@ import com.tngtech.archunit.lang.SimpleConditionEvent;
 import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
 import org.jspecify.annotations.NullMarked;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Rules for Gradle task action methods to ensure Gradle 10 compatibility.
  */
 @NullMarked
-public class GradleTaskActionRule implements ArchRulesService {
+public class GradleTaskActionRule {
 
     /**
      * Prevents {@code @TaskAction} methods from accessing {@code Project}.
@@ -111,13 +107,5 @@ public class GradleTaskActionRule implements ArchRulesService {
                 return false;
             }
         };
-    }
-
-    @Override
-    public Map<String, ArchRule> getRules() {
-        Map<String, ArchRule> rules = new HashMap<>();
-        rules.put("gradle-task-action-project-access", taskActionShouldNotAccessProject);
-        rules.put("gradle-task-action-task-dependencies", taskActionShouldNotCallGetTaskDependencies);
-        return rules;
     }
 }

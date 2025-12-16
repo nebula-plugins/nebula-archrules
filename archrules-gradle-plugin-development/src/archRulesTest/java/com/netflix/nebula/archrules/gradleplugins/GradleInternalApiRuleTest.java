@@ -21,7 +21,7 @@ public class GradleInternalApiRuleTest {
     @Test
     public void pluginNotUsingInternalApis_should_pass() {
         final EvaluationResult result = Runner.check(
-                GradleInternalApiRule.pluginsShouldNotUseInternalGradleApis,
+                GradleInternalApiRule.PLUGIN_INTERNAL,
                 PluginNotUsingInternalApis.class
         );
         LOG.info(result.getFailureReport().toString());
@@ -31,7 +31,7 @@ public class GradleInternalApiRuleTest {
     @Test
     public void taskNotUsingInternalApis_should_pass() {
         final EvaluationResult result = Runner.check(
-                GradleInternalApiRule.tasksShouldNotUseInternalGradleApis,
+                GradleInternalApiRule.TASK_INTERNAL,
                 TaskNotUsingInternalApis.class
         );
         LOG.info(result.getFailureReport().toString());
@@ -41,7 +41,7 @@ public class GradleInternalApiRuleTest {
     @Test
     public void pluginUsingPublicGradleApis_should_pass() {
         final EvaluationResult result = Runner.check(
-                GradleInternalApiRule.pluginsShouldNotUseInternalGradleApis,
+                GradleInternalApiRule.PLUGIN_INTERNAL,
                 PluginUsingPublicGradleApis.class
         );
         LOG.info(result.getFailureReport().toString());
@@ -51,7 +51,7 @@ public class GradleInternalApiRuleTest {
     @Test
     public void pluginUsingInternalApi_should_fail() {
         final EvaluationResult result = Runner.check(
-                GradleInternalApiRule.pluginsShouldNotUseInternalGradleApis,
+                GradleInternalApiRule.PLUGIN_INTERNAL,
                 PluginUsingInternalApi.class
         );
         LOG.info(result.getFailureReport().toString());
@@ -63,7 +63,7 @@ public class GradleInternalApiRuleTest {
     @Test
     public void taskUsingInternalApi_should_fail() {
         final EvaluationResult result = Runner.check(
-                GradleInternalApiRule.tasksShouldNotUseInternalGradleApis,
+                GradleInternalApiRule.TASK_INTERNAL,
                 TaskUsingInternalApi.class
         );
         LOG.info(result.getFailureReport().toString());

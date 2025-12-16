@@ -1,18 +1,13 @@
 package com.netflix.nebula.archrules.gradleplugins;
 
-import com.netflix.nebula.archrules.core.ArchRulesService;
-import com.tngtech.archunit.core.domain.JavaAccess;
-import com.tngtech.archunit.core.domain.JavaClass;
-import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ArchRule;
-import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.Priority;
-import com.tngtech.archunit.lang.SimpleConditionEvent;
 import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
 import org.jspecify.annotations.NullMarked;
 
-import java.util.HashMap;
-import java.util.Map;
+import static com.netflix.nebula.archrules.gradleplugins.Predicates.accessDeprecatedGradleApi;
+import static com.netflix.nebula.archrules.gradleplugins.Predicates.deprecatedGradleClass;
+import static com.tngtech.archunit.lang.conditions.ArchConditions.accessTargetWhere;
 
 /**
  * Rules to prevent usage of deprecated Gradle APIs.
@@ -20,9 +15,7 @@ import java.util.Map;
  * Using deprecated Gradle APIs will cause build failures in future Gradle versions.
  */
 @NullMarked
-public class GradleDeprecatedApiRule implements ArchRulesService {
-
-    private static final String GRADLE_API_PACKAGE = "org.gradle";
+public class GradleDeprecatedApiRule {
 
     /**
      * Prevents plugins from using deprecated Gradle APIs.
@@ -32,9 +25,10 @@ public class GradleDeprecatedApiRule implements ArchRulesService {
      * upgrade guides.
      */
     public static final ArchRule pluginsShouldNotUseDeprecatedGradleApis = ArchRuleDefinition.priority(Priority.MEDIUM)
-            .classes()
+            .noClasses()
             .that().implement("org.gradle.api.Plugin")
-            .should(notUseDeprecatedGradleApis())
+            .should().dependOnClassesThat(deprecatedGradleClass)
+            .orShould(accessTargetWhere(accessDeprecatedGradleApi))
             .allowEmptyShould(true)
             .because(
                     "Plugins should not use deprecated Gradle APIs as they will be removed in future versions. " +
@@ -50,52 +44,15 @@ public class GradleDeprecatedApiRule implements ArchRulesService {
      * upgrade guides.
      */
     public static final ArchRule tasksShouldNotUseDeprecatedGradleApis = ArchRuleDefinition.priority(Priority.MEDIUM)
-            .classes()
+            .noClasses()
             .that().areAssignableTo("org.gradle.api.Task")
             .and().areNotInterfaces()
-            .should(notUseDeprecatedGradleApis())
+            .should().dependOnClassesThat(deprecatedGradleClass)
+            .orShould(accessTargetWhere(accessDeprecatedGradleApi))
             .allowEmptyShould(true)
             .because(
                     "Tasks should not use deprecated Gradle APIs as they will be removed in future versions. " +
                     "Consult Gradle upgrade guides for modern alternatives. " +
                     "See https://docs.gradle.org/current/userguide/upgrading_version_8.html"
             );
-
-    private static ArchCondition<JavaClass> notUseDeprecatedGradleApis() {
-        return new ArchCondition<JavaClass>("not use deprecated Gradle APIs") {
-            @Override
-            public void check(JavaClass javaClass, ConditionEvents events) {
-                for (JavaAccess<?> access : javaClass.getAccessesFromSelf()) {
-                    if (isDeprecatedGradleApi(access)) {
-                        String message = String.format(
-                                "Class %s uses deprecated Gradle API: %s. " +
-                                "This API will be removed in a future Gradle version. " +
-                                "Consult Gradle upgrade guides for alternatives.",
-                                javaClass.getSimpleName(),
-                                access.getDescription()
-                        );
-                        events.add(SimpleConditionEvent.violated(access, message));
-                    }
-                }
-            }
-
-            private boolean isDeprecatedGradleApi(JavaAccess<?> access) {
-                String targetOwnerName = access.getTargetOwner().getName();
-
-                if (!targetOwnerName.startsWith(GRADLE_API_PACKAGE)) {
-                    return false;
-                }
-
-                return access.getTarget().isAnnotatedWith(Deprecated.class);
-            }
-        };
-    }
-
-    @Override
-    public Map<String, ArchRule> getRules() {
-        Map<String, ArchRule> rules = new HashMap<>();
-        rules.put("gradle-plugin-no-deprecated-apis", pluginsShouldNotUseDeprecatedGradleApis);
-        rules.put("gradle-task-no-deprecated-apis", tasksShouldNotUseDeprecatedGradleApis);
-        return rules;
-    }
 }
