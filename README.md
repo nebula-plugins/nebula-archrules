@@ -7,9 +7,14 @@ This repository contains several libraries of ArchRules which can be used in pro
 [![Maven Central](https://img.shields.io/maven-central/v/com.netflix.nebula/archrules-deprecation?style=for-the-badge&color=01AF01)](https://repo1.maven.org/maven2/com/netflix/nebula/archrules-deprecation/)
 
 ## Gradle Plugin Development
-[![Maven Central](https://img.shields.io/maven-central/v/com.netflix.nebula/archrules-gradle-plugin-development?style=for-the-badge&color=01AF01)](https://repo1.maven.org/maven2/com/netflix/nebula/gradle-plugin-development/)
+[![Maven Central](https://img.shields.io/maven-central/v/com.netflix.nebula/archrules-gradle-plugin-development?style=for-the-badge&color=01AF01)](https://repo1.maven.org/maven2/com/netflix/nebula/archrules-gradle-plugin-development/)
 
 These rules enforce best practices when developing Gradle plugins.
+
+## Guava Rules
+[![Maven Central](https://img.shields.io/maven-central/v/com.netflix.nebula/archrules-guava?style=for-the-badge&color=01AF01)](https://repo1.maven.org/maven2/com/netflix/nebula/archrules-guava/)
+
+These rules detect the usage of certain APIs from Guava which have standard library replacements.
 
 ## Javax Rules
 [![Maven Central](https://img.shields.io/maven-central/v/com.netflix.nebula/archrules-joda?style=for-the-badge&color=01AF01)](https://repo1.maven.org/maven2/com/netflix/nebula/archrules-javax/)

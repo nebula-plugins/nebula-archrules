@@ -1,14 +1,16 @@
 package com.netflix.nebula.archrules.gradleplugins;
 
-import com.netflix.nebula.archrules.core.ArchRulesService;
+import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaField;
 import com.tngtech.archunit.core.domain.JavaMethod;
+import com.tngtech.archunit.core.domain.JavaModifier;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ArchRule;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.Priority;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
+import com.tngtech.archunit.lang.conditions.ArchPredicates;
 import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
 import org.jspecify.annotations.NullMarked;
 
@@ -18,6 +20,15 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import static com.netflix.nebula.archrules.gradleplugins.Predicates.getters;
+import static com.netflix.nebula.archrules.gradleplugins.Predicates.hasRichPropertyReturnType;
+import static com.tngtech.archunit.base.DescribedPredicate.not;
+import static com.tngtech.archunit.core.domain.JavaMember.Predicates.declaredIn;
+import static com.tngtech.archunit.core.domain.JavaModifier.PRIVATE;
+import static com.tngtech.archunit.core.domain.properties.CanBeAnnotated.Predicates.annotatedWith;
+import static com.tngtech.archunit.core.domain.properties.HasModifiers.Predicates.modifier;
+import static com.tngtech.archunit.lang.conditions.ArchPredicates.are;
+
 /**
  * Rules for Gradle task classes to ensure they use the Provider API for lazy configuration.
  * <p>
@@ -25,7 +36,7 @@ import java.util.Set;
  * enables lazy configuration and configuration avoidance, which are critical for build performance.
  */
 @NullMarked
-public class GradleTaskProviderApiRule  implements ArchRulesService {
+class GradleTaskProviderApiRule {
 
     private static final String JAVA_IO_FILE = "java.io.File";
     private static final String JAVA_LANG_STRING = "java.lang.String";
@@ -68,6 +79,7 @@ public class GradleTaskProviderApiRule  implements ArchRulesService {
         ));
 
         private static final Map<String, String> TYPE_TO_PROVIDER;
+
         static {
             Map<String, String> map = new HashMap<>();
             map.put(JAVA_UTIL_LIST, RECOMMENDATION_LIST_PROPERTY);
@@ -93,7 +105,7 @@ public class GradleTaskProviderApiRule  implements ArchRulesService {
      * ({@code Property<T>}, {@code RegularFileProperty}, {@code DirectoryProperty}, etc.)
      * instead of plain types for lazy configuration.
      */
-    public static final ArchRule taskInputOutputPropertiesShouldUseProviderApi = ArchRuleDefinition.priority(Priority.MEDIUM)
+    static final ArchRule PROVIDER_PROPERTIES = ArchRuleDefinition.priority(Priority.MEDIUM)
             .classes()
             .that().areAssignableTo("org.gradle.api.Task")
             .and().areNotInterfaces()
@@ -237,10 +249,23 @@ public class GradleTaskProviderApiRule  implements ArchRulesService {
         };
     }
 
-    @Override
-    public Map<String, ArchRule> getRules() {
-        Map<String, ArchRule> rules = new HashMap<>();
-        rules.put("gradle-task-provider-api", taskInputOutputPropertiesShouldUseProviderApi);
-        return rules;
-    }
+    static final DescribedPredicate<JavaMethod> richTaskPropertyGetters = ArchPredicates.are(getters)
+            .and(are(hasRichPropertyReturnType))
+            .and(not(modifier(PRIVATE)))
+            .and(not(annotatedWith("javax.inject.Inject")))
+            .and(not(annotatedWith("org.gradle.api.tasks.options.OptionValues")))
+            .and(not(declaredIn("org.gradle.api.Task")))
+            .and(not(declaredIn("org.gradle.api.DefaultTask")))
+            .and(not(declaredIn("org.gradle.api.internal.AbstractTask")))
+            .as("task property getters");
+
+    /**
+     * Inspired by
+     * {@link <a href="https://github.com/gradle/gradle/blob/master/testing/architecture-test/src/test/java/org/gradle/architecture/test/PropertyUsageArchitectureTest.java">Gradle</a>}
+     */
+    static final ArchRule ABSTRACT_GETTERS = ArchRuleDefinition.priority(Priority.MEDIUM)
+            .methods().that(are(richTaskPropertyGetters))
+            .should().haveModifier(JavaModifier.ABSTRACT)
+            .allowEmptyShould(true)
+            .because("task implementations should define properties as abstract getters");
 }

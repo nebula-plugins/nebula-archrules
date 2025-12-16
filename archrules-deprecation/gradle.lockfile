@@ -3,16 +3,12 @@
 # This file is expected to be part of source control.
 ch.qos.logback:logback-classic:1.5.20=archRulesTestArchRulesRuntime,archRulesTestCompileClasspath,archRulesTestRuntimeClasspath
 ch.qos.logback:logback-core:1.5.20=archRulesTestArchRulesRuntime,archRulesTestCompileClasspath,archRulesTestRuntimeClasspath
-com.netflix.nebula:archrules-joda:0.3.0=archRules
-com.netflix.nebula:archrules-joda:0.6.0=archRulesArchRulesRuntime,archRulesTestArchRulesRuntime,mainArchRulesRuntime,testArchRulesRuntime
-com.netflix.nebula:archrules-nullability:0.3.0=archRules
-com.netflix.nebula:archrules-nullability:0.6.0=archRulesArchRulesRuntime,archRulesTestArchRulesRuntime,mainArchRulesRuntime,testArchRulesRuntime
-com.netflix.nebula:archrules-testing-frameworks:0.3.0=archRules
-com.netflix.nebula:archrules-testing-frameworks:0.6.0=archRulesArchRulesRuntime,archRulesTestArchRulesRuntime,mainArchRulesRuntime,testArchRulesRuntime
-com.netflix.nebula:nebula-archrules-core:0.2.3=archRules
-com.netflix.nebula:nebula-archrules-core:0.3.0=archRulesRuntimeClasspath
-com.netflix.nebula:nebula-archrules-core:0.4.0=mainArchRulesRuntime,testArchRulesRuntime
-com.netflix.nebula:nebula-archrules-core:0.5.3=archRulesArchRulesRuntime,archRulesCompileClasspath,archRulesTestArchRulesRuntime,archRulesTestCompileClasspath,archRulesTestRuntimeClasspath
+com.netflix.nebula:archrules-joda:0.6.0=archRules,archRulesArchRulesRuntime,archRulesTestArchRulesRuntime,mainArchRulesRuntime,testArchRulesRuntime
+com.netflix.nebula:archrules-nullability:0.6.0=archRules,archRulesArchRulesRuntime,archRulesTestArchRulesRuntime,mainArchRulesRuntime,testArchRulesRuntime
+com.netflix.nebula:archrules-security:0.6.0=archRules,archRulesArchRulesRuntime,archRulesTestArchRulesRuntime,mainArchRulesRuntime,testArchRulesRuntime
+com.netflix.nebula:archrules-testing-frameworks:0.6.0=archRules,archRulesArchRulesRuntime,archRulesTestArchRulesRuntime,mainArchRulesRuntime,testArchRulesRuntime
+com.netflix.nebula:nebula-archrules-core:0.5.2=archRules,mainArchRulesRuntime,testArchRulesRuntime
+com.netflix.nebula:nebula-archrules-core:0.5.5=archRulesArchRulesRuntime,archRulesCompileClasspath,archRulesRuntimeClasspath,archRulesTestArchRulesRuntime,archRulesTestCompileClasspath,archRulesTestRuntimeClasspath
 com.tngtech.archunit:archunit:1.4.1=archRules,archRulesArchRulesRuntime,archRulesCompileClasspath,archRulesRuntimeClasspath,archRulesTestArchRulesRuntime,archRulesTestCompileClasspath,archRulesTestRuntimeClasspath,mainArchRulesRuntime,testArchRulesRuntime
 net.bytebuddy:byte-buddy:1.17.7=archRulesTestArchRulesRuntime,archRulesTestCompileClasspath,archRulesTestRuntimeClasspath
 org.apiguardian:apiguardian-api:1.1.2=archRulesTestCompileClasspath

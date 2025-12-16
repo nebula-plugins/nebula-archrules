@@ -5,7 +5,6 @@ import com.tngtech.archunit.lang.EvaluationResult;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
-import org.gradle.api.tasks.TaskProvider;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,30 +17,33 @@ public class GradlePluginLazyTaskRegistrationRuleTest {
     @Test
     public void pluginUsingEagerTaskCreation_should_fail() {
         final EvaluationResult result = Runner.check(
-                GradlePluginLazyTaskRegistrationRule.pluginsShouldUseLazyTaskRegistration,
+                GradlePluginLazyTaskRegistrationRule.LAZY_TASK_CREATION,
                 PluginUsingEagerTaskCreation.class
         );
         LOG.info(result.getFailureReport().toString());
         assertThat(result.hasViolation()).isTrue();
-        assertThat(result.getFailureReport().toString()).contains("uses eager task creation");
-        assertThat(result.getFailureReport().toString()).contains("Use tasks.register()");
+        assertThat(result.getFailureReport().toString()).contains("where task is created eagerly");
+        assertThat(result.getFailureReport().toString()).contains("use tasks.register()");
+        assertThat(result.getFailureReport().toString())
+                .as("wrong call is shown")
+                .contains("calls method <org.gradle.api.Project.task(java.lang.String, org.gradle.api.Action)>");
     }
 
     @Test
     public void pluginUsingTasksCreate_should_fail() {
         final EvaluationResult result = Runner.check(
-                GradlePluginLazyTaskRegistrationRule.pluginsShouldUseLazyTaskRegistration,
+                GradlePluginLazyTaskRegistrationRule.LAZY_TASK_CREATION,
                 PluginUsingTasksCreate.class
         );
         LOG.info(result.getFailureReport().toString());
         assertThat(result.hasViolation()).isTrue();
-        assertThat(result.getFailureReport().toString()).contains("uses eager task creation");
+        assertThat(result.getFailureReport().toString()).contains("where task is created eagerly");
     }
 
     @Test
     public void pluginUsingLazyTaskRegistration_should_pass() {
         final EvaluationResult result = Runner.check(
-                GradlePluginLazyTaskRegistrationRule.pluginsShouldUseLazyTaskRegistration,
+                GradlePluginLazyTaskRegistrationRule.LAZY_TASK_CREATION,
                 PluginUsingLazyTaskRegistration.class
         );
         LOG.info(result.getFailureReport().toString());
@@ -51,7 +53,7 @@ public class GradlePluginLazyTaskRegistrationRuleTest {
     @Test
     public void pluginUsingTasksNamed_should_pass() {
         final EvaluationResult result = Runner.check(
-                GradlePluginLazyTaskRegistrationRule.pluginsShouldUseLazyTaskRegistration,
+                GradlePluginLazyTaskRegistrationRule.LAZY_TASK_CREATION,
                 PluginUsingTasksNamed.class
         );
         LOG.info(result.getFailureReport().toString());

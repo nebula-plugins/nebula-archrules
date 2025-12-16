@@ -21,18 +21,19 @@ public class GradleTaskInputOutputRuleTest {
     @Test
     public void taskWithoutInputOutput_should_fail() {
         final EvaluationResult result = Runner.check(
-                GradleTaskInputOutputRule.tasksShouldDeclareInputsOrOutputs,
+                GradleTaskInputOutputRule.INPUTS_OUTPUTS,
                 TaskWithoutInputOutput.class
         );
-        LOG.info(result.getFailureReport().toString());
         assertThat(result.hasViolation()).isTrue();
-        assertThat(result.getFailureReport().toString()).contains("no declared inputs or outputs");
+        assertThat(result.getFailureReport().toString())
+                .contains("should contain any methods that are annotated with Input and/or Output annotations")
+                .contains("should contain any fields that are annotated with Input and/or Output annotations");
     }
 
     @Test
     public void taskWithInputAnnotation_should_pass() {
         final EvaluationResult result = Runner.check(
-                GradleTaskInputOutputRule.tasksShouldDeclareInputsOrOutputs,
+                GradleTaskInputOutputRule.INPUTS_OUTPUTS,
                 TaskWithInputAnnotation.class
         );
         LOG.info(result.getFailureReport().toString());
@@ -42,7 +43,7 @@ public class GradleTaskInputOutputRuleTest {
     @Test
     public void taskWithInputFileAnnotation_should_pass() {
         final EvaluationResult result = Runner.check(
-                GradleTaskInputOutputRule.tasksShouldDeclareInputsOrOutputs,
+                GradleTaskInputOutputRule.INPUTS_OUTPUTS,
                 TaskWithInputFileAnnotation.class
         );
         LOG.info(result.getFailureReport().toString());
@@ -52,7 +53,7 @@ public class GradleTaskInputOutputRuleTest {
     @Test
     public void taskWithOutputAnnotation_should_pass() {
         final EvaluationResult result = Runner.check(
-                GradleTaskInputOutputRule.tasksShouldDeclareInputsOrOutputs,
+                GradleTaskInputOutputRule.INPUTS_OUTPUTS,
                 TaskWithOutputAnnotation.class
         );
         LOG.info(result.getFailureReport().toString());
@@ -62,7 +63,7 @@ public class GradleTaskInputOutputRuleTest {
     @Test
     public void taskWithoutTaskAction_should_pass() {
         final EvaluationResult result = Runner.check(
-                GradleTaskInputOutputRule.tasksShouldDeclareInputsOrOutputs,
+                GradleTaskInputOutputRule.INPUTS_OUTPUTS,
                 TaskWithoutTaskAction.class
         );
         LOG.info(result.getFailureReport().toString());

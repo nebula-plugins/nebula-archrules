@@ -24,18 +24,17 @@ public class GradleTaskCacheabilityRuleTest {
     @Test
     public void cacheableTaskWithoutPathSensitive_should_fail() {
         final EvaluationResult result = Runner.check(
-                GradleTaskCacheabilityRule.cacheableTasksShouldDeclarePathSensitivity,
+                GradleTaskCacheabilityRule.FIELDS_PATH_SENSITIVITY,
                 CacheableTaskWithoutPathSensitive.class
         );
-        LOG.info(result.getFailureReport().toString());
         assertThat(result.hasViolation()).isTrue();
-        assertThat(result.getFailureReport().toString()).contains("missing @PathSensitive");
+        assertThat(result.getFailureReport().toString()).contains("should be annotated with @PathSensitive");
     }
 
     @Test
     public void cacheableTaskWithPathSensitive_should_pass() {
         final EvaluationResult result = Runner.check(
-                GradleTaskCacheabilityRule.cacheableTasksShouldDeclarePathSensitivity,
+                GradleTaskCacheabilityRule.FIELDS_PATH_SENSITIVITY,
                 CacheableTaskWithPathSensitive.class
         );
         LOG.info(result.getFailureReport().toString());
@@ -45,18 +44,18 @@ public class GradleTaskCacheabilityRuleTest {
     @Test
     public void cacheableTaskWithInputFileMethodMissingPathSensitive_should_fail() {
         final EvaluationResult result = Runner.check(
-                GradleTaskCacheabilityRule.cacheableTasksShouldDeclarePathSensitivity,
+                GradleTaskCacheabilityRule.METHODS_PATH_SENSITIVITY,
                 CacheableTaskWithInputFileMethodMissingPathSensitive.class
         );
         LOG.info(result.getFailureReport().toString());
         assertThat(result.hasViolation()).isTrue();
-        assertThat(result.getFailureReport().toString()).contains("missing @PathSensitive");
+        assertThat(result.getFailureReport().toString()).contains("should be annotated with @PathSensitive");
     }
 
     @Test
     public void cacheableTaskWithInputFileMethodWithPathSensitive_should_pass() {
         final EvaluationResult result = Runner.check(
-                GradleTaskCacheabilityRule.cacheableTasksShouldDeclarePathSensitivity,
+                GradleTaskCacheabilityRule.FIELDS_PATH_SENSITIVITY,
                 CacheableTaskWithInputFileMethodWithPathSensitive.class
         );
         LOG.info(result.getFailureReport().toString());
@@ -66,7 +65,7 @@ public class GradleTaskCacheabilityRuleTest {
     @Test
     public void cacheableTaskWithOnlyOutputs_should_pass() {
         final EvaluationResult result = Runner.check(
-                GradleTaskCacheabilityRule.cacheableTasksShouldDeclarePathSensitivity,
+                GradleTaskCacheabilityRule.FIELDS_PATH_SENSITIVITY,
                 CacheableTaskWithOnlyOutputs.class
         );
         LOG.info(result.getFailureReport().toString());
@@ -76,7 +75,7 @@ public class GradleTaskCacheabilityRuleTest {
     @Test
     public void nonCacheableTaskWithoutPathSensitive_should_pass() {
         final EvaluationResult result = Runner.check(
-                GradleTaskCacheabilityRule.cacheableTasksShouldDeclarePathSensitivity,
+                GradleTaskCacheabilityRule.FIELDS_PATH_SENSITIVITY,
                 NonCacheableTaskWithoutPathSensitive.class
         );
         LOG.info(result.getFailureReport().toString());

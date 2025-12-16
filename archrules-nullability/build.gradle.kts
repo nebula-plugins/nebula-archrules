@@ -19,8 +19,13 @@ dependencies {
 }
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(11) // must be 11 in order to reference jakarta annotations
+        languageVersion = JavaLanguageVersion.of(8)
     }
+}
+tasks.named<JavaCompile>("compileArchRulesTestJava") {
+    javaCompiler.set(javaToolchains.compilerFor {
+        languageVersion.set(JavaLanguageVersion.of(11)) // must be 11 in order to reference jakarta annotations
+    })
 }
 dependencyLocking {
     lockAllConfigurations()
