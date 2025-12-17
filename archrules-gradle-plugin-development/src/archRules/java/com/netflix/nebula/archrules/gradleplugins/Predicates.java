@@ -36,7 +36,7 @@ class Predicates {
                 return false;
             }
             if (input.getName().startsWith("get")) {
-                if (Character.isLowerCase(input.getName().charAt(3))) {
+                if (input.getName().length() < 4 || Character.isLowerCase(input.getName().charAt(3))) {
                     return false;
                 }
                 return true;
