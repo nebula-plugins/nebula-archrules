@@ -18,9 +18,10 @@ develocity {
 rootProject.name = "nebula-archrules"
 
 include(":archrules-deprecation")
-include(":archrules-testing-frameworks")
+include(":archrules-gradle-plugin-development")
+include(":archrules-guava")
+include(":archrules-javax")
 include(":archrules-joda")
 include(":archrules-nullability")
-include(":archrules-gradle-plugin-development")
 include(":archrules-security")
-include(":archrules-javax")
+include(":archrules-testing-frameworks")
