@@ -37,4 +37,17 @@ class PredicatesTest {
                 scan(GradleTaskCacheabilityRuleTest.CacheableTaskWithoutPathSensitive.class).getField("inputFile"))
         ).isTrue();
     }
+
+    @Test
+    public void test_getters_get() {
+        assertThat(Predicates.getters.test(scan(AClass.class).getMethod("get"))).isFalse();
+    }
+
+
+    static class AClass {
+        @SuppressWarnings("unused")
+        public String get() {
+            return "";
+        }
+    }
 }
