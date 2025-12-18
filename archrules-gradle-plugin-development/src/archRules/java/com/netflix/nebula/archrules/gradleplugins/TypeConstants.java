@@ -23,6 +23,9 @@ final class TypeConstants {
     static final String JAVA_UTIL_SET = "java.util.Set";
     static final String JAVA_UTIL_MAP = "java.util.Map";
 
+    // Gradle core types
+    static final String GRADLE_PLUGIN = "org.gradle.api.Plugin";
+
     // Gradle task input annotations
     static final String ANNOTATION_INPUT = "org.gradle.api.tasks.Input";
     static final String ANNOTATION_INPUT_FILE = "org.gradle.api.tasks.InputFile";

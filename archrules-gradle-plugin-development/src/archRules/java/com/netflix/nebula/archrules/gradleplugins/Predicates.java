@@ -3,8 +3,10 @@ package com.netflix.nebula.archrules.gradleplugins;
 import com.tngtech.archunit.base.ChainableFunction;
 import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.domain.JavaAccess;
+import com.tngtech.archunit.core.domain.JavaCall;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaField;
+import com.tngtech.archunit.core.domain.JavaFieldAccess;
 import com.tngtech.archunit.core.domain.JavaMethod;
 import com.tngtech.archunit.core.domain.JavaModifier;
 import com.tngtech.archunit.core.domain.properties.CanBeAnnotated;
@@ -13,17 +15,22 @@ import com.tngtech.archunit.lang.conditions.ArchPredicates;
 
 import java.util.Set;
 
+import static com.tngtech.archunit.base.DescribedPredicate.not;
 import static com.tngtech.archunit.core.domain.JavaAccess.Predicates.target;
 import static com.tngtech.archunit.core.domain.JavaAccess.Predicates.targetOwner;
+import static com.tngtech.archunit.core.domain.JavaClass.Predicates.INTERFACES;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.assignableTo;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.containAnyMethodsThat;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPackage;
+import static com.tngtech.archunit.core.domain.JavaClass.Predicates.simpleNameEndingWith;
 import static com.tngtech.archunit.core.domain.properties.CanBeAnnotated.Predicates.annotatedWith;
+import static com.tngtech.archunit.core.domain.properties.HasModifiers.Predicates.modifier;
 import static com.tngtech.archunit.core.domain.properties.HasName.Predicates.name;
 import static com.tngtech.archunit.core.domain.properties.HasReturnType.Predicates.rawReturnType;
 import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.ANNOTATION_INPUT_DIRECTORY;
 import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.ANNOTATION_INPUT_FILE;
 import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.ANNOTATION_INPUT_FILES;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.GRADLE_PLUGIN;
 import static com.tngtech.archunit.core.domain.properties.HasType.Predicates.rawType;
 import static com.tngtech.archunit.lang.conditions.ArchPredicates.are;
 import static com.tngtech.archunit.lang.conditions.ArchPredicates.has;
@@ -171,4 +178,54 @@ class Predicates {
         return predicate.and(targetOwner(ownerPredicate))
                 .as("calls " + methodName + " on any of " + String.join(", ", ownerClasses));
     }
+
+    /**
+     * Matches classes that are registered as extensions from Plugin implementations.
+     * <p>
+     * Detects extension classes that are accessed from Plugin code through:
+     * <ul>
+     *   <li>Field references: {@code private MyExtension ext;}</li>
+     *   <li>Constructor calls: {@code new MyExtension()}</li>
+     *   <li>Method calls: {@code ext.getValue()}</li>
+     *   <li>Transitive references: classes used by classes used by plugins</li>
+     * </ul>
+     * <p>
+     * <b>Known limitation:</b> Pure class literal references like
+     * {@code project.getExtensions().create("name", Extension.class)} where there is
+     * NO other reference to the extension are not reliably detected due to ArchUnit API
+     * limitations. In practice, most plugins have additional references to their extensions
+     * (fields, constructors, methods), so this limitation has minimal real-world impact.
+     */
+    static final DescribedPredicate<JavaClass> referencedFromPlugin = new DescribedPredicate<JavaClass>("referenced from plugin") {
+        @Override
+        public boolean test(JavaClass extensionClass) {
+            boolean hasDirectAccess = extensionClass.getAccessesToSelf().stream()
+                    .anyMatch(access -> {
+                        JavaClass originOwner = access.getOriginOwner();
+
+                        if (originOwner.isAssignableTo(GRADLE_PLUGIN)) {
+                            return true;
+                        }
+
+                        return originOwner.getAccessesToSelf().stream()
+                                .anyMatch(outerAccess -> outerAccess.getOriginOwner().isAssignableTo(GRADLE_PLUGIN));
+                    });
+
+            if (hasDirectAccess) {
+                return true;
+            }
+
+            return extensionClass.getAllFields().stream()
+                    .filter(field -> "class".equals(field.getName()))
+                    .flatMap(field -> field.getAccessesToSelf().stream())
+                    .anyMatch(access -> access.getOriginOwner().isAssignableTo(GRADLE_PLUGIN));
+        }
+    };
+
+    /** Matches plugin extension classes (named with "Extension" suffix, non-interface, referenced from plugin). */
+    static final DescribedPredicate<JavaClass> pluginExtensionClass =
+            simpleNameEndingWith("Extension")
+                    .and(not(INTERFACES))
+                    .and(referencedFromPlugin)
+                    .as("plugin extension class");
 }

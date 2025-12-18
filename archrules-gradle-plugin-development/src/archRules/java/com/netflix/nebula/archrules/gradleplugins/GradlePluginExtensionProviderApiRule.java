@@ -21,6 +21,7 @@ import java.util.Set;
 import static com.netflix.nebula.archrules.gradleplugins.Predicates.getters;
 import static com.netflix.nebula.archrules.gradleplugins.Predicates.hasRichPropertyReturnType;
 import static com.netflix.nebula.archrules.gradleplugins.Predicates.isProviderApiType;
+import static com.netflix.nebula.archrules.gradleplugins.Predicates.pluginExtensionClass;
 import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.JAVA_LANG_BOOLEAN;
 import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.JAVA_LANG_INTEGER;
 import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.JAVA_LANG_LONG;
@@ -28,7 +29,6 @@ import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.JAVA_LANG
 import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.JAVA_UTIL_LIST;
 import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.JAVA_UTIL_SET;
 import static com.tngtech.archunit.base.DescribedPredicate.not;
-import static com.tngtech.archunit.core.domain.JavaClass.Predicates.simpleNameEndingWith;
 import static com.tngtech.archunit.core.domain.JavaMember.Predicates.declaredIn;
 import static com.tngtech.archunit.core.domain.properties.CanBeAnnotated.Predicates.annotatedWith;
 import static com.tngtech.archunit.core.domain.properties.HasModifiers.Predicates.modifier;
@@ -58,11 +58,13 @@ class GradlePluginExtensionProviderApiRule {
      * Extension classes used for plugin configuration should use Provider API types
      * for lazy configuration. This enables better integration with Gradle's configuration
      * system and improves build performance.
+     * <p>
+     * Only checks classes that are both named with "Extension" suffix AND referenced from Plugin code
+     * to reduce false positives from naming conventions.
      */
     public static final ArchRule EXTENSION_PROPERTIES_USE_PROVIDER_API = ArchRuleDefinition.priority(Priority.MEDIUM)
             .classes()
-            .that().haveSimpleNameEndingWith("Extension")
-            .and().areNotInterfaces()
+            .that(are(pluginExtensionClass))
             .should(useProviderApiForProperties())
             .allowEmptyShould(true)
             .because(
@@ -123,7 +125,7 @@ class GradlePluginExtensionProviderApiRule {
             .and(are(hasRichPropertyReturnType))
             .and(not(modifier(JavaModifier.PRIVATE)))
             .and(not(annotatedWith("javax.inject.Inject")))
-            .and(declaredIn(simpleNameEndingWith("Extension")))
+            .and(declaredIn(pluginExtensionClass))
             .as("extension property getters");
 
     /**
@@ -132,6 +134,9 @@ class GradlePluginExtensionProviderApiRule {
      * Extension property getters that return Provider API types should be abstract,
      * allowing Gradle to generate the implementation at runtime. This is the recommended
      * pattern for plugin extensions.
+     * <p>
+     * Only checks classes that are both named with "Extension" suffix AND referenced from Plugin code
+     * to reduce false positives from naming conventions.
      */
     public static final ArchRule EXTENSION_ABSTRACT_GETTERS = ArchRuleDefinition.priority(Priority.MEDIUM)
             .methods().that(are(richExtensionPropertyGetters))
@@ -142,4 +147,5 @@ class GradlePluginExtensionProviderApiRule {
                     "This allows Gradle to generate the implementation at runtime. " +
                     "See https://docs.gradle.org/current/userguide/custom_plugins.html#sec:implementing_an_extension"
             );
+
 }

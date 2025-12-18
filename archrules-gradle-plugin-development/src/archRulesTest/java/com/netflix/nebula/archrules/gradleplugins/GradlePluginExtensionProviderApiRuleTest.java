@@ -2,6 +2,8 @@ package com.netflix.nebula.archrules.gradleplugins;
 
 import com.netflix.nebula.archrules.core.Runner;
 import com.tngtech.archunit.lang.EvaluationResult;
+import org.gradle.api.Plugin;
+import org.gradle.api.Project;
 import org.gradle.api.provider.Property;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -16,7 +18,8 @@ public class GradlePluginExtensionProviderApiRuleTest {
     public void extensionWithPlainStringField_should_fail() {
         final EvaluationResult result = Runner.check(
                 GradlePluginExtensionProviderApiRule.EXTENSION_PROPERTIES_USE_PROVIDER_API,
-                BadPluginExtension.class
+                BadPluginExtension.class,
+                PluginUsingBadExtension.class
         );
         LOG.info(result.getFailureReport().toString());
         assertThat(result.hasViolation()).isTrue();
@@ -38,7 +41,8 @@ public class GradlePluginExtensionProviderApiRuleTest {
     public void extensionWithPlainStringGetter_should_fail() {
         final EvaluationResult result = Runner.check(
                 GradlePluginExtensionProviderApiRule.EXTENSION_PROPERTIES_USE_PROVIDER_API,
-                AnotherBadPluginExtension.class
+                AnotherBadPluginExtension.class,
+                PluginUsingAnotherBadExtension.class
         );
         LOG.info(result.getFailureReport().toString());
         assertThat(result.hasViolation()).isTrue();
@@ -70,7 +74,8 @@ public class GradlePluginExtensionProviderApiRuleTest {
     public void extensionWithConcreteProviderGetter_should_fail() {
         final EvaluationResult result = Runner.check(
                 GradlePluginExtensionProviderApiRule.EXTENSION_ABSTRACT_GETTERS,
-                ConcretePluginExtension.class
+                ConcretePluginExtension.class,
+                PluginUsingConcreteExtension.class
         );
         LOG.info(result.getFailureReport().toString());
         assertThat(result.hasViolation()).isTrue();
@@ -148,5 +153,39 @@ public class GradlePluginExtensionProviderApiRuleTest {
     @SuppressWarnings("unused")
     public abstract static class AbstractPluginExtension {
         public abstract Property<String> getValue();
+    }
+
+    @SuppressWarnings("unused")
+    public static class PluginUsingBadExtension implements Plugin<Project> {
+        private BadPluginExtension ext = new BadPluginExtension();
+
+        @Override
+        public void apply(Project project) {
+            ext.getValue();
+        }
+    }
+
+    @SuppressWarnings("unused")
+    public static class PluginUsingAnotherBadExtension implements Plugin<Project> {
+        private AnotherBadPluginExtension ext = new AnotherBadPluginExtension();
+
+        @Override
+        public void apply(Project project) {
+            ext.getValue();
+        }
+    }
+
+    @SuppressWarnings("unused")
+    public static class PluginUsingConcreteExtension implements Plugin<Project> {
+        private ConcretePluginExtension ext;
+
+        public PluginUsingConcreteExtension(Property<String> prop) {
+            ext = new ConcretePluginExtension(prop);
+        }
+
+        @Override
+        public void apply(Project project) {
+            ext.getValue();
+        }
     }
 }
