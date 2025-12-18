@@ -22,6 +22,7 @@ import java.util.Set;
 
 import static com.netflix.nebula.archrules.gradleplugins.Predicates.getters;
 import static com.netflix.nebula.archrules.gradleplugins.Predicates.hasRichPropertyReturnType;
+import static com.netflix.nebula.archrules.gradleplugins.Predicates.isProviderApiType;
 import static com.tngtech.archunit.base.DescribedPredicate.not;
 import static com.tngtech.archunit.core.domain.JavaMember.Predicates.declaredIn;
 import static com.tngtech.archunit.core.domain.JavaModifier.PRIVATE;
@@ -136,7 +137,7 @@ class GradleTaskProviderApiRule {
                     return;
                 }
 
-                if (shouldUseProviderApi(field.getRawType()) && !usesProviderApi(field.getRawType())) {
+                if (shouldUseProviderApi(field.getRawType()) && !isProviderApiType(field.getRawType())) {
                     String recommendation = getSpecificRecommendation(field.getRawType(), field);
                     String message = String.format(
                             "Task %s has field '%s' of type %s with input/output annotation. " +
@@ -160,7 +161,7 @@ class GradleTaskProviderApiRule {
                 }
 
                 JavaClass returnType = method.getRawReturnType();
-                if (shouldUseProviderApi(returnType) && !usesProviderApi(returnType)) {
+                if (shouldUseProviderApi(returnType) && !isProviderApiType(returnType)) {
                     String recommendation = getSpecificRecommendation(returnType, method);
                     String message = String.format(
                             "Task %s has getter '%s()' returning type %s with input/output annotation. " +
@@ -199,15 +200,6 @@ class GradleTaskProviderApiRule {
             private boolean shouldUseProviderApi(JavaClass type) {
                 String typeName = type.getName();
                 return getMutableTypesThatShouldUseProvider().contains(typeName);
-            }
-
-            private boolean usesProviderApi(JavaClass type) {
-                return type.isAssignableTo("org.gradle.api.provider.Property") ||
-                       type.isAssignableTo("org.gradle.api.provider.Provider") ||
-                       type.isAssignableTo("org.gradle.api.file.RegularFileProperty") ||
-                       type.isAssignableTo("org.gradle.api.file.DirectoryProperty") ||
-                       type.isAssignableTo("org.gradle.api.file.ConfigurableFileCollection") ||
-                       type.isAssignableTo("org.gradle.api.file.FileCollection");
             }
 
             private String getSpecificRecommendation(JavaClass type, JavaField field) {
