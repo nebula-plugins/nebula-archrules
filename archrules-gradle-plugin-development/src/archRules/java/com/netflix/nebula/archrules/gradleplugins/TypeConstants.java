@@ -25,6 +25,7 @@ final class TypeConstants {
 
     // Gradle core types
     static final String GRADLE_PLUGIN = "org.gradle.api.Plugin";
+    static final String GRADLE_PROJECT = "org.gradle.api.Project";
 
     // Gradle task input annotations
     static final String ANNOTATION_INPUT = "org.gradle.api.tasks.Input";

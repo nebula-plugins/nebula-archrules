@@ -21,7 +21,8 @@ public class GradlePluginProjectReferenceRuleTest {
         );
         LOG.info(result.getFailureReport().toString());
         assertThat(result.hasViolation()).isTrue();
-        assertThat(result.getFailureReport().toString()).contains("has field 'project' of type Project");
+        assertThat(result.getFailureReport().toString()).contains("PluginStoringProjectReference.project");
+        assertThat(result.getFailureReport().toString()).contains("has raw type assignable to org.gradle.api.Project");
         assertThat(result.getFailureReport().toString()).contains("breaks configuration cache");
     }
 
