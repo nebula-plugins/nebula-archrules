@@ -53,70 +53,50 @@ class GradlePluginExtensionProviderApiRule {
     ));
 
     /**
-     * Detects plugin extension classes with mutable properties that should use Provider API.
+     * Detects plugin extension fields with plain types that should use Provider API.
      * <p>
-     * Extension classes used for plugin configuration should use Provider API types
-     * for lazy configuration. This enables better integration with Gradle's configuration
-     * system and improves build performance.
-     * <p>
-     * Only checks classes that are both named with "Extension" suffix AND referenced from Plugin code
-     * to reduce false positives from naming conventions.
+     * Extension fields should use Provider API types for lazy configuration.
+     * Only checks non-static fields in extension classes.
      */
-    public static final ArchRule EXTENSION_PROPERTIES_USE_PROVIDER_API = ArchRuleDefinition.priority(Priority.MEDIUM)
-            .classes()
-            .that(are(pluginExtensionClass))
-            .should(useProviderApiForProperties())
+    public static final ArchRule EXTENSION_FIELDS_USE_PROVIDER_API = ArchRuleDefinition.priority(Priority.MEDIUM)
+            .fields()
+            .that().areDeclaredInClassesThat(are(pluginExtensionClass))
+            .and().areNotStatic()
+            .and(haveTypeThatShouldUseProvider())
+            .should(useProviderApiType())
             .allowEmptyShould(true)
             .because(
-                    "Plugin extension properties should use Provider API types (Property<T>, ListProperty<T>, " +
+                    "Plugin extension fields should use Provider API types (Property<T>, ListProperty<T>, " +
                     "SetProperty<T>) instead of plain mutable types. " +
                     "This enables lazy configuration and better integration with Gradle's configuration system. " +
                     "See https://docs.gradle.org/current/userguide/lazy_configuration.html"
             );
 
-    private static ArchCondition<JavaClass> useProviderApiForProperties() {
-        return new ArchCondition<JavaClass>("use Provider API for properties") {
+    private static boolean shouldUseProviderApi(JavaClass type) {
+        return TYPES_THAT_SHOULD_USE_PROVIDER.contains(type.getName()) && !isProviderApiType(type);
+    }
+
+    private static DescribedPredicate<JavaField> haveTypeThatShouldUseProvider() {
+        return new DescribedPredicate<JavaField>("have type that should use Provider API") {
             @Override
-            public void check(JavaClass extensionClass, ConditionEvents events) {
-                for (JavaField field : extensionClass.getAllFields()) {
-                    if (field.getModifiers().contains(JavaModifier.STATIC)) {
-                        continue;
-                    }
-
-                    if (shouldUseProviderApi(field.getRawType()) && !isProviderApiType(field.getRawType())) {
-                        String message = String.format(
-                                "Extension %s has field '%s' of type %s. " +
-                                "Use Property<%s> for lazy configuration.",
-                                extensionClass.getSimpleName(),
-                                field.getName(),
-                                field.getRawType().getSimpleName(),
-                                field.getRawType().getSimpleName()
-                        );
-                        events.add(SimpleConditionEvent.violated(field, message));
-                    }
-                }
-
-                for (JavaMethod method : extensionClass.getMethods()) {
-                    if (!getters.test(method)) {
-                        continue;
-                    }
-
-                    if (shouldUseProviderApi(method.getRawReturnType()) && !isProviderApiType(method.getRawReturnType())) {
-                        String message = String.format(
-                                "Extension %s has getter '%s()' returning type %s. " +
-                                "Use Property<%s> for lazy configuration.",
-                                extensionClass.getSimpleName(),
-                                method.getName(),
-                                method.getRawReturnType().getSimpleName(),
-                                method.getRawReturnType().getSimpleName()
-                        );
-                        events.add(SimpleConditionEvent.violated(method, message));
-                    }
-                }
+            public boolean test(JavaField field) {
+                return shouldUseProviderApi(field.getRawType());
             }
+        };
+    }
 
-            private boolean shouldUseProviderApi(JavaClass type) {
-                return TYPES_THAT_SHOULD_USE_PROVIDER.contains(type.getName());
+    private static ArchCondition<JavaField> useProviderApiType() {
+        return new ArchCondition<JavaField>("use Provider API type") {
+            @Override
+            public void check(JavaField field, ConditionEvents events) {
+                String message = String.format(
+                        "Field <%s.%s> has type %s. Use Property<%s> for lazy configuration.",
+                        field.getOwner().getName(),
+                        field.getName(),
+                        field.getRawType().getSimpleName(),
+                        field.getRawType().getSimpleName()
+                );
+                events.add(SimpleConditionEvent.violated(field, message));
             }
         };
     }

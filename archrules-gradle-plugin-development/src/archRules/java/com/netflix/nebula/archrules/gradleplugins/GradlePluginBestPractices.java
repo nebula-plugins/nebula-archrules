@@ -12,7 +12,7 @@ import static com.netflix.nebula.archrules.gradleplugins.GradleDeprecatedApiRule
 import static com.netflix.nebula.archrules.gradleplugins.GradleInternalApiRule.PLUGIN_INTERNAL;
 import static com.netflix.nebula.archrules.gradleplugins.GradleInternalApiRule.TASK_INTERNAL;
 import static com.netflix.nebula.archrules.gradleplugins.GradlePluginExtensionProviderApiRule.EXTENSION_ABSTRACT_GETTERS;
-import static com.netflix.nebula.archrules.gradleplugins.GradlePluginExtensionProviderApiRule.EXTENSION_PROPERTIES_USE_PROVIDER_API;
+import static com.netflix.nebula.archrules.gradleplugins.GradlePluginExtensionProviderApiRule.EXTENSION_FIELDS_USE_PROVIDER_API;
 import static com.netflix.nebula.archrules.gradleplugins.GradlePluginLazyTaskRegistrationRule.LAZY_TASK_CREATION;
 import static com.netflix.nebula.archrules.gradleplugins.GradlePluginProjectReferenceRule.PLUGINS_SHOULD_NOT_STORE_PROJECT_REFERENCES;
 import static com.netflix.nebula.archrules.gradleplugins.GradlePluginServiceInjectionRule.USE_INJECTED_OBJECT_FACTORY;
@@ -47,7 +47,7 @@ public class GradlePluginBestPractices implements ArchRulesService {
         rules.put("Plugin storing Project references", PLUGINS_SHOULD_NOT_STORE_PROJECT_REFERENCES);
         rules.put("Plugin should inject ObjectFactory", USE_INJECTED_OBJECT_FACTORY);
         rules.put("Plugin should inject ProviderFactory", USE_INJECTED_PROVIDER_FACTORY);
-        rules.put("Extension properties use Provider API", EXTENSION_PROPERTIES_USE_PROVIDER_API);
+        rules.put("Extension fields use Provider API", EXTENSION_FIELDS_USE_PROVIDER_API);
         rules.put("Extension abstract getters", EXTENSION_ABSTRACT_GETTERS);
         rules.put("Task declares inputs and/or outputs", INPUTS_OUTPUTS);
         rules.put("Cacheable Task input field path sensitivity", FIELDS_PATH_SENSITIVITY);

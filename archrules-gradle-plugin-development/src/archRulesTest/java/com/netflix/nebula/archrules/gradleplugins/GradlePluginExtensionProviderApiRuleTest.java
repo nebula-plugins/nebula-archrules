@@ -17,20 +17,21 @@ public class GradlePluginExtensionProviderApiRuleTest {
     @Test
     public void extensionWithPlainStringField_should_fail() {
         final EvaluationResult result = Runner.check(
-                GradlePluginExtensionProviderApiRule.EXTENSION_PROPERTIES_USE_PROVIDER_API,
+                GradlePluginExtensionProviderApiRule.EXTENSION_FIELDS_USE_PROVIDER_API,
                 BadPluginExtension.class,
                 PluginUsingBadExtension.class
         );
         LOG.info(result.getFailureReport().toString());
         assertThat(result.hasViolation()).isTrue();
-        assertThat(result.getFailureReport().toString()).contains("has field 'value' of type String");
+        assertThat(result.getFailureReport().toString()).contains("BadPluginExtension.value");
+        assertThat(result.getFailureReport().toString()).contains("has type String");
         assertThat(result.getFailureReport().toString()).contains("Use Property<String>");
     }
 
     @Test
     public void extensionWithPropertyField_should_pass() {
         final EvaluationResult result = Runner.check(
-                GradlePluginExtensionProviderApiRule.EXTENSION_PROPERTIES_USE_PROVIDER_API,
+                GradlePluginExtensionProviderApiRule.EXTENSION_FIELDS_USE_PROVIDER_API,
                 GoodPluginExtension.class
         );
         LOG.info(result.getFailureReport().toString());
@@ -38,22 +39,23 @@ public class GradlePluginExtensionProviderApiRuleTest {
     }
 
     @Test
-    public void extensionWithPlainStringGetter_should_fail() {
+    public void extensionWithPlainStringField_another_should_fail() {
         final EvaluationResult result = Runner.check(
-                GradlePluginExtensionProviderApiRule.EXTENSION_PROPERTIES_USE_PROVIDER_API,
+                GradlePluginExtensionProviderApiRule.EXTENSION_FIELDS_USE_PROVIDER_API,
                 AnotherBadPluginExtension.class,
                 PluginUsingAnotherBadExtension.class
         );
         LOG.info(result.getFailureReport().toString());
         assertThat(result.hasViolation()).isTrue();
-        assertThat(result.getFailureReport().toString()).contains("has getter 'getValue()' returning type String");
+        assertThat(result.getFailureReport().toString()).contains("AnotherBadPluginExtension.value");
+        assertThat(result.getFailureReport().toString()).contains("has type String");
         assertThat(result.getFailureReport().toString()).contains("Use Property<String>");
     }
 
     @Test
-    public void extensionWithPropertyGetter_should_pass() {
+    public void extensionWithAbstractGetter_should_pass() {
         final EvaluationResult result = Runner.check(
-                GradlePluginExtensionProviderApiRule.EXTENSION_PROPERTIES_USE_PROVIDER_API,
+                GradlePluginExtensionProviderApiRule.EXTENSION_FIELDS_USE_PROVIDER_API,
                 AnotherGoodPluginExtension.class
         );
         LOG.info(result.getFailureReport().toString());
@@ -63,7 +65,7 @@ public class GradlePluginExtensionProviderApiRuleTest {
     @Test
     public void extensionWithStaticField_should_pass() {
         final EvaluationResult result = Runner.check(
-                GradlePluginExtensionProviderApiRule.EXTENSION_PROPERTIES_USE_PROVIDER_API,
+                GradlePluginExtensionProviderApiRule.EXTENSION_FIELDS_USE_PROVIDER_API,
                 PluginExtensionWithStatics.class
         );
         LOG.info(result.getFailureReport().toString());
