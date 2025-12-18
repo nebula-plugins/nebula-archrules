@@ -23,6 +23,29 @@ import java.util.Set;
 import static com.netflix.nebula.archrules.gradleplugins.Predicates.getters;
 import static com.netflix.nebula.archrules.gradleplugins.Predicates.hasRichPropertyReturnType;
 import static com.netflix.nebula.archrules.gradleplugins.Predicates.isProviderApiType;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.ANNOTATION_INPUT;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.ANNOTATION_INPUT_DIRECTORY;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.ANNOTATION_INPUT_FILE;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.ANNOTATION_INPUT_FILES;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.ANNOTATION_OUTPUT_DIRECTORIES;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.ANNOTATION_OUTPUT_DIRECTORY;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.ANNOTATION_OUTPUT_FILE;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.ANNOTATION_OUTPUT_FILES;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.JAVA_IO_FILE;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.JAVA_LANG_BOOLEAN;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.JAVA_LANG_DOUBLE;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.JAVA_LANG_FLOAT;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.JAVA_LANG_INTEGER;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.JAVA_LANG_LONG;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.JAVA_LANG_STRING;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.JAVA_UTIL_LIST;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.JAVA_UTIL_MAP;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.JAVA_UTIL_SET;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.RECOMMENDATION_DIRECTORY_PROPERTY;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.RECOMMENDATION_LIST_PROPERTY;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.RECOMMENDATION_MAP_PROPERTY;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.RECOMMENDATION_REGULAR_FILE_PROPERTY;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.RECOMMENDATION_SET_PROPERTY;
 import static com.tngtech.archunit.base.DescribedPredicate.not;
 import static com.tngtech.archunit.core.domain.JavaMember.Predicates.declaredIn;
 import static com.tngtech.archunit.core.domain.JavaModifier.PRIVATE;
@@ -38,32 +61,6 @@ import static com.tngtech.archunit.lang.conditions.ArchPredicates.are;
  */
 @NullMarked
 class GradleTaskProviderApiRule {
-
-    private static final String JAVA_IO_FILE = "java.io.File";
-    private static final String JAVA_LANG_STRING = "java.lang.String";
-    private static final String JAVA_LANG_INTEGER = "java.lang.Integer";
-    private static final String JAVA_LANG_LONG = "java.lang.Long";
-    private static final String JAVA_LANG_BOOLEAN = "java.lang.Boolean";
-    private static final String JAVA_LANG_DOUBLE = "java.lang.Double";
-    private static final String JAVA_LANG_FLOAT = "java.lang.Float";
-    private static final String JAVA_UTIL_LIST = "java.util.List";
-    private static final String JAVA_UTIL_SET = "java.util.Set";
-    private static final String JAVA_UTIL_MAP = "java.util.Map";
-
-    private static final String ANNOTATION_INPUT = "org.gradle.api.tasks.Input";
-    private static final String ANNOTATION_INPUT_FILE = "org.gradle.api.tasks.InputFile";
-    private static final String ANNOTATION_INPUT_FILES = "org.gradle.api.tasks.InputFiles";
-    private static final String ANNOTATION_INPUT_DIRECTORY = "org.gradle.api.tasks.InputDirectory";
-    private static final String ANNOTATION_OUTPUT_FILE = "org.gradle.api.tasks.OutputFile";
-    private static final String ANNOTATION_OUTPUT_FILES = "org.gradle.api.tasks.OutputFiles";
-    private static final String ANNOTATION_OUTPUT_DIRECTORY = "org.gradle.api.tasks.OutputDirectory";
-    private static final String ANNOTATION_OUTPUT_DIRECTORIES = "org.gradle.api.tasks.OutputDirectories";
-
-    private static final String RECOMMENDATION_REGULAR_FILE_PROPERTY = "RegularFileProperty";
-    private static final String RECOMMENDATION_DIRECTORY_PROPERTY = "DirectoryProperty";
-    private static final String RECOMMENDATION_LIST_PROPERTY = "ListProperty<T>";
-    private static final String RECOMMENDATION_SET_PROPERTY = "SetProperty<T>";
-    private static final String RECOMMENDATION_MAP_PROPERTY = "MapProperty<K, V>";
 
     private static class LazyHolder {
         private static final Set<String> MUTABLE_TYPES_THAT_SHOULD_USE_PROVIDER = new HashSet<>(Arrays.asList(

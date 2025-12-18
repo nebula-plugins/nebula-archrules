@@ -21,6 +21,12 @@ import java.util.Set;
 import static com.netflix.nebula.archrules.gradleplugins.Predicates.getters;
 import static com.netflix.nebula.archrules.gradleplugins.Predicates.hasRichPropertyReturnType;
 import static com.netflix.nebula.archrules.gradleplugins.Predicates.isProviderApiType;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.JAVA_LANG_BOOLEAN;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.JAVA_LANG_INTEGER;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.JAVA_LANG_LONG;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.JAVA_LANG_STRING;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.JAVA_UTIL_LIST;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.JAVA_UTIL_SET;
 import static com.tngtech.archunit.base.DescribedPredicate.not;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.simpleNameEndingWith;
 import static com.tngtech.archunit.core.domain.JavaMember.Predicates.declaredIn;
@@ -36,13 +42,6 @@ import static com.tngtech.archunit.lang.conditions.ArchPredicates.are;
  */
 @NullMarked
 class GradlePluginExtensionProviderApiRule {
-
-    private static final String JAVA_LANG_STRING = "java.lang.String";
-    private static final String JAVA_LANG_INTEGER = "java.lang.Integer";
-    private static final String JAVA_LANG_LONG = "java.lang.Long";
-    private static final String JAVA_LANG_BOOLEAN = "java.lang.Boolean";
-    private static final String JAVA_UTIL_LIST = "java.util.List";
-    private static final String JAVA_UTIL_SET = "java.util.Set";
 
     private static final Set<String> TYPES_THAT_SHOULD_USE_PROVIDER = new HashSet<>(Arrays.asList(
             JAVA_LANG_STRING,

@@ -15,6 +15,14 @@ import static com.netflix.nebula.archrules.gradleplugins.Predicates.annotatedWit
 import static com.netflix.nebula.archrules.gradleplugins.Predicates.containAnyFieldsInClassHierarchyThat;
 import static com.netflix.nebula.archrules.gradleplugins.Predicates.containAnyMethodsInClassHierarchyThat;
 import static com.netflix.nebula.archrules.gradleplugins.Predicates.haveTaskAction;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.ANNOTATION_INPUT;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.ANNOTATION_INPUT_DIRECTORY;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.ANNOTATION_INPUT_FILE;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.ANNOTATION_INPUT_FILES;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.ANNOTATION_OUTPUT_DIRECTORIES;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.ANNOTATION_OUTPUT_DIRECTORY;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.ANNOTATION_OUTPUT_FILE;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.ANNOTATION_OUTPUT_FILES;
 import static com.tngtech.archunit.lang.ArchCondition.from;
 import static com.tngtech.archunit.lang.conditions.ArchPredicates.are;
 
@@ -25,15 +33,6 @@ import static com.tngtech.archunit.lang.conditions.ArchPredicates.are;
  */
 @NullMarked
 public class GradleTaskInputOutputRule {
-
-    private static final String ANNOTATION_INPUT = "org.gradle.api.tasks.Input";
-    private static final String ANNOTATION_INPUT_FILE = "org.gradle.api.tasks.InputFile";
-    private static final String ANNOTATION_INPUT_FILES = "org.gradle.api.tasks.InputFiles";
-    private static final String ANNOTATION_INPUT_DIRECTORY = "org.gradle.api.tasks.InputDirectory";
-    private static final String ANNOTATION_OUTPUT_FILE = "org.gradle.api.tasks.OutputFile";
-    private static final String ANNOTATION_OUTPUT_FILES = "org.gradle.api.tasks.OutputFiles";
-    private static final String ANNOTATION_OUTPUT_DIRECTORY = "org.gradle.api.tasks.OutputDirectory";
-    private static final String ANNOTATION_OUTPUT_DIRECTORIES = "org.gradle.api.tasks.OutputDirectories";
         private static final Set<String> INPUT_OUTPUT_ANNOTATIONS = new HashSet<>(Arrays.asList(
                 ANNOTATION_INPUT,
                 ANNOTATION_INPUT_FILE,

@@ -16,7 +16,6 @@ import static com.netflix.nebula.archrules.gradleplugins.GradlePluginExtensionPr
 import static com.netflix.nebula.archrules.gradleplugins.GradlePluginLazyTaskRegistrationRule.LAZY_TASK_CREATION;
 import static com.netflix.nebula.archrules.gradleplugins.GradlePluginProjectReferenceRule.PLUGINS_SHOULD_NOT_STORE_PROJECT_REFERENCES;
 import static com.netflix.nebula.archrules.gradleplugins.GradlePluginServiceInjectionRule.USE_INJECTED_OBJECT_FACTORY;
-import static com.netflix.nebula.archrules.gradleplugins.GradlePluginServiceInjectionRule.USE_INJECTED_PROJECT_LAYOUT;
 import static com.netflix.nebula.archrules.gradleplugins.GradlePluginServiceInjectionRule.USE_INJECTED_PROVIDER_FACTORY;
 import static com.netflix.nebula.archrules.gradleplugins.GradleTaskActionRule.taskActionShouldNotAccessProject;
 import static com.netflix.nebula.archrules.gradleplugins.GradleTaskActionRule.taskActionShouldNotCallGetTaskDependencies;
@@ -48,7 +47,6 @@ public class GradlePluginBestPractices implements ArchRulesService {
         rules.put("Plugin storing Project references", PLUGINS_SHOULD_NOT_STORE_PROJECT_REFERENCES);
         rules.put("Plugin should inject ObjectFactory", USE_INJECTED_OBJECT_FACTORY);
         rules.put("Plugin should inject ProviderFactory", USE_INJECTED_PROVIDER_FACTORY);
-        rules.put("Plugin should inject ProjectLayout", USE_INJECTED_PROJECT_LAYOUT);
         rules.put("Extension properties use Provider API", EXTENSION_PROPERTIES_USE_PROVIDER_API);
         rules.put("Extension abstract getters", EXTENSION_ABSTRACT_GETTERS);
         rules.put("Task declares inputs and/or outputs", INPUTS_OUTPUTS);

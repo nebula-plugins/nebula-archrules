@@ -25,9 +25,6 @@ class GradlePluginServiceInjectionRule {
     private static final DescribedPredicate<JavaAccess<?>> callsGetProviders =
             callsMethodOn("getProviders", "org.gradle.api.Project");
 
-    private static final DescribedPredicate<JavaAccess<?>> callsGetLayout =
-            callsMethodOn("getLayout", "org.gradle.api.Project");
-
     /**
      * Prevents plugins from calling {@code project.getObjects()}.
      * <p>
@@ -63,25 +60,6 @@ class GradlePluginServiceInjectionRule {
                     "Plugins should inject ProviderFactory via constructor instead of calling project.getProviders(). " +
                     "Use @Inject constructor parameter for better testability and to follow Gradle best practices. " +
                     "Example: @Inject public MyPlugin(ProviderFactory providers) { this.providers = providers; } " +
-                    "See https://docs.gradle.org/current/userguide/service_injection.html"
-            );
-
-    /**
-     * Prevents plugins from calling {@code project.getLayout()}.
-     * <p>
-     * Instead of calling {@code project.getLayout()}, plugins should inject
-     * {@code ProjectLayout} via constructor with {@code @Inject} annotation.
-     * This improves testability and follows Gradle's service injection pattern.
-     */
-    public static final ArchRule USE_INJECTED_PROJECT_LAYOUT = ArchRuleDefinition.priority(Priority.MEDIUM)
-            .noClasses()
-            .that().implement("org.gradle.api.Plugin")
-            .should().callMethodWhere(callsGetLayout)
-            .allowEmptyShould(true)
-            .because(
-                    "Plugins should inject ProjectLayout via constructor instead of calling project.getLayout(). " +
-                    "Use @Inject constructor parameter for better testability and to follow Gradle best practices. " +
-                    "Example: @Inject public MyPlugin(ProjectLayout layout) { this.layout = layout; } " +
                     "See https://docs.gradle.org/current/userguide/service_injection.html"
             );
 }

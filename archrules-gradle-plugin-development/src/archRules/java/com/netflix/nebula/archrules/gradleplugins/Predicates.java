@@ -21,6 +21,9 @@ import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPac
 import static com.tngtech.archunit.core.domain.properties.CanBeAnnotated.Predicates.annotatedWith;
 import static com.tngtech.archunit.core.domain.properties.HasName.Predicates.name;
 import static com.tngtech.archunit.core.domain.properties.HasReturnType.Predicates.rawReturnType;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.ANNOTATION_INPUT_DIRECTORY;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.ANNOTATION_INPUT_FILE;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.ANNOTATION_INPUT_FILES;
 import static com.tngtech.archunit.core.domain.properties.HasType.Predicates.rawType;
 import static com.tngtech.archunit.lang.conditions.ArchPredicates.are;
 import static com.tngtech.archunit.lang.conditions.ArchPredicates.has;
@@ -127,10 +130,6 @@ class Predicates {
                     return input.getAllFields();
                 }
             };
-
-    private static final String ANNOTATION_INPUT_FILE = "org.gradle.api.tasks.InputFile";
-    private static final String ANNOTATION_INPUT_FILES = "org.gradle.api.tasks.InputFiles";
-    private static final String ANNOTATION_INPUT_DIRECTORY = "org.gradle.api.tasks.InputDirectory";
 
     /** Matches elements annotated with @InputFile, @InputFiles, or @InputDirectory. */
     static final DescribedPredicate<CanBeAnnotated> areAnnotatedWithFileInputAnnotation =

@@ -61,28 +61,6 @@ public class GradlePluginServiceInjectionRuleTest {
         assertThat(result.hasViolation()).isFalse();
     }
 
-    @Test
-    public void pluginCallingGetLayout_should_fail() {
-        final EvaluationResult result = Runner.check(
-                GradlePluginServiceInjectionRule.USE_INJECTED_PROJECT_LAYOUT,
-                PluginCallingGetLayout.class
-        );
-        LOG.info(result.getFailureReport().toString());
-        assertThat(result.hasViolation()).isTrue();
-        assertThat(result.getFailureReport().toString()).contains("calls getLayout");
-        assertThat(result.getFailureReport().toString()).contains("inject ProjectLayout");
-    }
-
-    @Test
-    public void pluginWithInjectedProjectLayout_should_pass() {
-        final EvaluationResult result = Runner.check(
-                GradlePluginServiceInjectionRule.USE_INJECTED_PROJECT_LAYOUT,
-                PluginWithInjectedProjectLayout.class
-        );
-        LOG.info(result.getFailureReport().toString());
-        assertThat(result.hasViolation()).isFalse();
-    }
-
     @SuppressWarnings("unused")
     public static class PluginCallingGetObjects implements Plugin<Project> {
         @Override
@@ -125,23 +103,6 @@ public class GradlePluginServiceInjectionRuleTest {
             this.providers = providers;
         }
 
-        @Override
-        public void apply(Project project) {
-            project.getTasks().register("myTask");
-        }
-    }
-
-    @SuppressWarnings("unused")
-    public static class PluginCallingGetLayout implements Plugin<Project> {
-        @Override
-        public void apply(Project project) {
-            project.getLayout();
-            project.getTasks().register("myTask");
-        }
-    }
-
-    @SuppressWarnings("unused")
-    public static class PluginWithInjectedProjectLayout implements Plugin<Project> {
         @Override
         public void apply(Project project) {
             project.getTasks().register("myTask");
