@@ -31,6 +31,7 @@ import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.ANNOTATIO
 import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.ANNOTATION_INPUT_FILE;
 import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.ANNOTATION_INPUT_FILES;
 import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.GRADLE_PLUGIN;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.INPUT_OUTPUT_ANNOTATIONS;
 import static com.tngtech.archunit.core.domain.properties.HasType.Predicates.rawType;
 import static com.tngtech.archunit.lang.conditions.ArchPredicates.are;
 import static com.tngtech.archunit.lang.conditions.ArchPredicates.has;
@@ -145,6 +146,31 @@ class Predicates {
                     .or(annotatedWith(ANNOTATION_INPUT_DIRECTORY))
                     .as("annotated with Input file annotations");
 
+    /** Matches elements annotated with any input or output annotation. */
+    static final DescribedPredicate<CanBeAnnotated> hasInputOutputAnnotation =
+            annotatedWithAny(INPUT_OUTPUT_ANNOTATIONS)
+                    .as("has input or output annotation");
+
+    /** Creates a predicate matching fields with a specific raw type. */
+    static DescribedPredicate<JavaField> fieldWithType(String typeName) {
+        return new DescribedPredicate<JavaField>("field with type " + typeName) {
+            @Override
+            public boolean test(JavaField field) {
+                return field.getRawType().getName().equals(typeName);
+            }
+        };
+    }
+
+    /** Creates a predicate matching fields with types in the given set. */
+    static DescribedPredicate<JavaField> fieldWithTypeIn(Set<String> typeNames) {
+        return new DescribedPredicate<JavaField>("field with type in [" + String.join(", ", typeNames) + "]") {
+            @Override
+            public boolean test(JavaField field) {
+                return typeNames.contains(field.getRawType().getName());
+            }
+        };
+    }
+
     /** Returns true if the type is a Gradle Provider API type (Property, Provider, FileCollection, etc.). */
     static boolean isProviderApiType(JavaClass type) {
         return type.isAssignableTo("org.gradle.api.provider.Property") ||
@@ -157,6 +183,15 @@ class Predicates {
                type.isAssignableTo("org.gradle.api.file.ConfigurableFileCollection") ||
                type.isAssignableTo("org.gradle.api.file.FileCollection");
     }
+
+    /** Predicate matching Provider API types (Property, Provider, FileCollection, etc.). */
+    static final DescribedPredicate<JavaClass> isProviderApiTypePredicate =
+            new DescribedPredicate<JavaClass>("is Provider API type") {
+                @Override
+                public boolean test(JavaClass type) {
+                    return isProviderApiType(type);
+                }
+            };
 
     /** Creates a predicate matching calls to the specified method on the given owner class. */
     static DescribedPredicate<JavaAccess<?>> callsMethodOn(String methodName, String ownerClass) {

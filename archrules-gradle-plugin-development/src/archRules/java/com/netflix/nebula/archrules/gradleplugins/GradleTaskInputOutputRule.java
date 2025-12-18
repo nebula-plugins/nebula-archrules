@@ -7,22 +7,11 @@ import com.tngtech.archunit.lang.Priority;
 import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
 import org.jspecify.annotations.NullMarked;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
 import static com.netflix.nebula.archrules.gradleplugins.Predicates.annotatedWithAny;
 import static com.netflix.nebula.archrules.gradleplugins.Predicates.containAnyFieldsInClassHierarchyThat;
 import static com.netflix.nebula.archrules.gradleplugins.Predicates.containAnyMethodsInClassHierarchyThat;
 import static com.netflix.nebula.archrules.gradleplugins.Predicates.haveTaskAction;
-import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.ANNOTATION_INPUT;
-import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.ANNOTATION_INPUT_DIRECTORY;
-import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.ANNOTATION_INPUT_FILE;
-import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.ANNOTATION_INPUT_FILES;
-import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.ANNOTATION_OUTPUT_DIRECTORIES;
-import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.ANNOTATION_OUTPUT_DIRECTORY;
-import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.ANNOTATION_OUTPUT_FILE;
-import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.ANNOTATION_OUTPUT_FILES;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.INPUT_OUTPUT_ANNOTATIONS;
 import static com.tngtech.archunit.lang.ArchCondition.from;
 import static com.tngtech.archunit.lang.conditions.ArchPredicates.are;
 
@@ -33,16 +22,6 @@ import static com.tngtech.archunit.lang.conditions.ArchPredicates.are;
  */
 @NullMarked
 public class GradleTaskInputOutputRule {
-        private static final Set<String> INPUT_OUTPUT_ANNOTATIONS = new HashSet<>(Arrays.asList(
-                ANNOTATION_INPUT,
-                ANNOTATION_INPUT_FILE,
-                ANNOTATION_INPUT_FILES,
-                ANNOTATION_INPUT_DIRECTORY,
-                ANNOTATION_OUTPUT_FILE,
-                ANNOTATION_OUTPUT_FILES,
-                ANNOTATION_OUTPUT_DIRECTORY,
-                ANNOTATION_OUTPUT_DIRECTORIES
-        ));
 
     private static final DescribedPredicate<CanBeAnnotated> annotatedWithInputOutputAnnotations =
             annotatedWithAny(INPUT_OUTPUT_ANNOTATIONS)

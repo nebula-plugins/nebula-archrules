@@ -14,20 +14,12 @@ import com.tngtech.archunit.lang.conditions.ArchPredicates;
 import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
 import org.jspecify.annotations.NullMarked;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
+import static com.netflix.nebula.archrules.gradleplugins.Predicates.fieldWithTypeIn;
 import static com.netflix.nebula.archrules.gradleplugins.Predicates.getters;
 import static com.netflix.nebula.archrules.gradleplugins.Predicates.hasRichPropertyReturnType;
 import static com.netflix.nebula.archrules.gradleplugins.Predicates.isProviderApiType;
 import static com.netflix.nebula.archrules.gradleplugins.Predicates.pluginExtensionClass;
-import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.JAVA_LANG_BOOLEAN;
-import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.JAVA_LANG_INTEGER;
-import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.JAVA_LANG_LONG;
-import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.JAVA_LANG_STRING;
-import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.JAVA_UTIL_LIST;
-import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.JAVA_UTIL_SET;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.EXTENSION_TYPES_REQUIRING_PROVIDER;
 import static com.tngtech.archunit.base.DescribedPredicate.not;
 import static com.tngtech.archunit.core.domain.JavaMember.Predicates.declaredIn;
 import static com.tngtech.archunit.core.domain.properties.CanBeAnnotated.Predicates.annotatedWith;
@@ -42,15 +34,6 @@ import static com.tngtech.archunit.lang.conditions.ArchPredicates.are;
  */
 @NullMarked
 class GradlePluginExtensionProviderApiRule {
-
-    private static final Set<String> TYPES_THAT_SHOULD_USE_PROVIDER = new HashSet<>(Arrays.asList(
-            JAVA_LANG_STRING,
-            JAVA_LANG_INTEGER,
-            JAVA_LANG_LONG,
-            JAVA_LANG_BOOLEAN,
-            JAVA_UTIL_LIST,
-            JAVA_UTIL_SET
-    ));
 
     /**
      * Detects plugin extension fields with plain types that should use Provider API.
@@ -73,16 +56,18 @@ class GradlePluginExtensionProviderApiRule {
             );
 
     private static boolean shouldUseProviderApi(JavaClass type) {
-        return TYPES_THAT_SHOULD_USE_PROVIDER.contains(type.getName()) && !isProviderApiType(type);
+        return EXTENSION_TYPES_REQUIRING_PROVIDER.contains(type.getName()) && !isProviderApiType(type);
     }
 
     private static DescribedPredicate<JavaField> haveTypeThatShouldUseProvider() {
-        return new DescribedPredicate<JavaField>("have type that should use Provider API") {
-            @Override
-            public boolean test(JavaField field) {
-                return shouldUseProviderApi(field.getRawType());
-            }
-        };
+        return fieldWithTypeIn(EXTENSION_TYPES_REQUIRING_PROVIDER)
+                .and(new DescribedPredicate<JavaField>("not Provider API type") {
+                    @Override
+                    public boolean test(JavaField field) {
+                        return !isProviderApiType(field.getRawType());
+                    }
+                })
+                .as("have type that should use Provider API");
     }
 
     private static ArchCondition<JavaField> useProviderApiType() {
