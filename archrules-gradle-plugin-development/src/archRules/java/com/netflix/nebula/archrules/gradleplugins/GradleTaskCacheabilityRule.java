@@ -6,6 +6,8 @@ import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
 import org.jspecify.annotations.NullMarked;
 
 import static com.netflix.nebula.archrules.gradleplugins.Predicates.areAnnotatedWithFileInputAnnotation;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.ANNOTATION_CACHEABLE_TASK;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.ANNOTATION_PATH_SENSITIVE;
 import static com.tngtech.archunit.core.domain.properties.CanBeAnnotated.Predicates.annotatedWith;
 import static com.tngtech.archunit.lang.conditions.ArchPredicates.are;
 
@@ -16,9 +18,6 @@ import static com.tngtech.archunit.lang.conditions.ArchPredicates.are;
  */
 @NullMarked
 public class GradleTaskCacheabilityRule {
-
-    private static final String ANNOTATION_CACHEABLE_TASK = "org.gradle.api.tasks.CacheableTask";
-    private static final String ANNOTATION_PATH_SENSITIVE = "org.gradle.api.tasks.PathSensitive";
 
     /**
      * Ensures that cacheable tasks declare path sensitivity on file inputs.

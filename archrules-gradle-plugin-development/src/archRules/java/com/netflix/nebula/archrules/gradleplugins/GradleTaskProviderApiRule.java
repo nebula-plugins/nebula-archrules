@@ -5,6 +5,7 @@ import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaField;
 import com.tngtech.archunit.core.domain.JavaMethod;
 import com.tngtech.archunit.core.domain.JavaModifier;
+import com.tngtech.archunit.core.domain.properties.CanBeAnnotated;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ArchRule;
 import com.tngtech.archunit.lang.ConditionEvents;
@@ -14,14 +15,27 @@ import com.tngtech.archunit.lang.conditions.ArchPredicates;
 import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
 import org.jspecify.annotations.NullMarked;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import static com.netflix.nebula.archrules.gradleplugins.Predicates.getters;
+import static com.netflix.nebula.archrules.gradleplugins.Predicates.hasInputOutputAnnotation;
 import static com.netflix.nebula.archrules.gradleplugins.Predicates.hasRichPropertyReturnType;
+import static com.netflix.nebula.archrules.gradleplugins.Predicates.isProviderApiType;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.ANNOTATION_INPUT_DIRECTORY;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.ANNOTATION_INPUT_FILE;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.ANNOTATION_OUTPUT_DIRECTORY;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.ANNOTATION_OUTPUT_FILE;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.JAVA_IO_FILE;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.JAVA_UTIL_LIST;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.JAVA_UTIL_MAP;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.JAVA_UTIL_SET;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.RECOMMENDATION_DIRECTORY_PROPERTY;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.RECOMMENDATION_LIST_PROPERTY;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.RECOMMENDATION_MAP_PROPERTY;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.RECOMMENDATION_REGULAR_FILE_PROPERTY;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.RECOMMENDATION_SET_PROPERTY;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.TASK_TYPES_REQUIRING_PROVIDER;
 import static com.tngtech.archunit.base.DescribedPredicate.not;
 import static com.tngtech.archunit.core.domain.JavaMember.Predicates.declaredIn;
 import static com.tngtech.archunit.core.domain.JavaModifier.PRIVATE;
@@ -38,46 +52,7 @@ import static com.tngtech.archunit.lang.conditions.ArchPredicates.are;
 @NullMarked
 class GradleTaskProviderApiRule {
 
-    private static final String JAVA_IO_FILE = "java.io.File";
-    private static final String JAVA_LANG_STRING = "java.lang.String";
-    private static final String JAVA_LANG_INTEGER = "java.lang.Integer";
-    private static final String JAVA_LANG_LONG = "java.lang.Long";
-    private static final String JAVA_LANG_BOOLEAN = "java.lang.Boolean";
-    private static final String JAVA_LANG_DOUBLE = "java.lang.Double";
-    private static final String JAVA_LANG_FLOAT = "java.lang.Float";
-    private static final String JAVA_UTIL_LIST = "java.util.List";
-    private static final String JAVA_UTIL_SET = "java.util.Set";
-    private static final String JAVA_UTIL_MAP = "java.util.Map";
-
-    private static final String ANNOTATION_INPUT = "org.gradle.api.tasks.Input";
-    private static final String ANNOTATION_INPUT_FILE = "org.gradle.api.tasks.InputFile";
-    private static final String ANNOTATION_INPUT_FILES = "org.gradle.api.tasks.InputFiles";
-    private static final String ANNOTATION_INPUT_DIRECTORY = "org.gradle.api.tasks.InputDirectory";
-    private static final String ANNOTATION_OUTPUT_FILE = "org.gradle.api.tasks.OutputFile";
-    private static final String ANNOTATION_OUTPUT_FILES = "org.gradle.api.tasks.OutputFiles";
-    private static final String ANNOTATION_OUTPUT_DIRECTORY = "org.gradle.api.tasks.OutputDirectory";
-    private static final String ANNOTATION_OUTPUT_DIRECTORIES = "org.gradle.api.tasks.OutputDirectories";
-
-    private static final String RECOMMENDATION_REGULAR_FILE_PROPERTY = "RegularFileProperty";
-    private static final String RECOMMENDATION_DIRECTORY_PROPERTY = "DirectoryProperty";
-    private static final String RECOMMENDATION_LIST_PROPERTY = "ListProperty<T>";
-    private static final String RECOMMENDATION_SET_PROPERTY = "SetProperty<T>";
-    private static final String RECOMMENDATION_MAP_PROPERTY = "MapProperty<K, V>";
-
     private static class LazyHolder {
-        private static final Set<String> MUTABLE_TYPES_THAT_SHOULD_USE_PROVIDER = new HashSet<>(Arrays.asList(
-                JAVA_LANG_STRING,
-                JAVA_LANG_INTEGER,
-                JAVA_LANG_LONG,
-                JAVA_LANG_BOOLEAN,
-                JAVA_LANG_DOUBLE,
-                JAVA_LANG_FLOAT,
-                JAVA_IO_FILE,
-                JAVA_UTIL_LIST,
-                JAVA_UTIL_SET,
-                JAVA_UTIL_MAP
-        ));
-
         private static final Map<String, String> TYPE_TO_PROVIDER;
 
         static {
@@ -89,8 +64,8 @@ class GradleTaskProviderApiRule {
         }
     }
 
-    private static Set<String> getMutableTypesThatShouldUseProvider() {
-        return LazyHolder.MUTABLE_TYPES_THAT_SHOULD_USE_PROVIDER;
+    private static java.util.Set<String> getMutableTypesThatShouldUseProvider() {
+        return TASK_TYPES_REQUIRING_PROVIDER;
     }
 
     private static Map<String, String> getTypeToProviderMap() {
@@ -136,7 +111,7 @@ class GradleTaskProviderApiRule {
                     return;
                 }
 
-                if (shouldUseProviderApi(field.getRawType()) && !usesProviderApi(field.getRawType())) {
+                if (shouldUseProviderApi(field.getRawType()) && !isProviderApiType(field.getRawType())) {
                     String recommendation = getSpecificRecommendation(field.getRawType(), field);
                     String message = String.format(
                             "Task %s has field '%s' of type %s with input/output annotation. " +
@@ -155,12 +130,12 @@ class GradleTaskProviderApiRule {
                     return;
                 }
 
-                if (!method.getName().startsWith("get") || method.getRawParameterTypes().size() > 0) {
+                if (!getters.test(method)) {
                     return;
                 }
 
                 JavaClass returnType = method.getRawReturnType();
-                if (shouldUseProviderApi(returnType) && !usesProviderApi(returnType)) {
+                if (shouldUseProviderApi(returnType) && !isProviderApiType(returnType)) {
                     String recommendation = getSpecificRecommendation(returnType, method);
                     String message = String.format(
                             "Task %s has getter '%s()' returning type %s with input/output annotation. " +
@@ -174,40 +149,13 @@ class GradleTaskProviderApiRule {
                 }
             }
 
-            private boolean hasInputOutputAnnotation(JavaField field) {
-                return field.isAnnotatedWith(ANNOTATION_INPUT) ||
-                       field.isAnnotatedWith(ANNOTATION_INPUT_FILE) ||
-                       field.isAnnotatedWith(ANNOTATION_INPUT_FILES) ||
-                       field.isAnnotatedWith(ANNOTATION_INPUT_DIRECTORY) ||
-                       field.isAnnotatedWith(ANNOTATION_OUTPUT_FILE) ||
-                       field.isAnnotatedWith(ANNOTATION_OUTPUT_FILES) ||
-                       field.isAnnotatedWith(ANNOTATION_OUTPUT_DIRECTORY) ||
-                       field.isAnnotatedWith(ANNOTATION_OUTPUT_DIRECTORIES);
-            }
-
-            private boolean hasInputOutputAnnotation(JavaMethod method) {
-                return method.isAnnotatedWith(ANNOTATION_INPUT) ||
-                       method.isAnnotatedWith(ANNOTATION_INPUT_FILE) ||
-                       method.isAnnotatedWith(ANNOTATION_INPUT_FILES) ||
-                       method.isAnnotatedWith(ANNOTATION_INPUT_DIRECTORY) ||
-                       method.isAnnotatedWith(ANNOTATION_OUTPUT_FILE) ||
-                       method.isAnnotatedWith(ANNOTATION_OUTPUT_FILES) ||
-                       method.isAnnotatedWith(ANNOTATION_OUTPUT_DIRECTORY) ||
-                       method.isAnnotatedWith(ANNOTATION_OUTPUT_DIRECTORIES);
+            private boolean hasInputOutputAnnotation(CanBeAnnotated element) {
+                return Predicates.hasInputOutputAnnotation.test(element);
             }
 
             private boolean shouldUseProviderApi(JavaClass type) {
                 String typeName = type.getName();
                 return getMutableTypesThatShouldUseProvider().contains(typeName);
-            }
-
-            private boolean usesProviderApi(JavaClass type) {
-                return type.isAssignableTo("org.gradle.api.provider.Property") ||
-                       type.isAssignableTo("org.gradle.api.provider.Provider") ||
-                       type.isAssignableTo("org.gradle.api.file.RegularFileProperty") ||
-                       type.isAssignableTo("org.gradle.api.file.DirectoryProperty") ||
-                       type.isAssignableTo("org.gradle.api.file.ConfigurableFileCollection") ||
-                       type.isAssignableTo("org.gradle.api.file.FileCollection");
             }
 
             private String getSpecificRecommendation(JavaClass type, JavaField field) {
