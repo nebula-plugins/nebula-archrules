@@ -25,6 +25,7 @@ public class CveArchRules implements ArchRulesService {
                     "kotlin.io.FilesKt",
                     "createTempFile",
                     "java.lang.String", "java.lang.String", "java.io.File")
+            .allowEmptyShould(true)
             .because("A Kotlin application using createTempDir or createTempFile " +
                      "and placing sensitive information within either of these locations " +
                      "would be leaking this information in a read-only way to other users also on this system. " +
@@ -37,6 +38,7 @@ public class CveArchRules implements ArchRulesService {
             .dependOnClassesThat(JavaClass.Predicates.simpleName("FileBackedOutputStream"))
             .orShould()
             .accessTargetWhere(targetOwner(assignableTo(JavaClass.Predicates.simpleName("FileBackedOutputStream"))))
+            .allowEmptyShould(true)
             .because("CVE-2023-2976: Use of Java's default temporary directory for file creation in " +
                      "`FileBackedOutputStream` in Google Guava versions 1.0 to 31.1 on Unix systems " +
                      "and Android Ice Cream Sandwich allows other users and apps on the machine " +
@@ -46,6 +48,7 @@ public class CveArchRules implements ArchRulesService {
     public static final ArchRule CVE_2020_8908 = ArchRuleDefinition.priority(Priority.HIGH)
             .noClasses()
             .should().callMethod("com.google.common.io.Files", "createTempDir")
+            .allowEmptyShould(true)
             .because("A temp directory creation vulnerability exists in all versions of Guava, " +
                      "allowing an attacker with access to the machine to potentially access data in a temporary directory " +
                      "created by the Guava API com.google.common.io.Files.createTempDir(). " +
@@ -64,6 +67,7 @@ public class CveArchRules implements ArchRulesService {
             .dependOnClassesThat(JavaClass.Predicates.simpleName("CompoundOrdering"))
             .orShould()
             .accessTargetWhere(targetOwner(assignableTo(JavaClass.Predicates.simpleName("CompoundOrdering"))))
+            .allowEmptyShould(true)
             .because("Unbounded memory allocation in Google Guava 11.0 through 24.x before 24.1.1 " +
                      "allows remote attackers to conduct denial of service attacks against servers " +
                      "that depend on this library and deserialize attacker-provided data, " +
@@ -75,6 +79,7 @@ public class CveArchRules implements ArchRulesService {
     public static final ArchRule CVE_2024_6763 = ArchRuleDefinition.priority(Priority.HIGH)
             .noClasses()
             .should().dependOnClassesThat().haveFullyQualifiedName("org.eclipse.jetty.http.HttpURI")
+            .allowEmptyShould(true)
             .because("The HttpURI class does insufficient validation on the authority segment of a URI.");
 
     @Override

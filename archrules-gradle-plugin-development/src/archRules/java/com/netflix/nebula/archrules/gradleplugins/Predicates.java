@@ -39,37 +39,6 @@ import static com.tngtech.archunit.lang.conditions.ArchPredicates.has;
 class Predicates {
 
     /**
-     * Matches getter methods (getX(), isX()) that follow JavaBeans naming conventions.
-     */
-    static final DescribedPredicate<JavaMethod> getters = new DescribedPredicate<JavaMethod>("getters") {
-        @Override
-        public boolean test(JavaMethod input) {
-            if (input.getModifiers().contains(JavaModifier.STATIC)) {
-                return false;
-            }
-            if (!input.getParameters().isEmpty()) {
-                return false;
-            }
-            if (input.getName().startsWith("get")) {
-                if (input.getName().length() < 4 || Character.isLowerCase(input.getName().charAt(3))) {
-                    return false;
-                }
-                return true;
-            }
-            if (input.getName().startsWith("is")) {
-                if (input.getRawReturnType().isAssignableTo(Boolean.class)) {
-                    return false;
-                }
-                if (Character.isLowerCase(input.getName().charAt(2))) {
-                    return false;
-                }
-                return true;
-            }
-            return false;
-        }
-    };
-
-    /**
      * Matches methods returning Provider API or FileCollection types.
      */
     static final DescribedPredicate<HasReturnType> hasRichPropertyReturnType = ArchPredicates

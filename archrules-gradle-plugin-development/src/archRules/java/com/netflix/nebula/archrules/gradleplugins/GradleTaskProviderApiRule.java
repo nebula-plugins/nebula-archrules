@@ -18,8 +18,7 @@ import org.jspecify.annotations.NullMarked;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.netflix.nebula.archrules.gradleplugins.Predicates.getters;
-import static com.netflix.nebula.archrules.gradleplugins.Predicates.hasInputOutputAnnotation;
+import static com.netflix.nebula.archrules.common.JavaMethod.Predicates.aGetter;
 import static com.netflix.nebula.archrules.gradleplugins.Predicates.hasRichPropertyReturnType;
 import static com.netflix.nebula.archrules.gradleplugins.Predicates.isProviderApiType;
 import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.ANNOTATION_INPUT_DIRECTORY;
@@ -130,7 +129,7 @@ class GradleTaskProviderApiRule {
                     return;
                 }
 
-                if (!getters.test(method)) {
+                if (!aGetter().test(method)) {
                     return;
                 }
 
@@ -197,7 +196,7 @@ class GradleTaskProviderApiRule {
         };
     }
 
-    static final DescribedPredicate<JavaMethod> richTaskPropertyGetters = ArchPredicates.are(getters)
+    static final DescribedPredicate<JavaMethod> richTaskPropertyGetters = ArchPredicates.are(aGetter())
             .and(are(hasRichPropertyReturnType))
             .and(not(modifier(PRIVATE)))
             .and(not(annotatedWith("javax.inject.Inject")))

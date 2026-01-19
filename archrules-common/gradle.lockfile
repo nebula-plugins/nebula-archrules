@@ -1,0 +1,30 @@
+# This is a Gradle generated file for dependency locking.
+# Manual edits can break the build and are not advised.
+# This file is expected to be part of source control.
+ch.qos.logback:logback-classic:1.5.20=testArchRulesRuntime,testCompileClasspath,testRuntimeClasspath
+ch.qos.logback:logback-core:1.5.20=testArchRulesRuntime,testCompileClasspath,testRuntimeClasspath
+com.netflix.nebula:archrules-deprecation:0.7.1=archRules,mainArchRulesRuntime,testArchRulesRuntime
+com.netflix.nebula:archrules-joda:0.7.1=archRules,mainArchRulesRuntime,testArchRulesRuntime
+com.netflix.nebula:archrules-nullability:0.7.1=archRules,mainArchRulesRuntime,testArchRulesRuntime
+com.netflix.nebula:archrules-security:0.7.1=archRules,mainArchRulesRuntime,testArchRulesRuntime
+com.netflix.nebula:archrules-testing-frameworks:0.7.1=archRules,mainArchRulesRuntime,testArchRulesRuntime
+com.netflix.nebula:nebula-archrules-core:0.5.5=archRules,mainArchRulesRuntime
+com.netflix.nebula:nebula-archrules-core:0.7.0=testArchRulesRuntime,testCompileClasspath,testRuntimeClasspath
+com.tngtech.archunit:archunit:1.4.1=archRules,compileClasspath,mainArchRulesRuntime,runtimeClasspath,testArchRulesRuntime,testCompileClasspath,testRuntimeClasspath
+net.bytebuddy:byte-buddy:1.17.7=testArchRulesRuntime,testCompileClasspath,testRuntimeClasspath
+org.apiguardian:apiguardian-api:1.1.2=testCompileClasspath
+org.assertj:assertj-core:3.27.6=testArchRulesRuntime,testCompileClasspath,testRuntimeClasspath
+org.jetbrains.kotlin:kotlin-stdlib:2.2.0=testArchRulesRuntime,testCompileClasspath,testRuntimeClasspath
+org.jetbrains:annotations:13.0=testArchRulesRuntime,testCompileClasspath,testRuntimeClasspath
+org.jspecify:jspecify:1.0.0=archRules,compileClasspath,mainArchRulesRuntime,runtimeClasspath,testArchRulesRuntime,testCompileClasspath,testRuntimeClasspath
+org.junit.jupiter:junit-jupiter-api:5.12.2=testArchRulesRuntime,testCompileClasspath,testRuntimeClasspath
+org.junit.jupiter:junit-jupiter-engine:5.12.2=testArchRulesRuntime,testRuntimeClasspath
+org.junit.jupiter:junit-jupiter-params:5.12.2=testArchRulesRuntime,testCompileClasspath,testRuntimeClasspath
+org.junit.jupiter:junit-jupiter:5.12.2=testArchRulesRuntime,testCompileClasspath,testRuntimeClasspath
+org.junit.platform:junit-platform-commons:1.12.2=testArchRulesRuntime,testCompileClasspath,testRuntimeClasspath
+org.junit.platform:junit-platform-engine:1.12.2=testArchRulesRuntime,testRuntimeClasspath
+org.junit.platform:junit-platform-launcher:1.12.2=testArchRulesRuntime,testRuntimeClasspath
+org.junit:junit-bom:5.12.2=testArchRulesRuntime,testCompileClasspath,testRuntimeClasspath
+org.opentest4j:opentest4j:1.3.0=testArchRulesRuntime,testCompileClasspath,testRuntimeClasspath
+org.slf4j:slf4j-api:2.0.17=archRules,compileClasspath,mainArchRulesRuntime,runtimeClasspath,testArchRulesRuntime,testCompileClasspath,testRuntimeClasspath
+empty=annotationProcessor,testAnnotationProcessor

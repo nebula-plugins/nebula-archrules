@@ -14,8 +14,8 @@ import com.tngtech.archunit.lang.conditions.ArchPredicates;
 import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
 import org.jspecify.annotations.NullMarked;
 
+import static com.netflix.nebula.archrules.common.JavaMethod.Predicates.aGetter;
 import static com.netflix.nebula.archrules.gradleplugins.Predicates.fieldWithTypeIn;
-import static com.netflix.nebula.archrules.gradleplugins.Predicates.getters;
 import static com.netflix.nebula.archrules.gradleplugins.Predicates.hasRichPropertyReturnType;
 import static com.netflix.nebula.archrules.gradleplugins.Predicates.isProviderApiType;
 import static com.netflix.nebula.archrules.gradleplugins.Predicates.pluginExtensionClass;
@@ -86,7 +86,7 @@ class GradlePluginExtensionProviderApiRule {
         };
     }
 
-    static final DescribedPredicate<JavaMethod> richExtensionPropertyGetters = ArchPredicates.are(getters)
+    static final DescribedPredicate<JavaMethod> richExtensionPropertyGetters = ArchPredicates.are(aGetter())
             .and(are(hasRichPropertyReturnType))
             .and(not(modifier(JavaModifier.PRIVATE)))
             .and(not(annotatedWith("javax.inject.Inject")))
