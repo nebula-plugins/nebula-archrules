@@ -1,6 +1,8 @@
 package com.netflix.nebula.archrules.deprecation;
 
 import com.netflix.nebula.archrules.core.Runner;
+import com.netflix.nebula.archrules.deprecation.other.DeprecatedSinceKotlinClass;
+import com.netflix.nebula.archrules.deprecation.other.KotlinDeprecatedClass;
 import com.tngtech.archunit.lang.EvaluationResult;
 import com.tngtech.archunit.lang.Priority;
 import org.junit.jupiter.api.Test;
@@ -26,17 +28,6 @@ public class KotlinDeprecationRuleTest {
         LOG.info(result.getFailureReport().toString());
         assertThat(result.hasViolation()).isTrue();
         assertThat(result.getPriority()).isEqualTo(Priority.LOW);
-    }
-
-    // test helper classes (kotlin deprecated)
-    @kotlin.Deprecated(message="deprecated")
-    static class KotlinDeprecatedClass {
-        static void method() { }
-    }
-
-    @kotlin.DeprecatedSinceKotlin
-    static class DeprecatedSinceKotlinClass {
-        static void method() { }
     }
 
     static class CodeThatUsesKotlinDeprecatedClass {

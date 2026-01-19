@@ -5,6 +5,7 @@ plugins {
 description = "Arch Rules for detecting usage of deprecated code"
 
 dependencies {
+    archRulesImplementation(project(":archrules-common"))
     archRulesImplementation(libs.jspecify)
 
     archRulesTestImplementation(libs.assertj)

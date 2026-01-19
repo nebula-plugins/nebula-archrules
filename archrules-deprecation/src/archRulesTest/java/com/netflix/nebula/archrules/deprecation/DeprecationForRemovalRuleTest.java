@@ -1,24 +1,31 @@
 package com.netflix.nebula.archrules.deprecation;
 
 import com.netflix.nebula.archrules.core.Runner;
+import com.netflix.nebula.archrules.deprecation.other.DeprecatedForRemovalClass;
+import com.netflix.nebula.archrules.deprecation.other.DeprecatedForRemovalMethod;
 import com.tngtech.archunit.lang.EvaluationResult;
 import com.tngtech.archunit.lang.Priority;
 import org.junit.jupiter.api.Test;
 
+import static com.netflix.nebula.archrules.deprecation.DeprecationRuleTest.ACCESS_TARGET_PACKAGE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class DeprecationForRemovalRuleTest {
+    private static final String CLASS_DEPRECATED_FOR_REMOVAL = "have any dependencies that do not reside in same package and target is deprecated for removal";
+    private static final String TARGET_IS_DEPRECATED_FOR_REMOVAL = "target is deprecated for removal";
+    private static final String TARGET_OWNER_IS_DEPRECATED_FOR_REMOVAL = "target owner is deprecated for removal";
+
     @Test
-    public void testDeprecationForRemovalRule_class() {
-        final EvaluationResult result = Runner.check(DeprecationRule.deprecationForRemovalRule, DeprecationForRemovalRuleTest.CodeThatUsesDeprecatedForRemovalClass.class);
+    public void testDeprecationForRemovalRule_method() {
+        final EvaluationResult result = Runner.check(DeprecationRule.deprecationForRemovalRule, CodeThatUsesDeprecatedForRemovalMethod.class);
         assertThat(result.hasViolation()).isTrue();
         assertThat(result.getPriority()).isEqualTo(Priority.MEDIUM);
     }
 
     @Test
-    public void testDeprecationForRemovalRule_method() {
-        final EvaluationResult result = Runner.check(DeprecationRule.deprecationForRemovalRule, DeprecationForRemovalRuleTest.CodeThatUsesDeprecatedForRemovalMethod.class);
-        assertThat(result.hasViolation()).isTrue();
+    public void testDeprecationForRemovalRule_method_samePackage() {
+        final EvaluationResult result = Runner.check(DeprecationRule.deprecationForRemovalRule, DeprecationForRemovalRuleTest.CodeThatUsesDeprecatedForRemovalMethodSamePackage.class);
+        assertThat(result.hasViolation()).isFalse();
         assertThat(result.getPriority()).isEqualTo(Priority.MEDIUM);
     }
 
@@ -28,12 +35,28 @@ public class DeprecationForRemovalRuleTest {
         assertThat(result.hasViolation()).isFalse();
     }
 
-    @Deprecated(forRemoval = true)
-    static class DeprecatedForRemovalClass {
-        static void method() {}
+    @Test
+    public void testDeprecatedForRemovalRule_class() {
+        final EvaluationResult result = Runner.check(DeprecationRule.deprecationForRemovalRule, CodeThatUsesDeprecatedForRemovalClass.class);
+        assertThat(result.hasViolation()).isTrue();
+        assertThat(result.getPriority()).isEqualTo(Priority.MEDIUM);
+        assertThat(result.getFailureReport().toString())
+                .contains("no classes should " + CLASS_DEPRECATED_FOR_REMOVAL +
+                          " or " + ACCESS_TARGET_PACKAGE + " and " + TARGET_IS_DEPRECATED_FOR_REMOVAL + " or ");
+
+        assertThat(result.getFailureReport().toString())
+                .as("buggy behavior that will be fixed in https://github.com/TNG/ArchUnit/pull/1579")
+                .doesNotContain(TARGET_OWNER_IS_DEPRECATED_FOR_REMOVAL);
     }
 
-    static class DeprecatedForRemovalMethod {
+    @Test
+    public void testDeprecatedForRemovalRule_class_samePackage() {
+        final EvaluationResult result = Runner.check(
+                DeprecationRule.deprecationForRemovalRule, CodeThatUsesDeprecatedForRemovalClassSamePackage.class);
+        assertThat(result.hasViolation()).isFalse();
+    }
+
+    static class DeprecatedForRemovalMethodSamePackage {
         @Deprecated(forRemoval = true)
         static void deprecated() {}
     }
@@ -43,15 +66,15 @@ public class DeprecationForRemovalRuleTest {
         static void method() {}
     }
 
-    static class CodeThatUsesDeprecatedForRemovalClass {
-        static void usage() {
-            DeprecatedForRemovalClass.method();
-        }
-    }
-
     static class CodeThatUsesDeprecatedForRemovalMethod {
         static void usage() {
             DeprecatedForRemovalMethod.deprecated();
+        }
+    }
+
+    static class CodeThatUsesDeprecatedForRemovalMethodSamePackage {
+        static void usage() {
+            DeprecatedForRemovalMethodSamePackage.deprecated();
         }
     }
 
@@ -59,5 +82,17 @@ public class DeprecationForRemovalRuleTest {
         static void usage() {
             RegularDeprecatedClass.method();
         }
+    }
+
+    @Deprecated(forRemoval = true)
+    static class DeprecatedForRemovalClassSamePackage {
+    }
+
+    static class CodeThatUsesDeprecatedForRemovalClass {
+        DeprecatedForRemovalClass javaDeprecated;
+    }
+
+    static class CodeThatUsesDeprecatedForRemovalClassSamePackage {
+        DeprecatedForRemovalClassSamePackage javaDeprecated;
     }
 }

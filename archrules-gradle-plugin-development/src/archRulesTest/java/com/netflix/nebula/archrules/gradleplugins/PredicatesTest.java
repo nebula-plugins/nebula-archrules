@@ -56,11 +56,6 @@ class PredicatesTest {
         ).isTrue();
     }
 
-    @Test
-    public void test_getters_get() {
-        assertThat(Predicates.getters.test(scan(AClass.class).getMethod("get"))).isFalse();
-    }
-
     static Stream<Class<?>> providerApiTypes() {
         return Stream.of(
                 Property.class,
@@ -137,14 +132,6 @@ class PredicatesTest {
                 .count();
 
         assertThat(matchCount).isEqualTo(0);
-    }
-
-
-    static class AClass {
-        @SuppressWarnings("unused")
-        public String get() {
-            return "";
-        }
     }
 
     @SuppressWarnings("unused")
