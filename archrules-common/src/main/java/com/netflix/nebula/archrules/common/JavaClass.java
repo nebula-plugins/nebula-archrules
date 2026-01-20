@@ -23,7 +23,7 @@ public class JavaClass {
         public static DescribedPredicate<com.tngtech.archunit.core.domain.JavaClass> resideInAPackageThat(
                 DescribedPredicate<? super JavaPackage> condition) {
             return condition.onResultOf(GET_PACKAGE)
-                    .as("residing in package that %s", condition.getDescription());
+                    .as("reside in a package that %s", condition.getDescription());
         }
 
         /**
