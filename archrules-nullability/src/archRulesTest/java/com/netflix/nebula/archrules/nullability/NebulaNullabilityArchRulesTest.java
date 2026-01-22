@@ -87,8 +87,22 @@ public class NebulaNullabilityArchRulesTest {
           .isTrue();
       assertThat(result.getFailureReport().getDetails())
           .hasSize(2);
-  }
+    }
 
     static class InnerClass {
+    }
+
+    @Test
+    public void test_class_field_optional() {
+        EvaluationResult result = Runner.check(NebulaNullabilityArchRules.NO_OPTIONAL_CLASS_FIELDS, OptionalFailingClass.class);
+        assertThat(result.hasViolation()).isTrue();
+        assertThat(result.getFailureReport().getDetails()).hasSize(1);
+    }
+
+    @Test
+    public void test_method_parameter_optional() {
+        EvaluationResult result = Runner.check(NebulaNullabilityArchRules.NO_OPTIONAL_METHOD_PARAMETERS, OptionalFailingClass.class);
+        assertThat(result.hasViolation()).isTrue();
+        assertThat(result.getFailureReport().getDetails()).hasSize(1);
     }
 }
