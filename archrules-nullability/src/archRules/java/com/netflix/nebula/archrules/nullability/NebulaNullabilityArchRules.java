@@ -56,6 +56,16 @@ public class NebulaNullabilityArchRules implements ArchRulesService {
             .orShould().dependOnClassesThat(fullyQualifiedName("jakarta.annotation.Nonnull"))
             .allowEmptyShould(true)
             .because("Only JSpecify annotations should be used on @NullMarked classes");
+    static final ArchRule NO_OPTIONAL_CLASS_FIELDS = ArchRuleDefinition.priority(Priority.MEDIUM)
+            .noFields()
+            .should().haveRawType("java.util.Optional")
+            .allowEmptyShould(true)
+            .because("Class fields should not be Optional, use Nullable instead");
+    static final ArchRule NO_OPTIONAL_METHOD_PARAMETERS = ArchRuleDefinition.priority(Priority.LOW)
+            .noMethods()
+            .should().haveRawParameterTypes("java.util.Optional")
+            .allowEmptyShould(true)
+            .because("Method parameters should not be Optional");
 
     @Override
     public Map<String, ArchRule> getRules() {
@@ -65,6 +75,8 @@ public class NebulaNullabilityArchRules implements ArchRulesService {
         rules.put("upgrade legacy spring annotations", UPGRADE_LEGACY_SPRING_FRAMEWORK);
         rules.put("upgrade legacy javax annotations", UPGRADE_LEGACY_JAVAX);
         rules.put("upgrade legacy jakarta annotations", UPGRADE_LEGACY_JAKARTA);
+        rules.put("no Optional class fields", NO_OPTIONAL_CLASS_FIELDS);
+        rules.put("no Optional method parameters", NO_OPTIONAL_METHOD_PARAMETERS);
         return rules;
     }
 }
