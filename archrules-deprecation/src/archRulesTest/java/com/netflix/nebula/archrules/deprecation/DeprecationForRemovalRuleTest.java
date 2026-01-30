@@ -19,14 +19,14 @@ public class DeprecationForRemovalRuleTest {
     public void testDeprecationForRemovalRule_method() {
         final EvaluationResult result = Runner.check(DeprecationRule.deprecationForRemovalRule, CodeThatUsesDeprecatedForRemovalMethod.class);
         assertThat(result.hasViolation()).isTrue();
-        assertThat(result.getPriority()).isEqualTo(Priority.MEDIUM);
+        assertThat(result.getPriority()).isEqualTo(Priority.HIGH);
     }
 
     @Test
     public void testDeprecationForRemovalRule_method_samePackage() {
         final EvaluationResult result = Runner.check(DeprecationRule.deprecationForRemovalRule, DeprecationForRemovalRuleTest.CodeThatUsesDeprecatedForRemovalMethodSamePackage.class);
         assertThat(result.hasViolation()).isFalse();
-        assertThat(result.getPriority()).isEqualTo(Priority.MEDIUM);
+        assertThat(result.getPriority()).isEqualTo(Priority.HIGH);
     }
 
     @Test
@@ -39,7 +39,7 @@ public class DeprecationForRemovalRuleTest {
     public void testDeprecatedForRemovalRule_class() {
         final EvaluationResult result = Runner.check(DeprecationRule.deprecationForRemovalRule, CodeThatUsesDeprecatedForRemovalClass.class);
         assertThat(result.hasViolation()).isTrue();
-        assertThat(result.getPriority()).isEqualTo(Priority.MEDIUM);
+        assertThat(result.getPriority()).isEqualTo(Priority.HIGH);
         assertThat(result.getFailureReport().toString())
                 .contains("no classes should " + CLASS_DEPRECATED_FOR_REMOVAL +
                           " or " + ACCESS_TARGET_PACKAGE + " and " + TARGET_IS_DEPRECATED_FOR_REMOVAL + " or ");

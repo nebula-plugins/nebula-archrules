@@ -41,7 +41,7 @@ public class DeprecationRule implements ArchRulesService {
             .allowEmptyShould(true)
             .because("usage of deprecated APIs introduces risk that future upgrades and migrations will be blocked");
 
-    public static final ArchRule deprecationForRemovalRule = ArchRuleDefinition.priority(Priority.MEDIUM)
+    public static final ArchRule deprecationForRemovalRule = ArchRuleDefinition.priority(Priority.HIGH)
             .noClasses()
             .should(haveAnyDependenciesThat(doNot(resideInSamePackage())
                     .and(dependencyTarget(is(deprecatedForRemoval())))))
