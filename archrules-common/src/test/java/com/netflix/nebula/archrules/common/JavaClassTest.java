@@ -5,10 +5,12 @@ import com.netflix.nebula.archrules.common.other.ClassInOtherPackage;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.EvaluationResult;
 import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
+import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.Test;
 
 import static com.netflix.nebula.archrules.common.Dependency.Predicates.resideInSamePackage;
 import static com.netflix.nebula.archrules.common.JavaClass.Conditions.haveAnyDependenciesThat;
+import static com.netflix.nebula.archrules.common.JavaClass.Predicates.nullSafe;
 import static com.netflix.nebula.archrules.common.JavaClass.Predicates.resideInAPackageThat;
 import static com.netflix.nebula.archrules.common.Util.scanClass;
 import static com.netflix.nebula.archrules.common.Util.scanClasses;
@@ -72,6 +74,25 @@ public class JavaClassTest {
         assertThat(resideInAPackageThat(name("com.netflix.nebula.archrules.common"))
                 .test(scanClass(ClassInOtherPackage.class)))
                 .isFalse();
+    }
+
+    @Test
+    public void test_nullSafe_true() {
+        assertThat(nullSafe()
+                .test(scanClass(NullMarkedClass.class)))
+                .isTrue();
+    }
+
+    @Test
+    public void test_nullSafe_false() {
+        assertThat(nullSafe()
+                .test(scanClass(SameUsage.class)))
+                .isFalse();
+    }
+
+    @NullMarked
+    static class NullMarkedClass {
+
     }
 
     @SuppressWarnings("unused")
