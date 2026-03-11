@@ -11,6 +11,7 @@ import static com.netflix.nebula.archrules.gradleplugins.GradleDeprecatedApiRule
 import static com.netflix.nebula.archrules.gradleplugins.GradleDeprecatedApiRule.tasksShouldNotUseDeprecatedGradleApis;
 import static com.netflix.nebula.archrules.gradleplugins.GradleInternalApiRule.PLUGIN_INTERNAL;
 import static com.netflix.nebula.archrules.gradleplugins.GradleInternalApiRule.TASK_INTERNAL;
+import static com.netflix.nebula.archrules.gradleplugins.GradlePluginApplicationRule.APPLY_BY_ID;
 import static com.netflix.nebula.archrules.gradleplugins.GradlePluginExtensionProviderApiRule.EXTENSION_ABSTRACT_GETTERS;
 import static com.netflix.nebula.archrules.gradleplugins.GradlePluginExtensionProviderApiRule.EXTENSION_FIELDS_USE_PROVIDER_API;
 import static com.netflix.nebula.archrules.gradleplugins.GradlePluginLazyTaskRegistrationRule.LAZY_TASK_CREATION;
@@ -52,6 +53,7 @@ public class GradlePluginBestPractices implements ArchRulesService {
         rules.put("Task declares inputs and/or outputs", INPUTS_OUTPUTS);
         rules.put("Cacheable Task input field path sensitivity", FIELDS_PATH_SENSITIVITY);
         rules.put("Cacheable Task input method path sensitivity", METHODS_PATH_SENSITIVITY);
+        rules.put("Apply plugins by ID", APPLY_BY_ID);
         return rules;
     }
 }
