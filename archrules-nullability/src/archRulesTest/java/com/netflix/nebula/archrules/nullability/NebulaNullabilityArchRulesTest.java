@@ -1,6 +1,7 @@
 package com.netflix.nebula.archrules.nullability;
 
 import com.netflix.nebula.archrules.core.Runner;
+import com.netflix.nebula.archrules.nullability.packageann.PublicClassInAnnotatedPackage;
 import com.tngtech.archunit.lang.EvaluationResult;
 import org.junit.jupiter.api.Test;
 
@@ -104,5 +105,15 @@ public class NebulaNullabilityArchRulesTest {
         EvaluationResult result = Runner.check(NebulaNullabilityArchRules.NO_OPTIONAL_METHOD_PARAMETERS, OptionalFailingClass.class);
         assertThat(result.hasViolation()).isTrue();
         assertThat(result.getFailureReport().getDetails()).hasSize(1);
+    }
+
+    @Test
+    public void test_jspecify_package() {
+        EvaluationResult result = Runner.check(
+                NebulaNullabilityArchRules.PUBLIC_CLASSES_SHOULD_BE_NULL_MARKED,
+                PublicClassInAnnotatedPackage.class);
+        assertThat(result.hasViolation())
+                .as(() -> result.getFailureReport().toString())
+                .isFalse();
     }
 }

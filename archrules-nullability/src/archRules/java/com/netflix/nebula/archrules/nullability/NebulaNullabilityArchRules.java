@@ -10,8 +10,11 @@ import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.netflix.nebula.archrules.common.JavaClass.Predicates.nullSafe;
 import static com.netflix.nebula.archrules.nullability.HaveNoTests.haveNoTests;
+import static com.tngtech.archunit.lang.conditions.ArchConditions.be;
 import static com.tngtech.archunit.lang.conditions.ArchConditions.fullyQualifiedName;
+import static com.tngtech.archunit.lang.conditions.ArchPredicates.are;
 
 public class NebulaNullabilityArchRules implements ArchRulesService {
     static final ArchRule PUBLIC_CLASSES_SHOULD_BE_NULL_MARKED = ArchRuleDefinition.priority(Priority.MEDIUM)
@@ -20,13 +23,12 @@ public class NebulaNullabilityArchRules implements ArchRulesService {
             .and().arePublic()
             .and().containAnyMembersThat(HasModifiers.Predicates.modifier(JavaModifier.PUBLIC))
             .and(haveNoTests())
-            .and().areNotAnnotatedWith("kotlin.Metadata")
-            .should().beAnnotatedWith("org.jspecify.annotations.NullMarked")
+            .should(be(nullSafe()))
             .allowEmptyShould(true)
             .because("public classes should be null marked");
     static final ArchRule UPGRADE_LEGACY_JETBRAINS = ArchRuleDefinition.priority(Priority.MEDIUM)
             .noClasses()
-            .that().areAnnotatedWith("org.jspecify.annotations.NullMarked")
+            .that(are(nullSafe()))
             .should()
             .dependOnClassesThat(fullyQualifiedName("org.jetbrains.annotations.Nullable"))
             .orShould().dependOnClassesThat(fullyQualifiedName("org.jetbrains.annotations.NotNull"))
@@ -34,7 +36,7 @@ public class NebulaNullabilityArchRules implements ArchRulesService {
             .because("Only JSpecify annotations should be used on @NullMarked classes");
     static final ArchRule UPGRADE_LEGACY_SPRING_FRAMEWORK = ArchRuleDefinition.priority(Priority.MEDIUM)
             .noClasses()
-            .that().areAnnotatedWith("org.jspecify.annotations.NullMarked")
+            .that(are(nullSafe()))
             .should()
             .dependOnClassesThat(fullyQualifiedName("org.springframework.lang.Nullable"))
             .orShould().dependOnClassesThat(fullyQualifiedName("org.springframework.lang.NonNull"))
@@ -42,7 +44,7 @@ public class NebulaNullabilityArchRules implements ArchRulesService {
             .because("Only JSpecify annotations should be used on @NullMarked classes");
     static final ArchRule UPGRADE_LEGACY_JAVAX = ArchRuleDefinition.priority(Priority.MEDIUM)
             .noClasses()
-            .that().areAnnotatedWith("org.jspecify.annotations.NullMarked")
+            .that(are(nullSafe()))
             .should()
             .dependOnClassesThat(fullyQualifiedName("javax.annotation.Nullable"))
             .orShould().dependOnClassesThat(fullyQualifiedName("javax.annotation.Nonnull"))
@@ -50,7 +52,7 @@ public class NebulaNullabilityArchRules implements ArchRulesService {
             .because("Only JSpecify annotations should be used on @NullMarked classes");
     static final ArchRule UPGRADE_LEGACY_JAKARTA = ArchRuleDefinition.priority(Priority.MEDIUM)
             .noClasses()
-            .that().areAnnotatedWith("org.jspecify.annotations.NullMarked")
+            .that(are(nullSafe()))
             .should()
             .dependOnClassesThat(fullyQualifiedName("jakarta.annotation.Nullable"))
             .orShould().dependOnClassesThat(fullyQualifiedName("jakarta.annotation.Nonnull"))

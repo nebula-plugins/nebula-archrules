@@ -8,6 +8,7 @@ repositories {
 }
 dependencies {
     archRulesImplementation(libs.jspecify)
+    archRulesImplementation(project(":archrules-common"))
 
     archRulesTestImplementation(libs.assertj)
     archRulesTestImplementation(libs.logback)
