@@ -34,6 +34,25 @@ public class JavaClass {
         ) {
             return resideInAPackageThat(is(annotatedWith(annotationClass)));
         }
+
+        /**
+         * checks if the class's package is annotated with a specific annotation
+         */
+        public static DescribedPredicate<com.tngtech.archunit.core.domain.JavaClass> resideInPackageAnnotatedWith(
+                String annotationClass
+        ) {
+            return resideInAPackageThat(is(annotatedWith(annotationClass)));
+        }
+
+        /**
+         * checks if the class is null safe via Kotlin or JSpecify
+         */
+        public static DescribedPredicate<com.tngtech.archunit.core.domain.JavaClass> nullSafe() {
+            return resideInPackageAnnotatedWith("org.jspecify.annotations.NullMarked")
+                    .or(annotatedWith("kotlin.Metadata"))
+                    .or(annotatedWith("org.jspecify.annotations.NullMarked"))
+                    .as("null safe (JSpecify or Kotlin)");
+        }
     }
 
     public static class Conditions {
