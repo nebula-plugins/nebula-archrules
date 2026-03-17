@@ -24,9 +24,6 @@ import static com.netflix.nebula.archrules.gradleplugins.GradleTaskCacheabilityR
 import static com.netflix.nebula.archrules.gradleplugins.GradleTaskCacheabilityRule.METHODS_PATH_SENSITIVITY;
 import static com.netflix.nebula.archrules.gradleplugins.GradleTaskContainerApiRule.USE_CONFIGURE_EACH_INSTEAD_OF_ALL;
 import static com.netflix.nebula.archrules.gradleplugins.GradleTaskContainerApiRule.USE_NAMED_INSTEAD_OF_GET_BY_NAME;
-import static com.netflix.nebula.archrules.gradleplugins.GradleTaskInputOutputRule.INPUTS_OUTPUTS;
-import static com.netflix.nebula.archrules.gradleplugins.GradleTaskProviderApiRule.ABSTRACT_GETTERS;
-import static com.netflix.nebula.archrules.gradleplugins.GradleTaskProviderApiRule.PROVIDER_PROPERTIES;
 
 @NullMarked
 @SuppressWarnings("unused")
@@ -34,8 +31,11 @@ public class GradlePluginBestPractices implements ArchRulesService {
     @Override
     public Map<String, ArchRule> getRules() {
         Map<String, ArchRule> rules = new HashMap<>();
-        rules.put("provider properties", PROVIDER_PROPERTIES);
-        rules.put("abstract getters", ABSTRACT_GETTERS);
+        rules.put("Task input/output file should be regular", TaskRegularFilePropertyRule.RULE);
+        rules.put("abstract getters", TaskAbstractGetterRule.RULE);
+        rules.put("Task declares inputs and/or outputs", TaskHasInputOutputRule.RULE);
+        rules.put("Task input/output should not be fields", TaskInputOutputFieldRule.RULE);
+        rules.put("Task input/output should use Provider API", GradleTaskRules.PROVIDER_PROPERTIES);
         rules.put("task project access", taskActionShouldNotAccessProject);
         rules.put("task dependencies", taskActionShouldNotCallGetTaskDependencies);
         rules.put("lazy task registration", LAZY_TASK_CREATION);
@@ -50,7 +50,6 @@ public class GradlePluginBestPractices implements ArchRulesService {
         rules.put("Plugin should inject ProviderFactory", USE_INJECTED_PROVIDER_FACTORY);
         rules.put("Extension fields use Provider API", EXTENSION_FIELDS_USE_PROVIDER_API);
         rules.put("Extension abstract getters", EXTENSION_ABSTRACT_GETTERS);
-        rules.put("Task declares inputs and/or outputs", INPUTS_OUTPUTS);
         rules.put("Cacheable Task input field path sensitivity", FIELDS_PATH_SENSITIVITY);
         rules.put("Cacheable Task input method path sensitivity", METHODS_PATH_SENSITIVITY);
         rules.put("Apply plugins by ID", APPLY_BY_ID);

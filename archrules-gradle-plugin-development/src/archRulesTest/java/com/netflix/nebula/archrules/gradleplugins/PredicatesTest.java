@@ -6,6 +6,7 @@ import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
 import org.gradle.FakeDeprecatedGradleClass;
 import org.gradle.FakeDeprecatedGradleMethod;
+import org.gradle.api.DefaultTask;
 import org.gradle.api.Project;
 import org.gradle.api.file.ConfigurableFileCollection;
 import org.gradle.api.file.DirectoryProperty;
@@ -28,8 +29,15 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class PredicatesTest {
+
+    private static final ClassFileImporter importer = new ClassFileImporter();
+
     private static JavaClass scan(Class<?> clazz) {
-        return new ClassFileImporter().importClass(clazz);
+        return importer.importClass(clazz);
+    }
+
+    private static JavaClasses scan(Class<?>... classes) {
+        return importer.importClasses(classes);
     }
 
     @Test
@@ -88,7 +96,7 @@ class PredicatesTest {
 
     @Test
     public void test_callsMethodOn_shouldMatchCorrectMethodCall() {
-        JavaClasses classes = new ClassFileImporter().importClasses(ClassCallingGetObjects.class, Project.class);
+        JavaClasses classes = scan(ClassCallingGetObjects.class, Project.class);
         Set<JavaAccess<?>> accesses = classes.get(ClassCallingGetObjects.class).getAccessesFromSelf();
 
         long matchCount = accesses.stream()
@@ -100,7 +108,7 @@ class PredicatesTest {
 
     @Test
     public void test_callsMethodOn_shouldNotMatchDifferentMethod() {
-        JavaClasses classes = new ClassFileImporter().importClasses(ClassCallingGetObjects.class, Project.class);
+        JavaClasses classes = scan(ClassCallingGetObjects.class, Project.class);
         Set<JavaAccess<?>> accesses = classes.get(ClassCallingGetObjects.class).getAccessesFromSelf();
 
         long matchCount = accesses.stream()
@@ -112,7 +120,7 @@ class PredicatesTest {
 
     @Test
     public void test_callsMethodOnAny_shouldMatchCallOnFirstOwner() {
-        JavaClasses classes = new ClassFileImporter().importClasses(ClassCallingGetByName.class, Project.class, TaskContainer.class);
+        JavaClasses classes = scan(ClassCallingGetByName.class, Project.class, TaskContainer.class);
         Set<JavaAccess<?>> accesses = classes.get(ClassCallingGetByName.class).getAccessesFromSelf();
 
         long matchCount = accesses.stream()
@@ -124,7 +132,7 @@ class PredicatesTest {
 
     @Test
     public void test_callsMethodOnAny_shouldNotMatchDifferentOwner() {
-        JavaClasses classes = new ClassFileImporter().importClasses(ClassCallingGetByName.class, Project.class, TaskContainer.class);
+        JavaClasses classes = scan(ClassCallingGetByName.class, Project.class, TaskContainer.class);
         Set<JavaAccess<?>> accesses = classes.get(ClassCallingGetByName.class).getAccessesFromSelf();
 
         long matchCount = accesses.stream()
@@ -132,6 +140,14 @@ class PredicatesTest {
                 .count();
 
         assertThat(matchCount).isEqualTo(0);
+    }
+
+    @Test
+    public void test_aGradleTaskClass() {
+        assertThat(Predicates.aGradleTaskClass().test(scan(CustomTask.class))).isTrue();
+    }
+
+    static class CustomTask extends DefaultTask {
     }
 
     @SuppressWarnings("unused")

@@ -24,7 +24,7 @@ public class GradleInternalApiRule {
      * and may change or be removed between versions without notice. Use only public
      * Gradle APIs to ensure compatibility across Gradle versions.
      */
-    public static final ArchRule PLUGIN_INTERNAL = ArchRuleDefinition.priority(Priority.MEDIUM)
+    public static final ArchRule PLUGIN_INTERNAL = ArchRuleDefinition.priority(Priority.LOW)
             .noClasses()
             .that().implement("org.gradle.api.Plugin")
             .should().dependOnClassesThat(internalGradleClass)
@@ -43,7 +43,7 @@ public class GradleInternalApiRule {
      * and may change or be removed between versions without notice. Use only public
      * Gradle APIs to ensure compatibility across Gradle versions.
      */
-    public static final ArchRule TASK_INTERNAL = ArchRuleDefinition.priority(Priority.MEDIUM)
+    public static final ArchRule TASK_INTERNAL = ArchRuleDefinition.priority(Priority.LOW)
             .noClasses()
             .that().areAssignableTo("org.gradle.api.Task")
             .and().areNotInterfaces()
