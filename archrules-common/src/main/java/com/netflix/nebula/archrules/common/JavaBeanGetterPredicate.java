@@ -12,7 +12,7 @@ import org.jspecify.annotations.NullMarked;
 class JavaBeanGetterPredicate extends DescribedPredicate<JavaMethod> {
 
     JavaBeanGetterPredicate() {
-        super("getter");
+        super("a getter");
     }
 
     @Override

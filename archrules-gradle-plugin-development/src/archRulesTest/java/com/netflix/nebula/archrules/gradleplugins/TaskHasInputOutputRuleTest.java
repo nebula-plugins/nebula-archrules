@@ -8,20 +8,16 @@ import org.gradle.api.tasks.InputFile;
 import org.gradle.api.tasks.OutputFile;
 import org.gradle.api.tasks.TaskAction;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class GradleTaskInputOutputRuleTest {
-    private static final Logger LOG = LoggerFactory.getLogger(GradleTaskInputOutputRuleTest.class);
-
+class TaskHasInputOutputRuleTest {
     @Test
     public void taskWithoutInputOutput_should_fail() {
         final EvaluationResult result = Runner.check(
-                GradleTaskInputOutputRule.INPUTS_OUTPUTS,
+                TaskHasInputOutputRule.RULE,
                 TaskWithoutInputOutput.class
         );
         assertThat(result.hasViolation()).isTrue();
@@ -33,40 +29,36 @@ public class GradleTaskInputOutputRuleTest {
     @Test
     public void taskWithInputAnnotation_should_pass() {
         final EvaluationResult result = Runner.check(
-                GradleTaskInputOutputRule.INPUTS_OUTPUTS,
+                TaskHasInputOutputRule.RULE,
                 TaskWithInputAnnotation.class
         );
-        LOG.info(result.getFailureReport().toString());
         assertThat(result.hasViolation()).isFalse();
     }
 
     @Test
     public void taskWithInputFileAnnotation_should_pass() {
         final EvaluationResult result = Runner.check(
-                GradleTaskInputOutputRule.INPUTS_OUTPUTS,
+                TaskHasInputOutputRule.RULE,
                 TaskWithInputFileAnnotation.class
         );
-        LOG.info(result.getFailureReport().toString());
         assertThat(result.hasViolation()).isFalse();
     }
 
     @Test
     public void taskWithOutputAnnotation_should_pass() {
         final EvaluationResult result = Runner.check(
-                GradleTaskInputOutputRule.INPUTS_OUTPUTS,
+                TaskHasInputOutputRule.RULE,
                 TaskWithOutputAnnotation.class
         );
-        LOG.info(result.getFailureReport().toString());
         assertThat(result.hasViolation()).isFalse();
     }
 
     @Test
     public void taskWithoutTaskAction_should_pass() {
         final EvaluationResult result = Runner.check(
-                GradleTaskInputOutputRule.INPUTS_OUTPUTS,
+                TaskHasInputOutputRule.RULE,
                 TaskWithoutTaskAction.class
         );
-        LOG.info(result.getFailureReport().toString());
         assertThat(result.hasViolation()).isFalse();
     }
 

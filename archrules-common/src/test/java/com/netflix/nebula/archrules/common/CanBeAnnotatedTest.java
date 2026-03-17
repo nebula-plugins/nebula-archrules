@@ -2,6 +2,7 @@ package com.netflix.nebula.archrules.common;
 
 import org.junit.jupiter.api.Test;
 
+import static com.netflix.nebula.archrules.common.CanBeAnnotated.Predicates.annotatedWithAny;
 import static com.netflix.nebula.archrules.common.Util.scanClass;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -16,21 +17,43 @@ class CanBeAnnotatedTest {
     @Test
     public void test_javaDeprecatedForRemovalClass() {
         assertThat(CanBeAnnotated.Predicates.deprecatedForRemoval().test(scanClass(Usage.class))).isFalse();
-        assertThat(CanBeAnnotated.Predicates.deprecatedForRemoval().getDescription()).isEqualTo("deprecated for removal");
+        assertThat(CanBeAnnotated.Predicates.deprecatedForRemoval().getDescription())
+                .isEqualTo("deprecated for removal");
+    }
+
+    @Test
+    public void test_annotatedWithAny() {
+        final var rule = annotatedWithAny(SomeAnnotation.class.getName(), AnotherAnnotation.class.getName());
+        assertThat(rule.test(scanClass(Annotated1.class))).isTrue();
+        assertThat(rule.test(scanClass(Annotated2.class))).isTrue();
+        assertThat(rule.test(scanClass(Usage.class))).isFalse();
+        assertThat(rule.getDescription()).startsWith("annotated with any [");
     }
 
     @Deprecated
     static class JavaDeprecatedClass {
-
     }
 
     @Deprecated(forRemoval = true)
     static class JavaDeprecatedForRemovalClass {
-
     }
 
     static class Usage {
         JavaDeprecatedClass aField;
         JavaDeprecatedForRemovalClass deprecatedForRemoval;
+    }
+
+    @SomeAnnotation
+    static class Annotated1 {
+    }
+
+    @AnotherAnnotation
+    static class Annotated2 {
+    }
+
+    @interface SomeAnnotation {
+    }
+
+    @interface AnotherAnnotation {
     }
 }

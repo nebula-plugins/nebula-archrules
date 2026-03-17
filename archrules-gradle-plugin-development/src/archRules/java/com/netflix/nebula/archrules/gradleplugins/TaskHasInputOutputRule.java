@@ -1,42 +1,29 @@
 package com.netflix.nebula.archrules.gradleplugins;
 
-import com.tngtech.archunit.base.DescribedPredicate;
-import com.tngtech.archunit.core.domain.properties.CanBeAnnotated;
 import com.tngtech.archunit.lang.ArchRule;
 import com.tngtech.archunit.lang.Priority;
 import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
 import org.jspecify.annotations.NullMarked;
 
-import static com.netflix.nebula.archrules.gradleplugins.Predicates.annotatedWithAny;
+import static com.netflix.nebula.archrules.gradleplugins.Predicates.aGradleTaskClass;
+import static com.netflix.nebula.archrules.gradleplugins.Predicates.annotatedWithInputOutputAnnotations;
 import static com.netflix.nebula.archrules.gradleplugins.Predicates.containAnyFieldsInClassHierarchyThat;
 import static com.netflix.nebula.archrules.gradleplugins.Predicates.containAnyMethodsInClassHierarchyThat;
 import static com.netflix.nebula.archrules.gradleplugins.Predicates.haveTaskAction;
-import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.INPUT_OUTPUT_ANNOTATIONS;
 import static com.tngtech.archunit.lang.ArchCondition.from;
 import static com.tngtech.archunit.lang.conditions.ArchPredicates.are;
 
-/**
- * Rules to ensure Gradle tasks properly declare their inputs and outputs.
- * <p>
- * Tasks must declare inputs and outputs for incremental builds and caching to work correctly.
- */
 @NullMarked
-public class GradleTaskInputOutputRule {
-
-    private static final DescribedPredicate<CanBeAnnotated> annotatedWithInputOutputAnnotations =
-            annotatedWithAny(INPUT_OUTPUT_ANNOTATIONS)
-                    .as("annotated with Input and/or Output annotations");
-
+public class TaskHasInputOutputRule {
     /**
      * Ensures that task classes declare at least one input or output.
      * <p>
      * Tasks without declared inputs/outputs cannot participate in incremental builds
      * or build caching, which significantly impacts build performance.
      */
-    public static final ArchRule INPUTS_OUTPUTS = ArchRuleDefinition.priority(Priority.HIGH)
+    static final ArchRule RULE = ArchRuleDefinition.priority(Priority.HIGH)
             .classes()
-            .that().areAssignableTo("org.gradle.api.DefaultTask")
-            .and().areNotInterfaces()
+            .that(are(aGradleTaskClass()))
             .and(haveTaskAction)
             .and().doNotHaveSimpleName("DefaultTask")
             .should(from(containAnyMethodsInClassHierarchyThat(are(annotatedWithInputOutputAnnotations))))

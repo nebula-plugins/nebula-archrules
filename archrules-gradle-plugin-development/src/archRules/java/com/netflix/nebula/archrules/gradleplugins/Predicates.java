@@ -15,6 +15,7 @@ import com.tngtech.archunit.lang.conditions.ArchPredicates;
 
 import java.util.Set;
 
+import static com.netflix.nebula.archrules.common.CanBeAnnotated.Predicates.annotatedWithAny;
 import static com.tngtech.archunit.base.DescribedPredicate.not;
 import static com.tngtech.archunit.core.domain.JavaAccess.Predicates.target;
 import static com.tngtech.archunit.core.domain.JavaAccess.Predicates.targetOwner;
@@ -73,15 +74,6 @@ class Predicates {
     static final DescribedPredicate<JavaClass> haveTaskAction =
             ArchPredicates.have(containAnyMethodsThat(are(annotatedWith("org.gradle.api.tasks.TaskAction"))));
 
-    /** Creates a predicate matching elements annotated with any of the given annotations. */
-    static DescribedPredicate<CanBeAnnotated> annotatedWithAny(Set<String> annotationClasses) {
-        return annotationClasses.stream()
-                .map(CanBeAnnotated.Predicates::annotatedWith)
-                .reduce((a, b) -> a.or(b))
-                .orElseGet(() -> annotatedWith(rawType(assignableTo(Object.class))))
-                .as("annotated with any [%s]", String.join(", ", annotationClasses));
-    }
-
     /** Matches classes with at least one method in their hierarchy satisfying the predicate. */
     static DescribedPredicate<JavaClass> containAnyMethodsInClassHierarchyThat(DescribedPredicate<? super JavaMethod> predicate) {
         return new ContainAnyMembersInClassHierarchyThatPredicate<>("methods", GET_ALL_METHODS, predicate);
@@ -116,9 +108,9 @@ class Predicates {
                     .as("annotated with Input file annotations");
 
     /** Matches elements annotated with any input or output annotation. */
-    static final DescribedPredicate<CanBeAnnotated> hasInputOutputAnnotation =
+    static final DescribedPredicate<CanBeAnnotated> annotatedWithInputOutputAnnotations =
             annotatedWithAny(INPUT_OUTPUT_ANNOTATIONS)
-                    .as("has input or output annotation");
+                    .as("annotated with Input and/or Output annotations");
 
     /** Creates a predicate matching fields with a specific raw type. */
     static DescribedPredicate<JavaField> fieldWithType(String typeName) {
@@ -138,6 +130,13 @@ class Predicates {
                 return typeNames.contains(field.getRawType().getName());
             }
         };
+    }
+
+    /** Predicate matching Provider API types (Property, Provider, FileCollection, etc.). */
+    static DescribedPredicate<JavaClass> aGradleTaskClass(){
+        return assignableTo("org.gradle.api.Task")
+                .and(not(INTERFACES))
+                .as("a gradle task");
     }
 
     /** Returns true if the type is a Gradle Provider API type (Property, Provider, FileCollection, etc.). */

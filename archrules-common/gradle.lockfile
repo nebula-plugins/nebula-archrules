@@ -3,7 +3,7 @@
 # This file is expected to be part of source control.
 ch.qos.logback:logback-classic:1.5.20=testCompileClasspath,testRuntimeClasspath
 ch.qos.logback:logback-core:1.5.20=testCompileClasspath,testRuntimeClasspath
-com.netflix.nebula:nebula-archrules-core:0.15.1=testCompileClasspath,testRuntimeClasspath
+com.netflix.nebula:nebula-archrules-core:0.15.2=testCompileClasspath,testRuntimeClasspath
 com.tngtech.archunit:archunit:1.4.1=compileClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
 net.bytebuddy:byte-buddy:1.17.7=testCompileClasspath,testRuntimeClasspath
 org.apiguardian:apiguardian-api:1.1.2=testCompileClasspath
