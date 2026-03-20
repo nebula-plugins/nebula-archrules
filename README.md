@@ -42,6 +42,11 @@ These rules enforce JSpecify nullability annotations on public code. Kotlin clas
 
 These rules ensure calls are not made to known insecure OSS Java APIs.
 
+### Spring Rules [📖](archrules-spring/README.md)
+[![Maven Central](https://img.shields.io/maven-central/v/com.netflix.nebula/archrules-spring?style=for-the-badge&color=01AF01)](https://repo1.maven.org/maven2/com/netflix/nebula/archrules-archrules-security/)
+
+These rules enforce Spring best practices.
+
 ### Testing Frameworks Rules [📖](archrules-testing-frameworks/README.md)
 [![Maven Central](https://img.shields.io/maven-central/v/com.netflix.nebula/archrules-testing-frameworks?style=for-the-badge&color=01AF01)](https://repo1.maven.org/maven2/com/netflix/nebula/archrules-testing-frameworks/)
 
