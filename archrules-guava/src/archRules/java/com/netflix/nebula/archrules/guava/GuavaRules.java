@@ -15,6 +15,7 @@ public class GuavaRules implements ArchRulesService {
             .noClasses()
             .should()
             .dependOnClassesThat().haveFullyQualifiedName("com.google.common.base.Optional")
+            .allowEmptyShould(true)
             .because("Java Optional is preferred over Guava Optional");
 
     static final ArchRule COLLECTIONS = ArchRuleDefinition.priority(Priority.MEDIUM)
@@ -22,6 +23,7 @@ public class GuavaRules implements ArchRulesService {
             .should()
             .dependOnClassesThat()
             .resideInAPackage("com.google.common.collect..")
+            .allowEmptyShould(true)
             .because("Guava collections should not be used for compatibility reasons. " +
                      "Prefer Java or Kotlin standard library collections instead.");
 
