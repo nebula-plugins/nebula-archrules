@@ -26,7 +26,9 @@ public class NebulaNullabilityArchRules implements ArchRulesService {
             .should(be(nullSafe()))
             .allowEmptyShould(true)
             .because("public classes should be null marked");
-    static final ArchRule UPGRADE_LEGACY_JETBRAINS = ArchRuleDefinition.priority(Priority.MEDIUM)
+    static final ArchRule UPGRADE_LEGACY_JETBRAINS = ArchRuleDefinition
+            // kotlin generates code with this annotation still https://youtrack.jetbrains.com/issue/KT-47417/
+            .priority(Priority.LOW)
             .noClasses()
             .that(are(nullSafe()))
             .should()
