@@ -7,6 +7,7 @@ import org.jspecify.annotations.NullMarked;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.netflix.nebula.archrules.gradleplugins.DependencySubstitutionsAllMethodRule.DEPENDENCYSUBSTITUTIONS_ALL;
 import static com.netflix.nebula.archrules.gradleplugins.GradleDeprecatedApiRule.pluginsShouldNotUseDeprecatedGradleApis;
 import static com.netflix.nebula.archrules.gradleplugins.GradleDeprecatedApiRule.tasksShouldNotUseDeprecatedGradleApis;
 import static com.netflix.nebula.archrules.gradleplugins.GradleInternalApiRule.PLUGIN_INTERNAL;
@@ -52,6 +53,7 @@ public class GradlePluginBestPractices implements ArchRulesService {
         rules.put("Extension abstract getters", EXTENSION_ABSTRACT_GETTERS);
         rules.put("Cacheable Task input field path sensitivity", FIELDS_PATH_SENSITIVITY);
         rules.put("Cacheable Task input method path sensitivity", METHODS_PATH_SENSITIVITY);
+        rules.put("Don't call DependendencySubstitutions.all()", DEPENDENCYSUBSTITUTIONS_ALL);
         rules.put("Apply plugins by ID", APPLY_BY_ID);
         return rules;
     }
