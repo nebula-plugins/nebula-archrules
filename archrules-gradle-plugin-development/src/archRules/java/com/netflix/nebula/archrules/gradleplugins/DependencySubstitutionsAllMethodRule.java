@@ -3,7 +3,9 @@ package com.netflix.nebula.archrules.gradleplugins;
 import com.tngtech.archunit.lang.ArchRule;
 import com.tngtech.archunit.lang.Priority;
 import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public class DependencySubstitutionsAllMethodRule {
 
     public static final ArchRule DEPENDENCYSUBSTITUTIONS_ALL = ArchRuleDefinition.priority(Priority.MEDIUM)

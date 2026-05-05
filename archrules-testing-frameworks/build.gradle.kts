@@ -1,6 +1,3 @@
-import com.netflix.nebula.archrules.gradle.CheckRulesTask
-import com.netflix.nebula.archrules.gradle.PrintConsoleReportTask
-
 plugins {
     id("com.netflix.nebula.library")
     id("com.netflix.nebula.archrules.library")
