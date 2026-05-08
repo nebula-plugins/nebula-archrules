@@ -36,5 +36,3 @@ jobs:
         run: ./gradlew --stacktrace build
         env:
           JDK_VERSION_FOR_TESTS: ${{ matrix.java }}
-      - name: Arch Rule Reports
-        run: find . -type f -iwholename "*archrules/report.md" -exec cat {} > $GITHUB_STEP_SUMMARY \;
