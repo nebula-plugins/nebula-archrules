@@ -20,7 +20,8 @@ public class JUnit4Rule implements ArchRulesService {
     public static final ArchRule junit4Rule = ArchRuleDefinition.priority(Priority.MEDIUM)
             .noClasses()
             .should().dependOnClassesThat(resideInAPackage("org.junit..")
-                    .and(resideOutsideOfPackage("org.junit.jupiter..")))
+                    .and(resideOutsideOfPackage("org.junit.jupiter.."))
+                    .and(resideOutsideOfPackage("org.junit.platform..")))
             .allowEmptyShould(true)
             .as("No code should use JUnit4 test packages")
             .because("usage of JUnit4 is deprecated. Please migrate to JUnit5 Jupiter.");

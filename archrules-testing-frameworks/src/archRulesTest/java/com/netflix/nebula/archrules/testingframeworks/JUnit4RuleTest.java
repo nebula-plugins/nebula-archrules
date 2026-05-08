@@ -3,6 +3,7 @@ package com.netflix.nebula.archrules.testingframeworks;
 import com.netflix.nebula.archrules.core.Runner;
 import com.tngtech.archunit.lang.EvaluationResult;
 import org.junit.jupiter.api.Test;
+import org.junit.platform.commons.annotation.Testable;
 import org.junit.rules.ExternalResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,5 +46,17 @@ public class JUnit4RuleTest {
 
     public static class JUnit4TestRule extends ExternalResource {
 
+    }
+
+    @Test
+    public void junit_platform_test_package_test() {
+        final EvaluationResult result = Runner.check(JUnit4Rule.junit4Rule, JUnitPlatformUsage.class);
+        LOG.info(result.getFailureReport().toString());
+        assertThat(result.hasViolation()).isFalse();
+    }
+
+    @Testable
+    public static class JUnitPlatformUsage {
+        public void test() { }
     }
 }
