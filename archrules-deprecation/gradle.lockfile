@@ -3,7 +3,8 @@
 # This file is expected to be part of source control.
 ch.qos.logback:logback-classic:1.5.20=archRulesTestArchRulesRuntime,archRulesTestCompileClasspath,archRulesTestRuntimeClasspath
 ch.qos.logback:logback-core:1.5.20=archRulesTestArchRulesRuntime,archRulesTestCompileClasspath,archRulesTestRuntimeClasspath
-com.netflix.nebula:archrules-common:0.11.2=archRules,archRulesArchRulesRuntime,archRulesTestArchRulesRuntime,mainArchRulesRuntime,testArchRulesRuntime
+com.netflix.nebula:archrules-common:0.11.2=archRules,mainArchRulesRuntime,testArchRulesRuntime
+com.netflix.nebula:archrules-common:1.0.0=archRulesArchRulesRuntime,archRulesTestArchRulesRuntime
 com.netflix.nebula:archrules-guava:0.11.2=archRules,archRulesArchRulesRuntime,archRulesTestArchRulesRuntime,mainArchRulesRuntime,testArchRulesRuntime
 com.netflix.nebula:archrules-javax:0.11.2=archRules,archRulesArchRulesRuntime,archRulesTestArchRulesRuntime,mainArchRulesRuntime,testArchRulesRuntime
 com.netflix.nebula:archrules-joda:0.11.2=archRules,archRulesArchRulesRuntime,archRulesTestArchRulesRuntime,mainArchRulesRuntime,testArchRulesRuntime
