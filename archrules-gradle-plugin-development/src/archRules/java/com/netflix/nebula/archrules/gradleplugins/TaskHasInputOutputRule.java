@@ -17,6 +17,7 @@ import static com.tngtech.archunit.lang.conditions.ArchPredicates.are;
 public class TaskHasInputOutputRule {
     /**
      * Ensures that task classes declare at least one input or output.
+     * This rule exclude tasks annotated with @DisableCachingByDefault
      * <p>
      * Tasks without declared inputs/outputs cannot participate in incremental builds
      * or build caching, which significantly impacts build performance.
@@ -24,6 +25,7 @@ public class TaskHasInputOutputRule {
     static final ArchRule RULE = ArchRuleDefinition.priority(Priority.HIGH)
             .classes()
             .that(are(aGradleTaskClass()))
+            .and().areNotAnnotatedWith("org.gradle.work.DisableCachingByDefault")
             .and(haveTaskAction)
             .and().doNotHaveSimpleName("DefaultTask")
             .should(from(containAnyMethodsInClassHierarchyThat(are(annotatedWithInputOutputAnnotations))))
