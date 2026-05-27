@@ -1,5 +1,5 @@
 plugins {
-    id("com.netflix.nebula.oss.settings") version("25.+")
+    id("com.netflix.nebula.oss.settings") version("25.11.+")
 }
 
 rootProject.name = "nebula-archrules"
