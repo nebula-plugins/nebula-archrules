@@ -9,6 +9,9 @@ import org.jspecify.annotations.NullMarked;
 import java.util.Collections;
 import java.util.Map;
 
+import static com.tngtech.archunit.base.DescribedPredicate.doesNot;
+import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPackage;
+
 @NullMarked
 public class JavaxRule implements ArchRulesService {
     /**
@@ -16,7 +19,11 @@ public class JavaxRule implements ArchRulesService {
      */
     public static final ArchRule javaxRule = ArchRuleDefinition.priority(Priority.MEDIUM)
             .noClasses()
-            .should().dependOnClassesThat().resideInAPackage("javax..")
+            .should()
+            .dependOnClassesThat(
+                    resideInAPackage("javax..")
+                            .and(doesNot(resideInAPackage("javax.xml..")))
+            )
             .allowEmptyShould(true)
             .as("No code should use Javax library")
             .because("usage of Javax is deprecated. Please migrate to Jakarta.");

@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import javax.servlet.http.HttpServlet;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.xml.namespace.QName;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -29,6 +30,13 @@ public class JavaxRuleTest {
         LOG.info(result.getFailureReport().toString());
         assertThat(result.hasViolation()).isTrue();
         assertThat(result.getFailureReport().getDetails()).hasSize(2);
+    }
+
+    @Test
+    public void test_javax_xml_usage() {
+        final EvaluationResult result = Runner.check(JavaxRule.javaxRule, JavaxXmlUsage.class);
+        LOG.info(result.getFailureReport().toString());
+        assertThat(result.hasViolation()).isFalse();
     }
 
     @Test
@@ -53,6 +61,11 @@ public class JavaxRuleTest {
 
     @SuppressWarnings("unused")
     public static class JakartaUsage extends jakarta.servlet.http.HttpServlet {
+    }
+
+    @SuppressWarnings("unused")
+    public static class JavaxXmlUsage {
+        QName qName;
     }
 
 }
