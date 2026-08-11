@@ -86,6 +86,7 @@ final class TypeConstants {
     // Gradle task cacheability annotations
     static final String ANNOTATION_CACHEABLE_TASK = "org.gradle.api.tasks.CacheableTask";
     static final String ANNOTATION_PATH_SENSITIVE = "org.gradle.api.tasks.PathSensitive";
+    static final String ANNOTATION_CLASSPATH = "org.gradle.api.tasks.Classpath";
 
     // Annotation sets
 

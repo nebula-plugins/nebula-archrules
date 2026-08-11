@@ -7,8 +7,10 @@ import org.jspecify.annotations.NullMarked;
 
 import static com.netflix.nebula.archrules.gradleplugins.Predicates.areAnnotatedWithFileInputAnnotation;
 import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.ANNOTATION_CACHEABLE_TASK;
+import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.ANNOTATION_CLASSPATH;
 import static com.netflix.nebula.archrules.gradleplugins.TypeConstants.ANNOTATION_PATH_SENSITIVE;
 import static com.tngtech.archunit.core.domain.properties.CanBeAnnotated.Predicates.annotatedWith;
+import static com.tngtech.archunit.lang.conditions.ArchConditions.be;
 import static com.tngtech.archunit.lang.conditions.ArchPredicates.are;
 
 /**
@@ -31,6 +33,7 @@ public class GradleTaskCacheabilityRule {
             .that(areAnnotatedWithFileInputAnnotation)
             .and().areDeclaredInClassesThat(are(annotatedWith(ANNOTATION_CACHEABLE_TASK)))
             .should().beAnnotatedWith(ANNOTATION_PATH_SENSITIVE)
+            .orShould(be(annotatedWith(ANNOTATION_CLASSPATH)))
             .allowEmptyShould(true)
             .because(
                     "Cacheable tasks with file inputs must declare @PathSensitive to specify how paths " +
@@ -50,6 +53,7 @@ public class GradleTaskCacheabilityRule {
             .that(areAnnotatedWithFileInputAnnotation)
             .and().areDeclaredInClassesThat(are(annotatedWith(ANNOTATION_CACHEABLE_TASK)))
             .should().beAnnotatedWith(ANNOTATION_PATH_SENSITIVE)
+            .orShould(be(annotatedWith(ANNOTATION_CLASSPATH)))
             .allowEmptyShould(true)
             .because(
                     "Cacheable tasks with file inputs must declare @PathSensitive to specify how paths " +

@@ -2,7 +2,6 @@ package com.netflix.nebula.archrules.deprecation;
 
 import com.netflix.nebula.archrules.core.Runner;
 import com.netflix.nebula.archrules.deprecation.other.ClassThatIsJavaDeprecated;
-import com.netflix.nebula.archrules.deprecation.other.DeprecatedForRemovalClass;
 import com.netflix.nebula.archrules.deprecation.other.DeprecatedInterface;
 import com.netflix.nebula.archrules.deprecation.other.MethodThatIsDeprecated;
 import com.tngtech.archunit.lang.EvaluationResult;
@@ -29,11 +28,7 @@ public class DeprecationRuleTest {
         assertThat(result.getPriority()).isEqualTo(Priority.LOW);
         assertThat(result.getFailureReport().toString())
                 .contains("no classes should " + CLASS_DEPRECATED + " " +
-                          "or " + ACCESS_TARGET_PACKAGE + " and " + TARGET_IS_DEPRECATED + " or ");
-
-        assertThat(result.getFailureReport().toString())
-                .as("buggy behavior that will be fixed in https://github.com/TNG/ArchUnit/pull/1579")
-                .doesNotContain(TARGET_OWNER_IS_DEPRECATED);
+                          "or " + ACCESS_TARGET_PACKAGE + " and " + TARGET_IS_DEPRECATED + " or " + TARGET_OWNER_IS_DEPRECATED);
     }
 
     @Test
@@ -52,11 +47,7 @@ public class DeprecationRuleTest {
         assertThat(result.getPriority()).isEqualTo(Priority.LOW);
         assertThat(result.getFailureReport().toString())
                 .contains("no classes should " + CLASS_DEPRECATED + " " +
-                          "or " + ACCESS_TARGET_PACKAGE + " and " + TARGET_IS_DEPRECATED);
-
-        assertThat(result.getFailureReport().toString())
-                .as("buggy behavior that will be fixed in https://github.com/TNG/ArchUnit/pull/1579")
-                .doesNotContain("or target owner is deprecated");
+                          "or " + ACCESS_TARGET_PACKAGE + " and " + TARGET_IS_DEPRECATED + " or " + TARGET_OWNER_IS_DEPRECATED);
     }
 
     @Test
@@ -109,7 +100,6 @@ public class DeprecationRuleTest {
             MethodThatIsDeprecated.deprecated();
         }
     }
-
 
 
     static class Impl implements DeprecatedInterface {
