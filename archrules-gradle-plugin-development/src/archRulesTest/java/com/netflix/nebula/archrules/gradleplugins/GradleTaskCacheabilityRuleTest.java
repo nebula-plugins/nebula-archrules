@@ -5,6 +5,7 @@ import com.tngtech.archunit.lang.EvaluationResult;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.file.RegularFileProperty;
 import org.gradle.api.tasks.CacheableTask;
+import org.gradle.api.tasks.Classpath;
 import org.gradle.api.tasks.InputFile;
 import org.gradle.api.tasks.OutputFile;
 import org.gradle.api.tasks.PathSensitive;
@@ -42,6 +43,16 @@ public class GradleTaskCacheabilityRuleTest {
     }
 
     @Test
+    public void cacheableTaskWithClasspath_should_pass() {
+        final EvaluationResult result = Runner.check(
+                GradleTaskCacheabilityRule.FIELDS_PATH_SENSITIVITY,
+                CacheableTaskWithClasspath.class
+        );
+        LOG.info(result.getFailureReport().toString());
+        assertThat(result.hasViolation()).isFalse();
+    }
+
+    @Test
     public void cacheableTaskWithInputFileMethodMissingPathSensitive_should_fail() {
         final EvaluationResult result = Runner.check(
                 GradleTaskCacheabilityRule.METHODS_PATH_SENSITIVITY,
@@ -57,6 +68,16 @@ public class GradleTaskCacheabilityRuleTest {
         final EvaluationResult result = Runner.check(
                 GradleTaskCacheabilityRule.FIELDS_PATH_SENSITIVITY,
                 CacheableTaskWithInputFileMethodWithPathSensitive.class
+        );
+        LOG.info(result.getFailureReport().toString());
+        assertThat(result.hasViolation()).isFalse();
+    }
+
+    @Test
+    public void cacheableTaskWithInputFileMethodWithClasspath_should_pass() {
+        final EvaluationResult result = Runner.check(
+                GradleTaskCacheabilityRule.FIELDS_PATH_SENSITIVITY,
+                CacheableTaskWithInputFileMethodWithClasspath.class
         );
         LOG.info(result.getFailureReport().toString());
         assertThat(result.hasViolation()).isFalse();
@@ -115,6 +136,22 @@ public class GradleTaskCacheabilityRuleTest {
 
     @SuppressWarnings("unused")
     @CacheableTask
+    public static abstract class CacheableTaskWithClasspath extends DefaultTask {
+        @InputFile
+        @Classpath
+        public File inputFile;
+
+        @OutputFile
+        public File outputFile;
+
+        @TaskAction
+        public void execute() {
+            System.out.println("Processing");
+        }
+    }
+
+    @SuppressWarnings("unused")
+    @CacheableTask
     public static abstract class CacheableTaskWithInputFileMethodMissingPathSensitive extends DefaultTask {
         @InputFile
         public abstract RegularFileProperty getInputFile();
@@ -130,6 +167,19 @@ public class GradleTaskCacheabilityRuleTest {
     public static abstract class CacheableTaskWithInputFileMethodWithPathSensitive extends DefaultTask {
         @InputFile
         @PathSensitive(PathSensitivity.RELATIVE)
+        public abstract RegularFileProperty getInputFile();
+
+        @TaskAction
+        public void execute() {
+            System.out.println("Processing");
+        }
+    }
+
+    @SuppressWarnings("unused")
+    @CacheableTask
+    public static abstract class CacheableTaskWithInputFileMethodWithClasspath extends DefaultTask {
+        @InputFile
+        @Classpath
         public abstract RegularFileProperty getInputFile();
 
         @TaskAction

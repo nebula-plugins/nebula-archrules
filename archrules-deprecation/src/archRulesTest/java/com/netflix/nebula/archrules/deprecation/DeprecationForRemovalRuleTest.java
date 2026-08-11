@@ -42,11 +42,8 @@ public class DeprecationForRemovalRuleTest {
         assertThat(result.getPriority()).isEqualTo(Priority.MEDIUM);
         assertThat(result.getFailureReport().toString())
                 .contains("no classes should " + CLASS_DEPRECATED_FOR_REMOVAL +
-                          " or " + ACCESS_TARGET_PACKAGE + " and " + TARGET_IS_DEPRECATED_FOR_REMOVAL + " or ");
-
-        assertThat(result.getFailureReport().toString())
-                .as("buggy behavior that will be fixed in https://github.com/TNG/ArchUnit/pull/1579")
-                .doesNotContain(TARGET_OWNER_IS_DEPRECATED_FOR_REMOVAL);
+                          " or " + ACCESS_TARGET_PACKAGE + " and " + TARGET_IS_DEPRECATED_FOR_REMOVAL +
+                          " or " + TARGET_OWNER_IS_DEPRECATED_FOR_REMOVAL);
     }
 
     @Test
