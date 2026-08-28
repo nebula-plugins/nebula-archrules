@@ -9,7 +9,6 @@ import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.Test;
 
 import static com.netflix.nebula.archrules.common.Dependency.Predicates.resideInSamePackage;
-import static com.netflix.nebula.archrules.common.JavaClass.Conditions.haveAnyDependenciesThat;
 import static com.netflix.nebula.archrules.common.JavaClass.Predicates.nullSafe;
 import static com.netflix.nebula.archrules.common.JavaClass.Predicates.resideInAPackageThat;
 import static com.netflix.nebula.archrules.common.Util.scanClass;
@@ -17,6 +16,7 @@ import static com.netflix.nebula.archrules.common.Util.scanClasses;
 import static com.netflix.nebula.archrules.common.Util.scanClassesWithPackage;
 import static com.tngtech.archunit.base.DescribedPredicate.alwaysTrue;
 import static com.tngtech.archunit.core.domain.properties.HasName.Predicates.name;
+import static com.tngtech.archunit.lang.conditions.ArchConditions.haveAnyDependenciesThat;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class JavaClassTest {
