@@ -1,16 +1,22 @@
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     id("com.netflix.nebula.library")
+    kotlin("jvm")
 }
-description = "Common Predicates and Chanable Functions for building rules"
+description = "Common Predicates and Chainable Functions for building rules"
 
 dependencies {
     implementation(libs.jspecify)
     api("com.tngtech.archunit:archunit:1.+")
+    compileOnly(kotlin("reflect"))
 
     testImplementation(libs.assertj)
     testImplementation(libs.logback)
-    testImplementation("org.jetbrains.kotlin:kotlin-stdlib:2.2.0")
-    testImplementation("com.netflix.nebula:nebula-archrules-core:0.+")
+    testImplementation("org.jetbrains.kotlin:kotlin-stdlib")
+    testImplementation(kotlin("reflect"))
+    testImplementation("com.netflix.nebula:nebula-archrules-core:1.+")
 }
 java {
     toolchain {
@@ -22,6 +28,11 @@ tasks.named<JavaCompile>("compileTestJava") {
         languageVersion.set(JavaLanguageVersion.of(11))
     })
 }
+tasks.named<KotlinCompile>("compileTestKotlin") {
+    kotlinJavaToolchain.toolchain.use(javaToolchains.launcherFor {
+        languageVersion.set(JavaLanguageVersion.of(11))
+    })
+}
 dependencyLocking {
     lockAllConfigurations()
 }
@@ -30,5 +41,12 @@ testing {
         named<JvmTestSuite>("test") {
             useJUnitJupiter()
         }
+    }
+}
+
+kotlin {
+    compilerOptions {
+        languageVersion.set(KotlinVersion.KOTLIN_2_0)
+        apiVersion.set(KotlinVersion.KOTLIN_2_0)
     }
 }

@@ -1,5 +1,6 @@
 plugins {
     id("com.netflix.nebula.root")
+    kotlin("jvm") version("2.3.20") apply false
 }
 tasks.wrapper {
     distributionType = Wrapper.DistributionType.BIN

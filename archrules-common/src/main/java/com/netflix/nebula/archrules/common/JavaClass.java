@@ -3,8 +3,6 @@ package com.netflix.nebula.archrules.common;
 import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.domain.Dependency;
 import com.tngtech.archunit.core.domain.JavaPackage;
-import com.tngtech.archunit.lang.ArchCondition;
-import com.tngtech.archunit.lang.conditions.NebulaAnyDependencyCondition;
 import org.jspecify.annotations.NullMarked;
 
 import java.lang.annotation.Annotation;
@@ -45,6 +43,13 @@ public class JavaClass {
         }
 
         /**
+         * checks if the class's package is annotated with a specific annotation
+         */
+        public static DescribedPredicate<com.tngtech.archunit.core.domain.JavaClass> kotlinInternal() {
+            return new KotlinInternalClassPredicate();
+        }
+
+        /**
          * checks if the class is null safe via Kotlin or JSpecify
          */
         public static DescribedPredicate<com.tngtech.archunit.core.domain.JavaClass> nullSafe() {
@@ -56,16 +61,6 @@ public class JavaClass {
     }
 
     public static class Conditions {
-        /**
-         * Can be removed once <a href="https://github.com/TNG/ArchUnit/pull/1580">haveAnyDependenciesThat</a> is merged.
-         */
-        @Deprecated
-        public static ArchCondition<com.tngtech.archunit.core.domain.JavaClass> haveAnyDependenciesThat(
-                DescribedPredicate<? super Dependency> predicate) {
-            return new NebulaAnyDependencyCondition(
-                    "have any dependencies that " + predicate.getDescription(),
-                    predicate,
-                    GET_DIRECT_DEPENDENCIES_FROM_SELF);
-        }
+
     }
 }

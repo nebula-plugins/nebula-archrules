@@ -12,12 +12,12 @@ import static com.netflix.nebula.archrules.common.CanBeAnnotated.Predicates.depr
 import static com.netflix.nebula.archrules.common.CanBeAnnotated.Predicates.deprecatedForRemoval;
 import static com.netflix.nebula.archrules.common.Dependency.Predicates.resideInSamePackage;
 import static com.netflix.nebula.archrules.common.JavaAccess.Predicates.targetHasOwnerInSamePackage;
-import static com.netflix.nebula.archrules.common.JavaClass.Conditions.haveAnyDependenciesThat;
 import static com.tngtech.archunit.base.DescribedPredicate.doNot;
 import static com.tngtech.archunit.base.DescribedPredicate.not;
 import static com.tngtech.archunit.core.domain.Dependency.Predicates.dependencyTarget;
 import static com.tngtech.archunit.core.domain.JavaAccess.Predicates.target;
 import static com.tngtech.archunit.core.domain.JavaAccess.Predicates.targetOwner;
+import static com.tngtech.archunit.lang.conditions.ArchConditions.haveAnyDependenciesThat;
 import static com.tngtech.archunit.lang.conditions.ArchPredicates.is;
 
 @NullMarked

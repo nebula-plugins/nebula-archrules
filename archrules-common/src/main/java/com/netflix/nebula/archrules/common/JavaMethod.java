@@ -13,5 +13,12 @@ public class JavaMethod {
         public static DescribedPredicate<com.tngtech.archunit.core.domain.JavaMethod> aGetter() {
             return new JavaBeanGetterPredicate();
         }
+
+        /**
+         * checks if the class's package is annotated with a specific annotation
+         */
+        public static DescribedPredicate<com.tngtech.archunit.core.domain.JavaMethod> kotlinInternal() {
+            return new KotlinInternalMethodPredicate();
+        }
     }
 }
