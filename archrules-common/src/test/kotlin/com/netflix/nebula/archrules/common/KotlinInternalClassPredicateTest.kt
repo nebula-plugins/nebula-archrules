@@ -1,20 +1,23 @@
 package com.netflix.nebula.archrules.common
 
+import com.netflix.nebula.archrules.common.examples.InternalKotlinClass
+import com.netflix.nebula.archrules.common.examples.PublicKotlinClass
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import kotlin.jvm.java
 
 internal class KotlinInternalClassPredicateTest {
     @Test
     fun test_kotlinInternal_public() {
         assertThat(
-            JavaClass.Predicates.kotlinInternal().test(Util.scanClass(PublicKotlinClass::class.java))
+            KotlinInternalClassPredicate().test(Util.scanClass(PublicKotlinClass::class.java))
         ).isFalse()
     }
 
     @Test
     fun test_kotlinInternal_internal() {
         assertThat(
-            JavaClass.Predicates.kotlinInternal().test(Util.scanClass(InternalKotlinClass::class.java))
+            KotlinInternalClassPredicate().test(Util.scanClass(InternalKotlinClass::class.java))
         ).isTrue()
     }
 
@@ -23,10 +26,4 @@ internal class KotlinInternalClassPredicateTest {
         assertThat(JavaClass.Predicates.kotlinInternal().description).isEqualTo("Kotlin internal class")
     }
 
-    internal class InternalKotlinClass
-    class PublicKotlinClass {
-        internal fun internalKotlinMethod() {
-
-        }
-    }
 }

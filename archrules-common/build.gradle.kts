@@ -41,6 +41,19 @@ testing {
         named<JvmTestSuite>("test") {
             useJUnitJupiter()
         }
+        // this suite is for testing that kotlin-related rules work without kotlin on the classpath
+        create<JvmTestSuite>("javaOnlyTest"){
+            useJUnitJupiter()
+            dependencies {
+                implementation(project())
+                implementation(libs.assertj)
+            }
+            targets.configureEach {
+                project.tasks.named("check") {
+                    dependsOn(testTask)
+                }
+            }
+        }
     }
 }
 
