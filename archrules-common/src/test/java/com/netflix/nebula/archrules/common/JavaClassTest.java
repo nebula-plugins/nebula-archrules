@@ -1,6 +1,9 @@
 package com.netflix.nebula.archrules.common;
 
 import com.netflix.nebula.archrules.common.deprecated.ClassInDeprecatedPackage;
+import com.netflix.nebula.archrules.common.examples.InternalKotlinClass;
+import com.netflix.nebula.archrules.common.examples.PublicJavaClass;
+import com.netflix.nebula.archrules.common.examples.PublicKotlinClass;
 import com.netflix.nebula.archrules.common.other.ClassInOtherPackage;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.EvaluationResult;
@@ -88,6 +91,27 @@ public class JavaClassTest {
         assertThat(nullSafe()
                 .test(scanClass(SameUsage.class)))
                 .isFalse();
+    }
+
+    @Test
+    public void test_kotlinInternal_java_public() {
+        assertThat(
+                JavaClass.Predicates.kotlinInternal().test(Util.scanClass(PublicJavaClass.class))
+        ).isFalse();
+    }
+
+    @Test
+    public void test_kotlinInternal_public() {
+        assertThat(
+                JavaClass.Predicates.kotlinInternal().test(Util.scanClass(PublicKotlinClass.class))
+        ).isFalse();
+    }
+
+    @Test
+    public void test_kotlinInternal_internal() {
+        assertThat(
+                JavaClass.Predicates.kotlinInternal().test(Util.scanClass(InternalKotlinClass.class))
+        ).isTrue();
     }
 
     @NullMarked
