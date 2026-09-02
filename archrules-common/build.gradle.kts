@@ -10,14 +10,13 @@ description = "Common Predicates and Chainable Functions for building rules"
 dependencies {
     implementation(libs.jspecify)
     api("com.tngtech.archunit:archunit:1.+")
-    compileOnly(kotlin("reflect"))
+    implementation(kotlin("reflect"))
 
     testImplementation(libs.assertj)
     testImplementation(libs.logback)
-    testImplementation("org.jetbrains.kotlin:kotlin-stdlib")
-    testImplementation(kotlin("reflect"))
     testImplementation("com.netflix.nebula:nebula-archrules-core:1.+")
 }
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(8)
@@ -42,11 +41,15 @@ testing {
             useJUnitJupiter()
         }
         // this suite is for testing that kotlin-related rules work without kotlin on the classpath
-        create<JvmTestSuite>("javaOnlyTest"){
+        create<JvmTestSuite>("javaOnlyTest") {
             useJUnitJupiter()
             dependencies {
                 implementation(project())
                 implementation(libs.assertj)
+            }
+            project.configurations.named("javaOnlyTestRuntimeClasspath") {
+                exclude(module = "kotlin-reflect")
+                exclude(module = "kotlin-stdlib")
             }
             targets.configureEach {
                 project.tasks.named("check") {
