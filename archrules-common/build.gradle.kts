@@ -10,8 +10,9 @@ description = "Common Predicates and Chainable Functions for building rules"
 dependencies {
     implementation(libs.jspecify)
     api("com.tngtech.archunit:archunit:1.+")
-    implementation(kotlin("reflect"))
+    implementation(kotlin("metadata-jvm"))
 
+    testImplementation(kotlin("reflect"))
     testImplementation(libs.assertj)
     testImplementation(libs.logback)
     testImplementation("com.netflix.nebula:nebula-archrules-core:1.+")

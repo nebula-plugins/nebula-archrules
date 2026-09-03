@@ -25,6 +25,26 @@ internal class KotlinInternalMethodPredicateTest {
     }
 
     @Test
+    fun test_kotlinInternal_internal_other_signatures() {
+        val internalMethods = PublicKotlinClass::class.functions.filter { it.name == "manyParams" }
+        assertThat(internalMethods).hasSize(1)
+        val scannedClass = Util.scanClass(PublicKotlinClass::class.java)
+        val javaName = internalMethods.first().javaMethod!!.name
+        assertThat(
+            KotlinInternalMethodPredicate()
+                .test(scannedClass.getMethod(javaName, String::class.java))
+        )
+            .`as`("jvm overload is detected")
+            .isTrue()
+        assertThat(
+            KotlinInternalMethodPredicate()
+                .test(scannedClass.getMethod(javaName, String::class.java, String::class.java))
+        )
+            .`as`("full signature is detected")
+            .isTrue()
+    }
+
+    @Test
     fun test_kotlinInternal_description() {
         assertThat(KotlinInternalMethodPredicate().description).isEqualTo("Kotlin internal method")
     }

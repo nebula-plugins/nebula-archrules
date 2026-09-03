@@ -1,3 +1,5 @@
 package com.netflix.nebula.archrules.common.examples
 
-internal class InternalKotlinClass
+internal class InternalKotlinClass {
+    class InnerClass {}
+}
