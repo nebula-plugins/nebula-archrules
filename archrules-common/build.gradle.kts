@@ -10,7 +10,7 @@ description = "Common Predicates and Chainable Functions for building rules"
 dependencies {
     implementation(libs.jspecify)
     api("com.tngtech.archunit:archunit:1.+")
-    implementation(kotlin("metadata-jvm"))
+    api(kotlin("metadata-jvm")) // api needed for transitive dependencies in a rule classpath
 
     testImplementation(kotlin("reflect"))
     testImplementation(libs.assertj)
