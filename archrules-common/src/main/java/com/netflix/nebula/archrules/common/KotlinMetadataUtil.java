@@ -1,6 +1,7 @@
 package com.netflix.nebula.archrules.common;
 
 import com.tngtech.archunit.core.domain.JavaType;
+import com.tngtech.archunit.core.domain.JavaTypeVariable;
 import kotlin.metadata.Attributes;
 import kotlin.metadata.KmClassifier;
 import kotlin.metadata.KmFunction;
@@ -78,8 +79,18 @@ public class KotlinMetadataUtil {
         if (parameters.size() == javaMethod.getParameters().size()) {
             for (int i = 0; i < parameters.size(); i++) {
                 KmType kotlinType = parameters.get(i).type;
-                if (!typeMatches(javaMethod.getParameterTypes().get(i), ((KmClassifier.Class) kotlinType.classifier).getName())) {
-                    return false;
+                JavaType javaType = javaMethod.getParameters().get(i).getType();
+                if (javaType instanceof JavaTypeVariable) {
+                    if (!(kotlinType.classifier instanceof KmClassifier.TypeParameter)) {
+                        return false;
+                    }
+                } else if (javaType instanceof JavaClass) {
+                    if (!(kotlinType.classifier instanceof KmClassifier.Class)) {
+                        return false;
+                    }
+                    if (!typeMatches(javaType, ((KmClassifier.Class) kotlinType.classifier).getName())) {
+                        return false;
+                    }
                 }
             }
             return true;

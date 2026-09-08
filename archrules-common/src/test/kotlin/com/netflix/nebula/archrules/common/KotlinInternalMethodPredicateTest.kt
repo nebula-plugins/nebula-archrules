@@ -18,7 +18,7 @@ internal class KotlinInternalMethodPredicateTest {
 
     @Test
     fun test_kotlinInternal_internal() {
-        val internalMethodName = PublicKotlinClass::class.functions.first().javaMethod?.name
+        val internalMethodName = PublicKotlinClass::class.functions.first { it.name == "internalKotlinMethod" }.javaMethod?.name
         val scannedClass = Util.scanClass(PublicKotlinClass::class.java)
         assertThat(KotlinInternalMethodPredicate().test(scannedClass.getMethod(internalMethodName)))
             .isTrue()
