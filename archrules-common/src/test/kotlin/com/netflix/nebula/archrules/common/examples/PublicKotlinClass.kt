@@ -14,4 +14,6 @@ class PublicKotlinClass {
 
     @JvmOverloads
     fun publicManyParams(param1: String, param2: String = "test") {}
+
+    fun <T> generic(param1: T, param2: String = "test") {}
 }
