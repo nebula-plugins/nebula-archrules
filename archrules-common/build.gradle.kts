@@ -4,6 +4,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("com.netflix.nebula.library")
     kotlin("jvm")
+    id("jacoco")
 }
 description = "Common Predicates and Chainable Functions for building rules"
 
@@ -40,6 +41,11 @@ testing {
     suites {
         named<JvmTestSuite>("test") {
             useJUnitJupiter()
+            targets.configureEach {
+                testTask.configure {
+                    finalizedBy(tasks.named("jacocoTestReport"))
+                }
+            }
         }
         // this suite is for testing that kotlin-related rules work without kotlin on the classpath
         create<JvmTestSuite>("javaOnlyTest") {
