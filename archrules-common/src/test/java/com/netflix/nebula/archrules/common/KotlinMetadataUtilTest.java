@@ -66,7 +66,6 @@ public class KotlinMetadataUtilTest {
     public void test_matchParameterList_final_default() {
         KotlinClassMetadata metadata = KotlinClassMetadata.readStrict(PublicKotlinClass.class.getAnnotation(Metadata.class));
         KotlinClassMetadata.Class metadataClass = (KotlinClassMetadata.Class) metadata;
-        metadataClass.getKmClass().getFunctions().stream().forEach(it -> System.out.println(JvmExtensionsKt.getSignature(it).toString()));
         Optional<KmFunction> function = metadataClass.getKmClass().getFunctions().stream()
                 .filter(f -> JvmExtensionsKt.getSignature(f).toString().equals("functionWithFinalDefault(II)V"))
                 .findFirst();
