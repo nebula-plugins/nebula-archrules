@@ -2,6 +2,7 @@ package com.netflix.nebula.archrules.common;
 
 import com.tngtech.archunit.core.domain.JavaType;
 import com.tngtech.archunit.core.domain.JavaTypeVariable;
+import kotlin.jvm.JvmClassMappingKt;
 import kotlin.metadata.Attributes;
 import kotlin.metadata.KmClassifier;
 import kotlin.metadata.KmFunction;
@@ -10,35 +11,67 @@ import kotlin.metadata.KmValueParameter;
 import kotlin.metadata.jvm.JvmExtensionsKt;
 import kotlin.metadata.jvm.JvmMethodSignature;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @NullMarked
 public class KotlinMetadataUtil {
     private KotlinMetadataUtil() {
     }
 
-    private static final Map<String, String> kotlinTypeConversion = Stream.of(
-                    Arrays.asList("java.lang.String", "kotlin.String"),
-                    Arrays.asList("java.lang.Integer", "kotlin.Int"),
-                    Arrays.asList("int", "kotlin.Int"))
-            .collect(Collectors.toMap(k -> k.get(0), v -> v.get(1)));
+    @Nullable
+    static String convertPrimitiveToKotlin(String javaPrimitive) {
+        switch (javaPrimitive) {
+            case "java.lang.Boolean":
+                return "kotlin.Boolean";
+            case "boolean":
+                return "kotlin.Boolean";
+            case "java.lang.Character":
+                return "kotlin.Char";
+            case "char":
+                return "kotlin.Char";
+            case "java.lang.Byte":
+                return "kotlin.Byte";
+            case "byte":
+                return "kotlin.Byte";
+            case "java.lang.Short":
+                return "kotlin.Short";
+            case "short":
+                return "kotlin.Short";
+            case "java.lang.Integer":
+                return "kotlin.Int";
+            case "int":
+                return "kotlin.Int";
+            case "java.lang.Float":
+                return "kotlin.Float";
+            case "float":
+                return "kotlin.Float";
+            case "java.lang.Long":
+                return "kotlin.Long";
+            case "long":
+                return "kotlin.Long";
+            case "java.lang.Double":
+                return "kotlin.Double";
+            case "double":
+                return "kotlin.Double";
+            case "java.lang.String":
+                return "kotlin.String";
+            default:
+                return null;
+        }
+    }
 
     static boolean typeMatches(JavaType type, String kotlinMetadataType) {
         String dotFormat = kotlinMetadataType.replace("/", ".");
-        if (type.toErasure().getFullName().equals(dotFormat)) {
+        String javaFullName = type.toErasure().getFullName();
+        if (javaFullName.equals(dotFormat)) {
             return true;
         } else {
-            if (kotlinTypeConversion.containsKey(type.toErasure().getFullName())) {
-                return dotFormat.equals(kotlinTypeConversion.get(type.toErasure().getFullName()));
-            } else {
-                return false;
-            }
+            String kotlinRepresentationOfJavaPrimitive = convertPrimitiveToKotlin(javaFullName);
+            return kotlinRepresentationOfJavaPrimitive != null && kotlinRepresentationOfJavaPrimitive.equals(dotFormat);
         }
     }
 
