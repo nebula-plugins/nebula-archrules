@@ -55,6 +55,9 @@ public class KotlinMetadataUtil {
                     boolean matchFound = false;
                     while (kotlinIndex < parameters.size() && Attributes.getDeclaresDefaultValue(parameters.get(kotlinIndex))) {
                         kotlinIndex++;
+                        if (kotlinIndex >= parameters.size()) {
+                            return false;
+                        }
                         if (matchParameter(javaIndex, kotlinIndex, javaMethod, parameters)) {
                             matchFound = true;
                             break;
