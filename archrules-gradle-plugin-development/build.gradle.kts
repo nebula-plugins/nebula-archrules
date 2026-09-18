@@ -12,10 +12,31 @@ dependencies {
     archRulesTestImplementation(libs.assertj)
     archRulesTestImplementation(libs.logback)
     archRulesTestImplementation(gradleApi())
+    archRulesTestImplementation(gradleKotlinDsl())
 }
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(8)
+    }
+}
+
+// some of the tests use code compiled on java 17, so we need to compile and run our tests on java 17
+testing {
+    suites {
+        named("test", JvmTestSuite::class) {
+            targets.configureEach {
+                testTask.configure {
+                    javaLauncher = javaToolchains.launcherFor {
+                        languageVersion.set(JavaLanguageVersion.of(17))
+                    }
+                }
+            }
+        }
+    }
+}
+tasks.named<JavaCompile>("compileArchRulesTestJava") {
+    javaCompiler = javaToolchains.compilerFor {
+        languageVersion.set(JavaLanguageVersion.of(17))
     }
 }
 
